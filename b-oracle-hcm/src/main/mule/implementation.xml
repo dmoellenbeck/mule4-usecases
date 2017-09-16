@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:sockets="http://www.mulesoft.org/schema/mule/sockets" xmlns:ftp="http://www.mulesoft.org/schema/mule/ftp" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ftp http://www.mulesoft.org/schema/mule/ftp/current/mule-ftp.xsd
+http://www.mulesoft.org/schema/mule/sockets http://www.mulesoft.org/schema/mule/sockets/current/mule-sockets.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<ftp:config name="SFTP_Config" doc:name="FTP Config" doc:id="238e2ac6-7b94-4264-a976-a5cbbc199349">
+		<ftp:sftp-connection host="${sftp.host}" port="${sftp.port}" username="${sftp.user}" password="${sftp.password}" />
+	</ftp:config>
+	<ftp:matcher name="Matcher" doc:name="Matcher" doc:id="b2826e2d-1970-4a0f-9675-22f4280cf51d" filenamePattern="*.xml" />
+	<vm:config name="VM_Config" doc:name="VM Config" doc:id="c01592c1-075e-43c5-bc4a-b91c7efbaee1">
+		<vm:connection>
+			<reconnection>
+				<reconnect-forever />
+			</reconnection>
+		</vm:connection>
+	</vm:config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="3b4d1029-fa45-4811-a67d-df2dfec96c34">
+		<http:request-connection protocol="HTTPS" host="${s-payroll-cze.host}" port="${s-payroll-cze.port}" />
+	</http:request-config>
+	<flow name="poll-oracle-hcm-files-flow" doc:id="fb5a8ad3-65b6-4a56-bdd1-3e178ad6c012">
+		<scheduler doc:name="Scheduler" doc:id="1a98f259-536b-4c50-9a97-fb5f989ea7ba">
+			<scheduling-strategy>
+				<fixed-frequency frequency="${sftp.polling.frequency}" />
+			</scheduling-strategy>
+		</scheduler>
+		<ftp:list config-ref="SFTP_Config" directoryPath="${sftp.input.path}" doc:name="List OracleHCM XML files" doc:id="2c8cdc2f-6f15-4e04-b57a-b58ac5b8d322" matcher="Matcher">
+			<reconnect-forever frequency="${sftp.reconnect.frequency}" />
+		</ftp:list>
+		<choice doc:name="xml files to process?" doc:id="549f958b-ece0-47d8-8d23-51522a1d1d6e">
+			<when expression="#[sizeOf(payload) &gt; 0]">
+				<foreach doc:name="For Each">
+					<logger message="#[ output text/plain ---&quot;OracleHCM File: $(write(payload, 'application/xml'))&quot; ]" level="INFO" doc:name="Log OracleHCM XML" />
+					<ftp:move config-ref="SFTP_Config" targetPath="#[p('sftp.archive.path')]" doc:name="Archive OracleHCM XML file" doc:id="9baa5cd8-8bfd-4cf7-8ad3-b0ffd7b5ca12"
+						sourcePath="#[p('sftp.input.path') ++ attributes.fileName]" createParentDirectories="false" overwrite="true" />
+					<vm:publish config-ref="VM_Config" queueName="VM.process" doc:name="VM.process" doc:id="f670f3cb-6750-47bb-a635-1b13eb5fcc32" />
+				</foreach>
+			</when>
+			<otherwise>
+				<logger level="DEBUG" doc:name="do nothing" doc:id="a73c9755-ee27-456c-8400-5053f7f47afb" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="process-file" doc:id="349641c3-65db-4bea-ac59-85ef56c6520b">
+		<vm:listener config-ref="VM_Config" queueName="VM.process" doc:name="VM.process" doc:id="9a93ceaf-ebd3-49e3-92b9-1b870e685e07" />
+		<ee:transform doc:name="map employees XML to JAVA" doc:id="0d216dab-5ba9-48a0-91b0-eb3fa49f5dc1">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+import * from dw::core::Strings
+output application/java
+
+fun toUpperCamelCase(name) = 
+	camelize(lower(name))
+
+fun formatKeys(key) =
+	key match {
+		case is Array -> key map formatKeys($)
+		case is Object -> key mapObject ((v,k) -> { (toUpperCamelCase (k)): formatKeys(v) })
+		else -> key
+	}
+
+var parameters=payload.DATA_DS.G_1.G_2.FILE_FRAGMENT.Aperam_Generic_Extract.parameters
+var employees=payload.DATA_DS.G_1.G_2.FILE_FRAGMENT.Aperam_Generic_Extract.*Main
+var repCategoryName=payload.DATA_DS.G_1.G_2.FILE_FRAGMENT.Aperam_Generic_Extract.REP_CATEGORY_NAME
+---
+formatKeys(data_ds: {
+	archive_action_id: payload.DATA_DS.G_1.ARCHIVEACTIONID,
+	delivery_option_id: payload.DATA_DS.G_1.DELIVERYOPTIONID,
+	payroll_action_id: payload.DATA_DS.G_1.PAYROLLACTIONID,
+	flow_instance_name: payload.DATA_DS.G_1.FLOWINSTANCENAME,
+	g1: {
+		payroll_action_id: payload.DATA_DS.G_1.PAYROLL_ACTION_ID,
+		g2: {
+			file_fragment: {
+				aperam_generic_extract: {
+					rep_category_name: repCategoryName,
+					parameters: parameters,
+					main: employees
+				}
+			}
+		}
+	}
+})]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="build request per country" doc:id="a29631ad-3d48-4be4-abeb-f2d4c8a08b63">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="italyRepublicRequest"><![CDATA[%dw 2.0
+output application/java
+---
+{
+  dataDs: {
+    archieveActionId: payload.dataDs.archieveActionId,
+    deliveryOptionId: payload.dataDs.deliveryOptionId,
+    payrollActionId: payload.dataDs.payrollActionId,
+    flowInstanceName: payload.dataDs.flowInstanceName,
+    g1: {
+      payrollActionId: payload.dataDs.g1.payrollActionId,
+      g2: {
+        fileFragment: {
+          aperamGenericExtract: {
+            repCategoryName: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.repCategoryName,
+            parameters: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.parameters,
+            main: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.main filter $.identificationData.country == 'Italy'
+          }
+        }
+      }
+    }
+  }
+}]]></ee:set-variable>
+				<ee:set-variable variableName="germanyRequest"><![CDATA[%dw 2.0
+output application/java
+---
+{
+  dataDs: {
+    archieveActionId: payload.dataDs.archieveActionId,
+    deliveryOptionId: payload.dataDs.deliveryOptionId,
+    payrollActionId: payload.dataDs.payrollActionId,
+    flowInstanceName: payload.dataDs.flowInstanceName,
+    g1: {
+      payrollActionId: payload.dataDs.g1.payrollActionId,
+      g2: {
+        fileFragment: {
+          aperamGenericExtract: {
+            repCategoryName: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.repCategoryName,
+            parameters: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.parameters,
+            main: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.main filter $.identificationData.country == 'Germany'
+          }
+        }
+      }
+    }
+  }
+}]]></ee:set-variable>
+				<ee:set-variable variableName="czechRepublicRequest"><![CDATA[%dw 2.0
+output application/java
+---
+{
+  dataDs: {
+    archieveActionId: payload.dataDs.archieveActionId,
+    deliveryOptionId: payload.dataDs.deliveryOptionId,
+    payrollActionId: payload.dataDs.payrollActionId,
+    flowInstanceName: payload.dataDs.flowInstanceName,
+    g1: {
+      payrollActionId: payload.dataDs.g1.payrollActionId,
+      g2: {
+        fileFragment: {
+          aperamGenericExtract: {
+            repCategoryName: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.repCategoryName,
+            parameters: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.parameters,
+            main: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.main filter $.identificationData.country == 'Czech Republic'
+          }
+        }
+      }
+    }
+  }
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="e273260d-c8ae-4563-a454-08991f6faf8d">
+			<route>
+				<flow-ref name="process-czech-republic-flow" doc:name="process-czech-republic-flow" doc:id="d7ed136f-b790-4427-876a-4b544038aad1" />
+			</route>
+			<route>
+				<flow-ref name="process-italy-flow" doc:name="process-italy-flow" doc:id="ced3be23-7214-4a32-9a75-214dd9c8f4dc" />
+			</route>
+			<route>
+				<flow-ref name="process-germany-flow" doc:name="process-germany-flow" doc:id="0e036030-b91b-4f9c-bc4b-e04a434ad98f" />
+			</route>
+		</scatter-gather>
+	</flow>
+	<flow name="process-czech-republic-flow">
+		<choice doc:name="process Czech Republic employees?" doc:id="f8e158f8-3cbd-4507-8a89-5987ffaacf7d">
+			<when expression="#[sizeOf(vars.czechRepublicRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main) > 0]">
+				<ee:transform doc:name="map employees JAVA to JSON" doc:id="e66a631b-26ad-49bc-850a-a6757bf21544">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json skipNullOn="everywhere"
+---
+vars.czechRepublicRequest]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="log Czech Republic employees" doc:id="5bbd4efa-b03f-47df-9152-91dd0508b52e"
+					message="#[ output text/plain ---&quot;Processing Czech Republic Employees: $(write(vars.czechRepublicRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main, 'application/json'))&quot; ]" />
+				<http:request config-ref="HTTP_Request_configuration" method="POST" path="${s-payroll-cze.path}" doc:name="POST employees to s-payroll-cze" doc:id="1bf44445-5e48-430c-b2ab-73856b93c52f" />
+				<logger level="INFO" doc:name="log s-payroll-cze response" doc:id="da56f745-916d-4e6f-85cf-734a64a45ac9" message="#[ output text/plain ---&quot;s-payroll-cze response: $(write(payload, 'application/json'))&quot; ]" />
+			</when>
+			<otherwise>
+				<logger level="DEBUG" doc:name="do nothing" doc:id="53138b48-e121-46f8-8d34-be9250974b5a" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="process-germany-flow">
+		<choice doc:name="process Germany employees?" doc:id="8e21e9c9-2ed0-4f39-a027-18b915e801e9">
+			<when expression="#[sizeOf(vars.germanyRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main) > 0]">
+				<ee:transform doc:name="map employees JAVA to JSON" doc:id="3e073f68-7900-439e-84a6-68d310a4dbee">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json skipNullOn="everywhere"
+---
+vars.germanyRequest]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="log Germany employees" doc:id="5bbd4efa-b03f-47df-9152-91dd0508b52e"
+					message="#[ output text/plain ---&quot;Processing Germany Employees: $(write(vars.germanyRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main, 'application/json'))&quot; ]" />
+				<http:request config-ref="HTTP_Request_configuration" method="POST" path="${s-payroll-deu.path}" doc:name="POST employees to s-payroll-deu" doc:id="ead9fe37-3e85-4998-9e35-8e36e03cd2a6" />
+				<logger level="INFO" doc:name="log s-payroll-deu response" doc:id="004c0e1f-dfe0-4300-8acd-339c3d2f890c" message="#[ output text/plain ---&quot;s-payroll-deu response: $(write(payload, 'application/json'))&quot; ]" />
+			</when>
+			<otherwise>
+				<logger level="DEBUG" doc:name="do nothing" doc:id="53138b48-e121-46f8-8d34-be9250974b5a" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="process-italy-flow">
+		<choice doc:name="process Italy Republic employees?">
+			<when expression="#[sizeOf(vars.italyRepublicRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main) > 0]">
+				<ee:transform doc:name="map employees JAVA to JSON" doc:id="df21bba5-1ba7-428d-821e-7f244081fb4c">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json skipNullOn="everywhere"
+---
+vars.italyRepublicRequest]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="log Italy Republic employees" doc:id="5bbd4efa-b03f-47df-9152-91dd0508b52e"
+					message="#[ output text/plain ---&quot;Processing Italy Republic Employees: $(write(vars.italyRepublicRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main, 'application/json'))&quot; ]" />
+				<http:request config-ref="HTTP_Request_configuration" method="POST" path="${s-payroll-ita.path}" doc:name="POST employees to s-payroll-ita" doc:id="af21beee-431c-498d-ac8c-5e017209214b" />
+				<logger level="INFO" doc:name="log s-payroll-ita response" doc:id="c71d4084-0dee-4723-884d-8bcf3e68349f" message="#[ output text/plain ---&quot;s-payroll-ita response: $(write(payload, 'application/json'))&quot; ]" />
+			</when>
+			<otherwise>
+				<logger level="DEBUG" doc:name="do nothing" doc:id="53138b48-e121-46f8-8d34-be9250974b5a" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

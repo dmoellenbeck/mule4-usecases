@@ -1,0 +1,20 @@
+{
+  "domain": "default",
+  "configs": [
+    "global.xml",
+    "implementation.xml"
+  ],
+  "redeploymentEnabled": true,
+  "name": "b-oracle-hcm",
+  "minMuleVersion": "4.0.0-rc-SNAPSHOT",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedResources": []
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}
