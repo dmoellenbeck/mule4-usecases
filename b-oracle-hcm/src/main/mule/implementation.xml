@@ -22,7 +22,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			</reconnection>
 		</vm:connection>
 	</vm:config>
-	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="3b4d1029-fa45-4811-a67d-df2dfec96c34">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration"  doc:id="3b4d1029-fa45-4811-a67d-df2dfec96c34">
 		<http:request-connection protocol="HTTPS" host="${s-payroll-cze.host}" port="${s-payroll-cze.port}" />
 	</http:request-config>
 	<flow name="poll-oracle-hcm-files-flow" doc:id="fb5a8ad3-65b6-4a56-bdd1-3e178ad6c012">
@@ -47,6 +47,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 				<logger level="DEBUG" doc:name="do nothing" doc:id="a73c9755-ee27-456c-8400-5053f7f47afb" />
 			</otherwise>
 		</choice>
+		<error-handler>
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="86afcdb6-9b13-447a-92a8-94225714df39" >
+				<logger level="INFO" doc:name="log error message" doc:id="9c2a6d33-4dc0-4b9e-b83c-9ed69dd5eff6" message="#[&quot;Error while reading: $(write(attributes.fileName, 'text/plain'))&quot;]"/>
+			</on-error-propagate>
+		</error-handler>
 	</flow>
 	<flow name="process-file" doc:id="349641c3-65db-4bea-ac59-85ef56c6520b">
 		<vm:listener config-ref="VM_Config" queueName="VM.process" doc:name="VM.process" doc:id="9a93ceaf-ebd3-49e3-92b9-1b870e685e07" />
