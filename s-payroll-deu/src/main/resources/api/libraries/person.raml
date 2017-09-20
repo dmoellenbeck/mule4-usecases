@@ -1,0 +1,26 @@
+#%RAML 1.0 Library
+
+uses:
+  personalData: personalData.raml
+  callEmailData: callEmailData.raml
+  callPhoneData: callPhoneData.raml
+  callAddressData: callAddressData.raml
+  callNidData: callNidData.raml
+  callCitizenshipData: callCitizenshipData.raml
+  callDependentData: callDependentData.raml
+  callPassportData: callPassportData.raml
+  callVisaData: callVisaData.raml
+
+types:
+  Person:
+    type: object
+    properties: 
+      personalData?: personalData.PersonalData
+      callEmailData?: callEmailData.CallEmailData
+      callPhoneData?: callPhoneData.CallPhoneData
+      callAddressData?: callAddressData.CallAddressData
+      callNidData?: callNidData.CallNidData
+      callCitizenshipData?: callCitizenshipData.CallCitizenshipData
+      callDependentData?: callDependentData.CallDependentData
+      callPassportData?: callPassportData.CallPassportData
+      callVisaData?: callVisaData.CallVisaData

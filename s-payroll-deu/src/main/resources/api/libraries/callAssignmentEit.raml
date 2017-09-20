@@ -1,0 +1,10 @@
+#%RAML 1.0 Library
+
+uses:
+  assignmentEitData: assignmentEitData.raml
+
+types:
+  CallAssignmentEit:
+    type: object
+    properties:
+      assignmentExtraInformation: assignmentEitData.AssignmentEitData[]

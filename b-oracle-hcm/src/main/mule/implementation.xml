@@ -71,9 +71,9 @@ fun formatKeys(key) =
 		else -> key
 	}
 
-var parameters=payload.DATA_DS.G_1.G_2.FILE_FRAGMENT.Aperam_Generic_Extract.parameters
-var employees=payload.DATA_DS.G_1.G_2.FILE_FRAGMENT.Aperam_Generic_Extract.*Main
-var repCategoryName=payload.DATA_DS.G_1.G_2.FILE_FRAGMENT.Aperam_Generic_Extract.REP_CATEGORY_NAME
+var parameters=payload.DATA_DS.G_1.G_2.FILE_FRAGMENT.Acme_Generic_Extract.parameters
+var employees=payload.DATA_DS.G_1.G_2.FILE_FRAGMENT.Acme_Generic_Extract.*Main
+var repCategoryName=payload.DATA_DS.G_1.G_2.FILE_FRAGMENT.Acme_Generic_Extract.REP_CATEGORY_NAME
 ---
 formatKeys(data_ds: {
 	archive_action_id: payload.DATA_DS.G_1.ARCHIVEACTIONID,
@@ -84,7 +84,7 @@ formatKeys(data_ds: {
 		payroll_action_id: payload.DATA_DS.G_1.PAYROLL_ACTION_ID,
 		g2: {
 			file_fragment: {
-				aperam_generic_extract: {
+				Acme_Generic_Extract: {
 					rep_category_name: repCategoryName,
 					parameters: parameters,
 					main: employees
@@ -112,10 +112,10 @@ output application/java
       payrollActionId: payload.dataDs.g1.payrollActionId,
       g2: {
         fileFragment: {
-          aperamGenericExtract: {
-            repCategoryName: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.repCategoryName,
-            parameters: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.parameters,
-            main: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.main filter $.identificationData.country == 'Italy'
+          acmeGenericExtract: {
+            repCategoryName: payload.dataDs.g1.g2.fileFragment.acmeGenericExtract.repCategoryName,
+            parameters: payload.dataDs.g1.g2.fileFragment.acmeGenericExtract.parameters,
+            main: payload.dataDs.g1.g2.fileFragment.acmeGenericExtract.main filter $.identificationData.country == 'Italy'
           }
         }
       }
@@ -135,10 +135,10 @@ output application/java
       payrollActionId: payload.dataDs.g1.payrollActionId,
       g2: {
         fileFragment: {
-          aperamGenericExtract: {
-            repCategoryName: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.repCategoryName,
-            parameters: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.parameters,
-            main: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.main filter $.identificationData.country == 'Germany'
+          acmeGenericExtract: {
+            repCategoryName: payload.dataDs.g1.g2.fileFragment.acmeGenericExtract.repCategoryName,
+            parameters: payload.dataDs.g1.g2.fileFragment.acmeGenericExtract.parameters,
+            main: payload.dataDs.g1.g2.fileFragment.acmeGenericExtract.main filter $.identificationData.country == 'Germany'
           }
         }
       }
@@ -158,10 +158,10 @@ output application/java
       payrollActionId: payload.dataDs.g1.payrollActionId,
       g2: {
         fileFragment: {
-          aperamGenericExtract: {
-            repCategoryName: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.repCategoryName,
-            parameters: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.parameters,
-            main: payload.dataDs.g1.g2.fileFragment.aperamGenericExtract.main filter $.identificationData.country == 'Czech Republic'
+          acmeGenericExtract: {
+            repCategoryName: payload.dataDs.g1.g2.fileFragment.acmeGenericExtract.repCategoryName,
+            parameters: payload.dataDs.g1.g2.fileFragment.acmeGenericExtract.parameters,
+            main: payload.dataDs.g1.g2.fileFragment.acmeGenericExtract.main filter $.identificationData.country == 'Czech Republic'
           }
         }
       }
@@ -184,7 +184,7 @@ output application/java
 	</flow>
 	<flow name="process-czech-republic-flow">
 		<choice doc:name="process Czech Republic employees?" doc:id="f8e158f8-3cbd-4507-8a89-5987ffaacf7d">
-			<when expression="#[sizeOf(vars.czechRepublicRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main) > 0]">
+			<when expression="#[sizeOf(vars.czechRepublicRequest.dataDs.g1.g2.fileFragment.acmeGenericExtract.main) > 0]">
 				<ee:transform doc:name="map employees JAVA to JSON" doc:id="e66a631b-26ad-49bc-850a-a6757bf21544">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
@@ -194,7 +194,7 @@ vars.czechRepublicRequest]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 				<logger level="INFO" doc:name="log Czech Republic employees" doc:id="5bbd4efa-b03f-47df-9152-91dd0508b52e"
-					message="#[ output text/plain ---&quot;Processing Czech Republic Employees: $(write(vars.czechRepublicRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main, 'application/json'))&quot; ]" />
+					message="#[ output text/plain ---&quot;Processing Czech Republic Employees: $(write(payload, 'application/json'))&quot; ]" />
 				<http:request config-ref="HTTP_Request_configuration" method="POST" path="${s-payroll-cze.path}" doc:name="POST employees to s-payroll-cze" doc:id="1bf44445-5e48-430c-b2ab-73856b93c52f" />
 				<logger level="INFO" doc:name="log s-payroll-cze response" doc:id="da56f745-916d-4e6f-85cf-734a64a45ac9" message="#[ output text/plain ---&quot;s-payroll-cze response: $(write(payload, 'application/json'))&quot; ]" />
 			</when>
@@ -205,7 +205,7 @@ vars.czechRepublicRequest]]></ee:set-payload>
 	</flow>
 	<flow name="process-germany-flow">
 		<choice doc:name="process Germany employees?" doc:id="8e21e9c9-2ed0-4f39-a027-18b915e801e9">
-			<when expression="#[sizeOf(vars.germanyRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main) > 0]">
+			<when expression="#[sizeOf(vars.germanyRequest.dataDs.g1.g2.fileFragment.acmeGenericExtract.main) > 0]">
 				<ee:transform doc:name="map employees JAVA to JSON" doc:id="3e073f68-7900-439e-84a6-68d310a4dbee">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
@@ -215,7 +215,7 @@ vars.germanyRequest]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 				<logger level="INFO" doc:name="log Germany employees" doc:id="5bbd4efa-b03f-47df-9152-91dd0508b52e"
-					message="#[ output text/plain ---&quot;Processing Germany Employees: $(write(vars.germanyRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main, 'application/json'))&quot; ]" />
+					message="#[ output text/plain ---&quot;Processing Germany Employees: $(write(payload, 'application/json'))&quot; ]" />
 				<http:request config-ref="HTTP_Request_configuration" method="POST" path="${s-payroll-deu.path}" doc:name="POST employees to s-payroll-deu" doc:id="ead9fe37-3e85-4998-9e35-8e36e03cd2a6" />
 				<logger level="INFO" doc:name="log s-payroll-deu response" doc:id="004c0e1f-dfe0-4300-8acd-339c3d2f890c" message="#[ output text/plain ---&quot;s-payroll-deu response: $(write(payload, 'application/json'))&quot; ]" />
 			</when>
@@ -226,7 +226,7 @@ vars.germanyRequest]]></ee:set-payload>
 	</flow>
 	<flow name="process-italy-flow">
 		<choice doc:name="process Italy Republic employees?">
-			<when expression="#[sizeOf(vars.italyRepublicRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main) > 0]">
+			<when expression="#[sizeOf(vars.italyRepublicRequest.dataDs.g1.g2.fileFragment.acmeGenericExtract.main) > 0]">
 				<ee:transform doc:name="map employees JAVA to JSON" doc:id="df21bba5-1ba7-428d-821e-7f244081fb4c">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
@@ -236,7 +236,7 @@ vars.italyRepublicRequest]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 				<logger level="INFO" doc:name="log Italy Republic employees" doc:id="5bbd4efa-b03f-47df-9152-91dd0508b52e"
-					message="#[ output text/plain ---&quot;Processing Italy Republic Employees: $(write(vars.italyRepublicRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main, 'application/json'))&quot; ]" />
+					message="#[ output text/plain ---&quot;Processing Italy Republic Employees: $(write(payload, 'application/json'))&quot; ]" />
 				<http:request config-ref="HTTP_Request_configuration" method="POST" path="${s-payroll-ita.path}" doc:name="POST employees to s-payroll-ita" doc:id="af21beee-431c-498d-ac8c-5e017209214b" />
 				<logger level="INFO" doc:name="log s-payroll-ita response" doc:id="c71d4084-0dee-4723-884d-8bcf3e68349f" message="#[ output text/plain ---&quot;s-payroll-ita response: $(write(payload, 'application/json'))&quot; ]" />
 			</when>

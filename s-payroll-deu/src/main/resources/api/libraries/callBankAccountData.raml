@@ -1,0 +1,10 @@
+#%RAML 1.0 Library
+
+uses:
+  bankAccountsData: bankAccountsData.raml
+  
+types:
+  CallBankAccountData:
+    type: object
+    properties: 
+      bankAccounts: bankAccountsData.BankAccountsData[]

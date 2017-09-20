@@ -1,0 +1,13 @@
+#%RAML 1.0
+baseUri: https://localhost:8081/api
+title: s-payroll
+version: 0.1
+
+uses:
+  Employees: libraries/employees.raml
+
+resourceTypes:
+  entity: !include resourceTypes/entity.raml
+
+/employees:
+  type: entity

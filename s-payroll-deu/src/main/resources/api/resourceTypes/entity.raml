@@ -1,0 +1,19 @@
+#%RAML 1.0 ResourceType
+
+post:
+  body: 
+    application/json:
+      type: <<resourcePathName | !uppercamelcase>>.<<resourcePathName |  !uppercamelcase>>
+  responses: 
+    200:
+      body: 
+        application/json:
+          example: { "message": "OK" }
+    400:
+      body:
+        application/json:
+          example: { "message": "BAD REQUEST" }
+    500:
+      body: 
+        application/json:
+          example: { "message": "INTERNAL SERVER ERROR" }

@@ -1,0 +1,122 @@
+{
+  "dataDs": {
+    "g1": {
+      "payrollActionId": "3833",
+      "g2": {
+        "fileFragment": {
+          "acmeGenericExtract": {
+            "repCategoryName": "Acme_Generic_Extract",
+            "parameters": {
+              "requestId": "300000004882630",
+              "legislativeDataGroupId": "",
+              "effectiveDate": "2017-07-18",
+              "reportCategoryId": "300000004857935"
+            },
+            "main": [
+              {
+                "identificationData": {
+                  "personNumber": "205849",
+                  "payrollNumber": "00020649",
+                  "country": "Germany",
+                  "legalEmployer": "Acme Berlin"
+                },
+                "callPersonalData": {
+                  "persons": [
+                    {
+                      "personalData": {
+                        "personNumber": "205849",
+                        "firstName": "JOHN",
+                        "lastName": "DOE",
+                        "dateOfBirth": "1961-02-08T00:00:00.000Z",
+                        "gender": "F"
+                      },
+                      "callEmailData": {
+                        "emails": [
+                          {
+                            "personNumber": "205849",
+                            "emailType": "W1",
+                            "email": "test_john.doe@acme.com"
+                          }
+                        ]
+                      },
+                      "callNidData": {
+                        "nid": [
+                          {
+                            "personNumber": "205849",
+                            "nationalIdType": "NID",
+                            "nationalId": "261024520811741"
+                          }
+                        ]
+                      },
+                      "callCitizenshipData": {
+                        "citizenships": [
+                          {
+                            "personNumber": "205849",
+                            "nationality": "German",
+                            "fromDate": "1981-04-01T00:00:00.000Z",
+                            "toDate": "4712-12-31T00:00:00.000Z",
+                            "status": "A"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "callAssignmentData": {
+                  "empOrgData": [
+                    {
+                      "assignmentData": {
+                        "personNumber": "205849",
+                        "hireDate": "1981-04-01T00:00:00.000Z",
+                        "actionName": "Hire",
+                        "actionReason": "Hire to fill vacant position",
+                        "actionEffectiveDate": "1981-04-01T00:00:00.000Z",
+                        "employmentStatus": "ACTIVE",
+                        "employmentStatusMeaning": "Active - Payroll Eligible",
+                        "legalEmployerHireDate": "1981-04-01T00:00:00.000Z",
+                        "enterpriseHireDate": "1981-04-01T00:00:00.000Z",
+                        "seniorityDate": "1981-04-01T00:00:00.000Z",
+                        "workerType": "EMP",
+                        "personType": "Employee",
+                        "businessUnit": "Downstream",
+                        "department": "A&S Berlin",
+                        "job": "Production",
+                        "location": "Berlin",
+                        "assignmentCategory": "Part-time Permanent",
+                        "workerCategory": "Blue Collar",
+                        "regularTemporary": "R",
+                        "managerIndicator": "N",
+                        "assignmentType": "E",
+                        "noticePeriod": 1,
+                        "noticePeriodUom": "M"
+                      }
+                    }
+                  ]
+                },
+                "callSalaryData": {
+                  "salaries": [
+                    {
+                      "salaryData": {
+                        "personNumber": "103440",
+                        "salaryAction": "Change Salary",
+                        "salaryBasis": "Basic Salary - BR",
+                        "fromDate": "2017-04-25T00:00:00.000Z",
+                        "toDate": "4712-12-31T00:00:00.000Z",
+                        "salaryAnnualFactor": 1,
+                        "salaryCurrency": "BRL",
+                        "salaryAmount": 30476,
+                        "annualSalaryAmount": 30476,
+                        "assignmentFte": 1,
+                        "annualizedFteSalary": 30476
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

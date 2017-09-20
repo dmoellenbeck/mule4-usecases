@@ -1,0 +1,21 @@
+{
+  "domain": "default",
+  "configs": [
+    "global.xml",
+    "implementation.xml.xml",
+    "interface.xml"
+  ],
+  "redeploymentEnabled": true,
+  "name": "s-payroll-deu",
+  "minMuleVersion": "4.0.0-rc-SNAPSHOT",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedResources": []
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}

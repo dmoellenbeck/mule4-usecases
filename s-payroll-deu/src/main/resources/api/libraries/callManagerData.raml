@@ -1,0 +1,11 @@
+#%RAML 1.0 Library
+
+uses:
+  managerData: managerData.raml
+
+types:
+  CallManagerData:
+    type: object
+    properties: 
+      managers: managerData.ManagerData[]
+  

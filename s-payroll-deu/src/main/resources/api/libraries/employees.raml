@@ -1,0 +1,45 @@
+#%RAML 1.0 Library
+
+uses:
+  main: main.raml
+
+types:
+  Employees:
+    type: object
+    properties:
+      dataDs:
+        type: object
+        properties:
+          archiveActionId?: string
+          deliveryOptionId?: string
+          payrollActionId?: string
+          flowInstanceName?: string
+          g1:
+            type: object
+            properties:
+              payrollActionId?: string
+              g2:
+                type: object
+                properties:
+                  fileFragment?:
+                    type: object
+                    properties:
+                      acmeGenericExtract?:
+                        type: object
+                        properties:
+                          repCategoryName?: string
+                          parameters:
+                            type: object
+                            properties:
+                              baselineOnly?: string
+                              changesOnly?: string
+                              deleteArchive?: string
+                              effectiveDate?: string
+                              legislativeDataGroupId?: string
+                              parameterGroupId?: string
+                              reportCategoryId?: string
+                              requestId?: string
+                              startDate?: string
+                          main:
+                            type: main.Main[]
+    example: !include ../examples/employee.raml

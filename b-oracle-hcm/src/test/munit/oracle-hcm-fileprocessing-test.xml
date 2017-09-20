@@ -12,7 +12,7 @@
 		<import file="implementation.xml" />
 	<munit:test name="test-XML-to-JAVA-transformation" description="Test" doc:id="b8c50ce0-554c-4a6e-b9a8-5f6e3595a6eb" >
 		<munit:behavior >
-			<set-payload value="#[getResourceAsString('sample_data/Aperam XML_18072017_0928.xml')]" doc:name="Set OracleHCM XML file" mimeType="application/xml"/>
+			<set-payload value="#[getResourceAsString('sample_data/Acme XML_18072017_0928.xml')]" doc:name="Set OracleHCM XML file" mimeType="application/xml"/>
 		</munit:behavior>
 		<munit:execution >
 			<flow-ref name="process-file" doc:name="process-file" doc:id="cda0e8dc-41c5-418a-8479-1a151eef4aa7" />
@@ -21,9 +21,9 @@
 			<munit-tools:assert-that expression="#[vars.czechRepublicRequest]" is="#[notNullValue()]" doc:name="Assert vars.czechRepublicRequest is not null" doc:id="5e41252e-9bac-4e3e-bda0-61b2af1ce116" />
 			<munit-tools:assert-that expression="#[vars.italyRepublicRequest]" is="#[notNullValue()]" doc:name="Assert vars.italyRepublicRequest is not null" doc:id="ad5ae825-25d4-450a-bc90-1843743bb1bc" />
 			<munit-tools:assert-that expression="#[vars.germanyRequest]" is="#[notNullValue()]" doc:name="Assert vars.germanyRequest is not null" doc:id="56f942f8-6c70-49ae-bf6a-f284e8b8fa23" />
-			<munit-tools:assert-that expression="#[sizeOf(vars.czechRepublicRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main) == 4]" is="#[equalTo(true)]" doc:name="Assert Czech Republic has 4 employees" doc:id="681b9962-c06d-4446-bdfb-f4afbbdcea6c" />
-			<munit-tools:assert-that expression="#[sizeOf(vars.italyRepublicRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main) == 4]" is="#[equalTo(true)]" doc:name="Assert Italy Republic has 4 employees" doc:id="681b9962-c06d-4446-bdfb-f4afbbdcea6c" />
-			<munit-tools:assert-that expression="#[sizeOf(vars.germanyRequest.dataDs.g1.g2.fileFragment.aperamGenericExtract.main) == 4]" is="#[equalTo(true)]" doc:name="Assert Germany has 4 employees" doc:id="681b9962-c06d-4446-bdfb-f4afbbdcea6c" />
+			<munit-tools:assert-that expression="#[sizeOf(vars.czechRepublicRequest.dataDs.g1.g2.fileFragment.acmeGenericExtract.main) == 1]" is="#[equalTo(true)]" doc:name="Assert Czech Republic has 1 employee" doc:id="681b9962-c06d-4446-bdfb-f4afbbdcea6c" />
+			<munit-tools:assert-that expression="#[sizeOf(vars.italyRepublicRequest.dataDs.g1.g2.fileFragment.acmeGenericExtract.main) == 1]" is="#[equalTo(true)]" doc:name="Assert Italy Republic has 1 employee" doc:id="681b9962-c06d-4446-bdfb-f4afbbdcea6c" />
+			<munit-tools:assert-that expression="#[sizeOf(vars.germanyRequest.dataDs.g1.g2.fileFragment.acmeGenericExtract.main) == 1]" is="#[equalTo(true)]" doc:name="Assert Germany has 1 employee" doc:id="681b9962-c06d-4446-bdfb-f4afbbdcea6c" />
 		</munit:validation>
 	</munit:test>
 	

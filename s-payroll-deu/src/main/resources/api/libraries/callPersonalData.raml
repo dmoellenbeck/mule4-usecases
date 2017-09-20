@@ -1,0 +1,10 @@
+#%RAML 1.0 Library
+
+uses:
+  person: person.raml
+
+types:
+  CallPersonalData:
+    type: object
+    properties:
+      persons: person.Person[]

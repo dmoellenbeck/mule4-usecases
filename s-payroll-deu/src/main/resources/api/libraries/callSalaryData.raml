@@ -1,0 +1,10 @@
+#%RAML 1.0 Library
+
+uses:
+  salary: salary.raml
+
+types:
+  CallSalaryData:
+    type: object
+    properties:
+      salaries: salary.Salary[]

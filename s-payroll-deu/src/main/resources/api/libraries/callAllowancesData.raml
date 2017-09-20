@@ -1,0 +1,10 @@
+#%RAML 1.0 Library
+
+uses:
+  allowancesData: allowancesData.raml
+  
+types:
+  CallAllowancesData:
+    type: object
+    properties: 
+      allowances: allowancesData.AllowancesData[]

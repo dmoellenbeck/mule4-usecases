@@ -1,0 +1,10 @@
+#%RAML 1.0 Library
+
+uses:
+  personAddress: personAddress.raml
+  
+types:
+  CallAddressData:
+    type: object
+    properties: 
+      addresses: personAddress.PersonAddress[]

@@ -1,0 +1,14 @@
+#%RAML 1.0 Library
+
+uses:
+  salaryData: salaryData.raml
+  callAllowancesData: callAllowancesData.raml
+  callBankAccountData: callBankAccountData.raml
+
+types:
+  Salary:
+    type: object
+    properties:
+      salaryData?: salaryData.SalaryData
+      callAllowancesData?: callAllowancesData.CallAllowancesData
+      callBankAccountData?: callBankAccountData.CallBankAccountData

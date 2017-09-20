@@ -1,0 +1,16 @@
+#%RAML 1.0 Library
+
+uses:
+  identificationData: identificationData.raml
+  callPersonalData: callPersonalData.raml
+  callAssignmentData: callAssignmentData.raml
+  callSalaryData: callSalaryData.raml
+  
+types:
+  Main:
+    type: object
+    properties:
+      identificationData?: identificationData.IdentificationData
+      callPersonalData?: callPersonalData.CallPersonalData
+      callAssignmentData?: callAssignmentData.CallAssignmentData
+      callSalaryData?: callSalaryData.CallSalaryData

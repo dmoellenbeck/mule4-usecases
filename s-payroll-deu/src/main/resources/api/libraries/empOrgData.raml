@@ -1,0 +1,14 @@
+#%RAML 1.0 Library
+
+uses:
+  assignmentData: assignmentData.raml
+  callAssignmentEit: callAssignmentEit.raml
+  callManagerData: callManagerData.raml
+  
+types:
+  EmpOrgData:
+    type: object
+    properties:
+      assignmentData?: assignmentData.AssignmentData
+      callAssignmentEit?: callAssignmentEit.CallAssignmentEit
+      callManagerData?: callManagerData.CallManagerData
