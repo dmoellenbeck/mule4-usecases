@@ -2,7 +2,7 @@
   "domain": "default",
   "configs": [
     "global.xml",
-    "implementation.xml.xml",
+    "implementation.xml",
     "interface.xml"
   ],
   "redeploymentEnabled": true,
