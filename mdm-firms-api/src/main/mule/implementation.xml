@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="get-selling-agreements-flow" doc:id="8042151a-2879-4b7c-8e9e-9b03c45e208f" >
+		<db:stored-procedure config-ref="Database_Config" doc:name="Call Selling Agreement Stored Procedure (GET)" doc:id="aec997ab-26d4-413b-8bb6-d2c49eca8b82" >
+			<db:sql >CALL training.sellingagreement_get(:id, :dealerNumber)</db:sql>
+			<db:parameter-types>
+       			<db:parameter-type key="id" type="INTEGER" />
+       			<db:parameter-type key="dealerNumber" type="INTEGER" />
+   			</db:parameter-types>
+   			<db:input-parameters><![CDATA[#[{'id' : attributes.queryParams.id, 'dealerNumber' : attributes.queryParams.dealerNumber}]]]></db:input-parameters>
+		</db:stored-procedure>
+		<ee:transform doc:name="map JAVA to JSON" doc:id="9ca884b7-7d2d-4c04-b9b1-5a6a71c9be06" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload.resultSet1 map ((SA, KEY) -> {
+	sellingAgreementId: SA.selling_agreement_id,
+	fundNumber: SA.fund_number,
+	dstDealerNumber: SA.dst_dealer_number,
+	signingDate: SA.signing_date,
+	dstEffectiveDate: SA.dst_effective_date,
+	firstEligibleCloseDate: SA.first_eligible_close_date,
+	endDate: SA.end_date,
+	commission: SA.commission,
+	fs2FeeDm: SA.fs2_fee_dm,
+	bdReallowanceMarketingFee: SA.bd_reallowance_marketing_fee,
+	totalDmFee: SA.total_dm_fee,
+	dealerCommission: SA.dealer_commission,
+	advancedCommission: SA.advanced_commission,
+	advancedMarketingFee: SA.advanced_marketing_fee,
+	socialCodes: SA.social_codes,
+	comments: SA.comments,
+	custodian: SA.custodian,
+	uploadedDocumentUri: SA.uploaded_document_uri,
+	saType: SA.sa_type,
+	createdBy: SA.created_by,
+	createdOn: SA.created_on,
+	modifiedBy: SA.modified_by,
+	modifiedOn: SA.modified_on
+})]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

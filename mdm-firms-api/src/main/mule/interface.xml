@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd ">
-    <http:listener-config name="mdm-firms-api-httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="8081" />
-    </http:listener-config>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd ">
     <apikit:config name="mdm-firms-api-config" raml="mdm-firms-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="mdm-firms-api-main">
-        <http:listener config-ref="mdm-firms-api-httpListenerConfig" path="/api/*">
+        <http:listener config-ref="HTTPS_Listener_config" path="/api/*" doc:name="Listener">
             <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:response>
             <http:error-response statusCode="#[vars.httpStatus default 500]">
                 <http:body>#[payload]</http:body>
@@ -97,9 +93,8 @@ output application/json
         </error-handler>
     </flow>
     <flow name="mdm-firms-api-console">
-        <http:listener config-ref="mdm-firms-api-httpListenerConfig" path="/console/*">
+        <http:listener config-ref="HTTPS_Listener_config" path="/console/*" doc:name="Listener">
             <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:response>
             <http:error-response statusCode="#[vars.httpStatus default 500]">
                 <http:body>#[payload]</http:body>
@@ -124,85 +119,56 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\sellingAgreement\v1:application\json:mdm-firms-api-config">
+    	<set-variable variableName="httpStatus" value="501" doc:name="set http status 501" doc:id="8b99507a-3e13-4182-8ffd-49ae72ed3d6e" />
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  message: "Accepted"
+  message: "Not Implemented"
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
     </flow>
     <flow name="get:\queue\v1\(uniqueID):mdm-firms-api-config">
+    	<set-variable variableName="httpStatus" value="501" doc:name="set http status 501" doc:id="8b99507a-3e13-4182-8ffd-49ae72ed3d6e" />
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  message: "In progress"
+  message: "Not Implemented"
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
     </flow>
     <flow name="get:\sellingAgreement\v1:mdm-firms-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    sellingAgreementId: 1,
-    fundNumber: 3426,
-    dstDealerNumber: "0009975",
-    signingDate: "2017-05-15T18:25:43.511Z",
-    dstEffectiveDate: "2017-05-15T18:25:43.511Z",
-    firstEligibleCloseDate: "2017-05-15T18:25:43.511Z",
-    endDate: "2017-05-15T18:25:43.511Z",
-    commission: 0.1,
-    fs2FeeDm: 0.1,
-    bdReallowanceMarketingFee: 0.1,
-    totalDmFee: 0.5,
-    dealerCommission: 0.1,
-    advancedCommission: 0.1,
-    advancedMarketingFee: 0.1,
-    socialCodes: "RIA",
-    comments: "Test selling agreement.",
-    custodian: "Fidelity",
-    uploadedDocumentUri: "https://salesforce.fsinvestments.com/selling_agreement_id/1",
-    saType: "type1",
-    createdBy: "smays",
-    createdOn: "2017-05-15T18:25:43.511Z",
-    modifiedBy: "smays",
-    modifiedOn: "2017-05-15T18:25:43.511Z"
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref name="get-selling-agreements-flow" doc:name="get-selling-agreements-flow" doc:id="4ccaec3b-4caa-49d4-b02a-62dd802efa6a" />
     </flow>
     <flow name="get:\sellingAgreement\v1\(uniqueID):mdm-firms-api-config">
+        <set-variable variableName="httpStatus" value="501" doc:name="set http status 501" doc:id="8b99507a-3e13-4182-8ffd-49ae72ed3d6e" />
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  message: "Selling agreement successfully generated"
+  message: "Not Implemented"
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
     </flow>
     <flow name="post:\sellingAgreement\v1:application\json:mdm-firms-api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+        <set-variable variableName="httpStatus" value="501" doc:name="set http status 501" doc:id="8b99507a-3e13-4182-8ffd-49ae72ed3d6e" />
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  message: "Accepted"
+  message: "Not Implemented"
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>

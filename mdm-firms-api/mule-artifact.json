@@ -1,7 +1,9 @@
 {
   "domain": "default",
   "configs": [
-    "mdm-firms-api.xml"
+    "global.xml",
+    "implementation.xml",
+    "interface.xml"
   ],
   "redeploymentEnabled": true,
   "name": "mdm-firms-api",
