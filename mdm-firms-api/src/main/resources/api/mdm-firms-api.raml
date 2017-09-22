@@ -1,0 +1,84 @@
+#%RAML 1.0
+baseUri: https://vipname/api/firms
+title: mdm-firms-api
+version: 1.0
+
+types:
+  SellingAgreementPost: !include dataTypes/v1/SellingAgreementPost.raml
+  SellingAgreementPut: !include dataTypes/v1/SellingAgreementPut.raml
+
+/queue/v1/{uniqueID}:
+  get:
+    responses: 
+      200:
+        body: 
+          application/json:
+            example: !include examples/v1/inProgress-response.json
+      303:
+        body:
+          application/json:
+            example: !include examples/v1/seeOthers-response.json
+      404:
+        body: 
+          application/json:
+            example: !include examples/v1/notFound-response.json
+
+/sellingAgreement/v1:
+  get: 
+    headers: 
+      correlation_id: 
+        type: string
+        required: true
+        example: c61b444e-1e2a-46f1-b88a-da75a40a557d
+    queryParameters: 
+      id:
+        type: integer
+        required: false
+        example: 1
+      dealerNumber:
+        type: integer
+        required: false
+        example: 9975
+    responses: 
+      200:
+        description: selling agreement array object
+        body: 
+          application/json:
+            example: !include examples/v1/getSellingagreements-response.json
+  post:
+    headers: 
+      correlation_id:
+        type: string
+        required: true
+        example: c61b444e-1e2a-46f1-b88a-da75a40a557d
+    body: 
+      application/json:
+        type: SellingAgreementPost
+        example: !include examples/v1/postSellingagreements-request.json
+    responses: 
+      200:
+        body: 
+          application/json:
+            example: !include examples/v1/accepted-response.json
+  put:
+    headers: 
+      correlation_id:
+        type: string
+        required: true
+        example: c61b444e-1e2a-46f1-b88a-da75a40a557d
+    body: 
+      application/json:
+        type: SellingAgreementPut
+        example: !include examples/v1/putSellingagreements-request.json
+    responses: 
+      200:
+        body: 
+          application/json:
+            example: !include examples/v1/accepted-response.json
+  /{uniqueID}:
+    get:
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: !include examples/v1/getSellingagreement-response.json
