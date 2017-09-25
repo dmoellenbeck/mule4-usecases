@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-	<flow name="get-selling-agreements-flow" doc:id="8042151a-2879-4b7c-8e9e-9b03c45e208f" >
-		<db:stored-procedure config-ref="Database_Config" doc:name="Call Selling Agreement Stored Procedure (GET)" doc:id="aec997ab-26d4-413b-8bb6-d2c49eca8b82" >
-			<db:sql >CALL training.sellingagreement_get(:id, :dealerNumber)</db:sql>
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<flow name="get-selling-agreements-flow" doc:id="8042151a-2879-4b7c-8e9e-9b03c45e208f">
+		<db:stored-procedure config-ref="Database_Config" doc:name="Call Selling Agreement Stored Procedure (GET)" doc:id="aec997ab-26d4-413b-8bb6-d2c49eca8b82">
+			<db:sql>CALL training.sellingagreement_get(:id, :dealerNumber)</db:sql>
 			<db:parameter-types>
-       			<db:parameter-type key="id" type="INTEGER" />
-       			<db:parameter-type key="dealerNumber" type="INTEGER" />
-   			</db:parameter-types>
-   			<db:input-parameters><![CDATA[#[{'id' : attributes.queryParams.id, 'dealerNumber' : attributes.queryParams.dealerNumber}]]]></db:input-parameters>
+				<db:parameter-type key="id" type="INTEGER" />
+				<db:parameter-type key="dealerNumber" type="INTEGER" />
+			</db:parameter-types>
+			<db:input-parameters><![CDATA[#[{'id' : attributes.queryParams.id, 'dealerNumber' : attributes.queryParams.dealerNumber}]]]></db:input-parameters>
 		</db:stored-procedure>
 		<ee:transform doc:name="map JAVA to JSON" doc:id="9ca884b7-7d2d-4c04-b9b1-5a6a71c9be06" >
 			<ee:message >
@@ -47,6 +47,109 @@ payload.resultSet1 map ((SA, KEY) -> {
 	modifiedOn: SA.modified_on
 })]]></ee:set-payload>
 			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="post-selling-agreements-flow" doc:id="ecae6e92-c80a-4254-9cbb-8bea33bfeee0">
+		<flow-ref name="initializitation-flows" doc:name="initializitation-flows" doc:id="7e15142b-c406-4eaa-8303-b2a0492d925f" />
+		<async doc:name="Create selling agreement (Async)" doc:id="bfb6b042-0e3a-4eb8-bee0-a6d47af83eb8" >
+			<flow-ref name="create-selling-agreement-flow" doc:name="create-selling-agreement-flow" doc:id="395f3abb-a5a0-4301-8fe7-14db6d9268c6" />
+		</async>
+		<flow-ref name="set-accepted-status-flow" doc:name="set-accepted-status-flow" doc:id="f351ef06-bde7-4c94-81dc-aa0967f1a7ec" />
+	</flow>
+	<flow name="create-selling-agreement-flow" doc:id="9ffde12a-2c97-4221-b472-a72884885e14" >
+		<db:stored-procedure config-ref="Database_Config" doc:name="Call Selling Agreement Stored Procedure (POST)" doc:id="9d1174fd-f1cf-4397-82d0-3c67d04895ec" >
+			<db:sql >CALL training.sellingagreement_post(:sellingAgreementId, :fundNumber, :dstDealerNumber, :signingDate, :dstEffectiveDate, :firstEligibleCloseDate, :endDate, :commission, :fs2FeeDm, :bdReallowanceMarketingFee, :totalDmFee, :dealerCommission, :advancedCommission, :advancedMarketingFee, :socialCodes, :comments, :custodian, :uploadedDocumentUri, :saType, :createdBy, :createdOn, :modifiedBy, :modifiedOn);</db:sql>
+			<db:parameter-types>
+				<db:parameter-type key="sellingAgreementId" type="BIGINT" />
+				<db:parameter-type key="fundNumber" type="BIGINT" />
+				<db:parameter-type key="dstDealerNumber" type="CHAR" />
+				<db:parameter-type key="signingDate" type="DATE" />
+				<db:parameter-type key="dstEffectiveDate" type="DATE" />
+				<db:parameter-type key="firstEligibleCloseDate" type="DATE" />
+				<db:parameter-type key="endDate" type="DATE" />
+				<db:parameter-type key="commission" type="DECIMAL" />
+				<db:parameter-type key="fs2FeeDm" type="DECIMAL" />
+				<db:parameter-type key="bdReallowanceMarketingFee" type="DECIMAL" />
+				<db:parameter-type key="totalDmFee" type="DECIMAL" />
+				<db:parameter-type key="dealerCommission" type="DECIMAL" />
+				<db:parameter-type key="advancedCommission" type="DECIMAL" />
+				<db:parameter-type key="advancedMarketingFee" type="DECIMAL" />
+				<db:parameter-type key="socialCodes" type="CHAR" />
+				<db:parameter-type key="comments" type="CHAR" />
+				<db:parameter-type key="custodian" type="CHAR" />
+				<db:parameter-type key="uploadedDocumentUri" type="CHAR" />
+				<db:parameter-type key="saType" type="CHAR" />
+				<db:parameter-type key="createdBy" type="DATE" />
+				<db:parameter-type key="createdOn" type="DATE" />
+				<db:parameter-type key="modifiedBy" type="CHAR" />
+				<db:parameter-type key="modifiedOn" type="CHAR" />
+			</db:parameter-types>
+			<db:input-parameters ><![CDATA[#[{'sellingAgreementId': payload.sellingAgreementId, 'fundNumber': payload.fundNumber, 'dstDealerNumber': payload.dstDealerNumber, 'signingDate': payload.signingDate, 'dstEffectiveDate': payload.dstEffectiveDate, 'firstEligibleCloseDate': payload.firstEligibleCloseDate, 'endDate': payload.endDate, 'commission': payload.commission, 'fs2FeeDm': payload.fs2FeeDm, 'bdReallowanceMarketingFee': payload.bdReallowanceMarketingFee, 'totalDmFee': payload.totalDmFee, 'dealerCommission': payload.dealerCommission, 'advancedCommission': payload.advancedCommission, 'advancedMarketingFee': payload.advancedMarketingFee, 'socialCodes': payload.socialCodes, 'comments': payload.comments, 'custodian': payload.custodian,  'uploadedDocumentUri': payload.uploadedDocumentUri, 'saType': payload.saType, 'createdBy': payload.createdBy, 'createdOn': payload.createdOn, 'modifiedBy': payload.modifiedBy,  'modifiedOn':  payload.modifiedOn}]]]></db:input-parameters>
+		</db:stored-procedure>
+		<ee:transform doc:name="set processed status to 'true'" doc:id="a3125c0a-160c-453f-a9ce-bfe0133f85c1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	updateCount1: payload.updateCount1,
+	processed: true
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<os:store key="#[vars.id]" doc:name="Store result into ObjectStore" doc:id="00f64ac4-d96b-473e-9771-5a27a86f357d" />
+	</flow>
+	<flow name="initializitation-flows" doc:id="ede6e894-63be-478e-907c-4ef29a2292b2" >
+		<ee:transform doc:name="set 'id', 'sleepValue', and 'counter' variables" doc:id="f4e4293c-4444-4382-bb55-b82966c96c08">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="sleepValue"><![CDATA[%dw 2.0
+output application/java
+---
+p('backoff.retry.sleep.init')]]></ee:set-variable>
+				<ee:set-variable variableName="id"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers.correlation_id]]></ee:set-variable>
+				<ee:set-variable variableName="counter"><![CDATA[%dw 2.0
+output application/java
+---
+p('backoff.retry.max')]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<os:store key="#[vars.id]" doc:name="Store 'uniqueId' in ObjectStore" doc:id="ce21f7c9-27d2-4f65-b402-fa0755262b3c">
+			<os:value><![CDATA[#['']]]></os:value>
+		</os:store>
+		<ee:transform doc:name="JSON to JAVA transformation" doc:id="2259ded9-dd40-46af-b623-fd5dce23a0b9">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="set-accepted-status-flow" doc:id="47d6eeaf-ee3b-40ae-a0f3-4a4a569c48c8" >
+		<ee:transform doc:name="set 'Accepted' message" doc:id="4ff1f340-5e32-4d37-9e04-967c69a401ed" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Accepted"
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+202]]></ee:set-variable>
+				<ee:set-variable variableName="outboundHeaders" ><![CDATA[%dw 2.0
+output application/java
+---
+vars.outboundHeaders ++ {Location: "https://" ++ attributes.headers.host ++ p('api.basePath') ++ "/queue/v1/" ++ vars.id }]]></ee:set-variable>
+			</ee:variables>
 		</ee:transform>
 	</flow>
 </mule>
