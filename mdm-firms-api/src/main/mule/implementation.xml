@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
 	<flow name="get-selling-agreements-flow" doc:id="8042151a-2879-4b7c-8e9e-9b03c45e208f">
 		<db:stored-procedure config-ref="Database_Config" doc:name="Call Selling Agreement Stored Procedure (GET)" doc:id="aec997ab-26d4-413b-8bb6-d2c49eca8b82">
 			<db:sql>CALL training.sellingagreement_get(:id, :dealerNumber)</db:sql>
@@ -16,9 +18,9 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 			</db:parameter-types>
 			<db:input-parameters><![CDATA[#[{'id' : attributes.queryParams.id, 'dealerNumber' : attributes.queryParams.dealerNumber}]]]></db:input-parameters>
 		</db:stored-procedure>
-		<ee:transform doc:name="map JAVA to JSON" doc:id="9ca884b7-7d2d-4c04-b9b1-5a6a71c9be06" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<ee:transform doc:name="map JAVA to JSON" doc:id="9ca884b7-7d2d-4c04-b9b1-5a6a71c9be06">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 payload.resultSet1 map ((SA, KEY) -> {
@@ -51,10 +53,71 @@ payload.resultSet1 map ((SA, KEY) -> {
 	</flow>
 	<flow name="post-selling-agreements-flow" doc:id="ecae6e92-c80a-4254-9cbb-8bea33bfeee0">
 		<flow-ref name="initializitation-flows" doc:name="initializitation-flows" doc:id="7e15142b-c406-4eaa-8303-b2a0492d925f" />
-		<async doc:name="Create selling agreement (Async)" doc:id="bfb6b042-0e3a-4eb8-bee0-a6d47af83eb8" >
+		<async doc:name="Create selling agreement (Async)" doc:id="bfb6b042-0e3a-4eb8-bee0-a6d47af83eb8">
 			<flow-ref name="create-selling-agreement-flow" doc:name="create-selling-agreement-flow" doc:id="395f3abb-a5a0-4301-8fe7-14db6d9268c6" />
 		</async>
 		<flow-ref name="set-accepted-status-flow" doc:name="set-accepted-status-flow" doc:id="f351ef06-bde7-4c94-81dc-aa0967f1a7ec" />
+	</flow>
+	<flow name="get-queue-status-flow" doc:id="af26f51e-023f-4a1c-a414-e93833db59f7">
+		<ee:transform doc:name="set 'id' and 'host' variable" doc:id="991fd7cc-fe8c-4b26-93f9-8a25a93b6ede">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="id"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.uriParams.uniqueID]]></ee:set-variable>
+				<ee:set-variable variableName="host" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers.host]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<os:contains key="#[vars.id]" doc:name="Get if ObjectStore contains id" doc:id="ed8047e9-0d42-460e-b57d-3c7ff533fd15" />
+		<choice doc:name="Does the id exists?" doc:id="c9376c83-9fa4-4940-aa85-67e1206ab7c1">
+			<when expression="#[payload]">
+				<os:retrieve key="#[vars.id]" doc:name="Retrieve value from ObjectStore" doc:id="b14eba84-ea5f-4bad-98c5-d8d2eec8fc76" />
+				<choice doc:name="Process hasn't finished?" doc:id="ba9411db-1ee2-4cbd-a3ea-15f839eb69a3" >
+					<when expression="#[isEmpty(payload)]">
+						<ee:transform doc:name="Set 'In progress' message" doc:id="7cea51e8-88c0-4ccf-a748-3eeb1fe0f825">
+							<ee:message>
+								<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "In progress"
+}]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+					</when>
+					<otherwise>
+						<ee:transform doc:name="Set 'See other' message" doc:id="ea2c562a-737e-43a5-ac6a-9178a33a881b">
+							<ee:message>
+								<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "See Other"
+}]]></ee:set-payload>
+							</ee:message>
+							<ee:variables >
+								<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+303]]></ee:set-variable>
+								<ee:set-variable variableName="outboundHeaders" ><![CDATA[%dw 2.0
+output application/java
+---
+vars.outboundHeaders ++ {Location: "https://" ++ vars.host ++ p('api.basePath') ++ "/sellingAgreement/v1/" ++ vars.id }]]></ee:set-variable>
+							</ee:variables>
+						</ee:transform>
+					</otherwise>
+				</choice>
+			</when>
+			<otherwise>
+				<flow-ref name="set-resource-not-found-flow" doc:name="set-resource-not-found-flow" doc:id="4fc770b9-01c1-422d-9f02-3ef8c50db934" />
+			</otherwise>
+		</choice>
 	</flow>
 	<flow name="create-selling-agreement-flow" doc:id="9ffde12a-2c97-4221-b472-a72884885e14" >
 		<db:stored-procedure config-ref="Database_Config" doc:name="Call Selling Agreement Stored Procedure (POST)" doc:id="9d1174fd-f1cf-4397-82d0-3c67d04895ec" >
@@ -108,14 +171,14 @@ output application/java
 output application/java
 ---
 p('backoff.retry.sleep.init')]]></ee:set-variable>
-				<ee:set-variable variableName="id"><![CDATA[%dw 2.0
-output application/java
----
-attributes.headers.correlation_id]]></ee:set-variable>
 				<ee:set-variable variableName="counter"><![CDATA[%dw 2.0
 output application/java
 ---
 p('backoff.retry.max')]]></ee:set-variable>
+				<ee:set-variable variableName="id" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers.correlation_id]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<os:store key="#[vars.id]" doc:name="Store 'uniqueId' in ObjectStore" doc:id="ce21f7c9-27d2-4f65-b402-fa0755262b3c">
@@ -149,6 +212,24 @@ output application/java
 output application/java
 ---
 vars.outboundHeaders ++ {Location: "https://" ++ attributes.headers.host ++ p('api.basePath') ++ "/queue/v1/" ++ vars.id }]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</flow>
+	<flow name="set-resource-not-found-flow" doc:id="dda93342-1bcf-459a-abf9-ec234d2b56bc" >
+		<ee:transform doc:name="set 'Not Found' message" doc:id="7a2f0150-ccff-41af-8456-197ea51819ee" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Not Found"	
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+404]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 	</flow>

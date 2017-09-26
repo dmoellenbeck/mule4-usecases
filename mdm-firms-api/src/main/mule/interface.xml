@@ -135,17 +135,7 @@ output application/json
 		</ee:transform>
 	</flow>
 	<flow name="get:\queue\v1\(uniqueID):mdm-firms-api-config">
-		<set-variable variableName="httpStatus" value="501" doc:name="set http status 501" doc:id="8b99507a-3e13-4182-8ffd-49ae72ed3d6e" />
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  message: "Not Implemented"
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
+		<flow-ref name="get-queue-status-flow" doc:name="get-queue-status-flow" doc:id="dd22cbde-e0b8-4ce9-b927-918a5c818616" />
 	</flow>
 	<flow name="get:\sellingAgreement\v1:mdm-firms-api-config">
 		<flow-ref name="get-selling-agreements-flow" doc:name="get-selling-agreements-flow" doc:id="4ccaec3b-4caa-49d4-b02a-62dd802efa6a" />
