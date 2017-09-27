@@ -25,11 +25,6 @@ types:
 
 /sellingAgreement/v1:
   get: 
-    headers: 
-      correlation_id: 
-        type: string
-        required: true
-        example: c61b444e-1e2a-46f1-b88a-da75a40a557d
     queryParameters: 
       id:
         type: integer
@@ -46,11 +41,6 @@ types:
           application/json:
             example: !include examples/v1/getSellingagreements-response.json
   post:
-    headers: 
-      correlation_id:
-        type: string
-        required: true
-        example: c61b444e-1e2a-46f1-b88a-da75a40a557d
     body: 
       application/json:
         type: SellingAgreementPost
@@ -61,11 +51,6 @@ types:
           application/json:
             example: !include examples/v1/accepted-response.json
   put:
-    headers: 
-      correlation_id:
-        type: string
-        required: true
-        example: c61b444e-1e2a-46f1-b88a-da75a40a557d
     body: 
       application/json:
         type: SellingAgreementPut

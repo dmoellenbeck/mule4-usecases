@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
+	<flow name="exponential-backoff-retry-strategy-flow" doc:id="0390796a-27f6-4be3-8824-8928d51eb095" >
+		<choice doc:name="Choice - max attempts reached?" doc:id="7d9481b4-717a-43f3-b67f-ddb3d2dd6921" >
+			<when expression="#[vars.counter == 0]" >
+				<logger level="ERROR" doc:name="Log max attempts reached" doc:id="5a7292fc-3d63-49a2-8c37-cda0aa24ee1e" message='#["Max attempts reached"]'/>
+				<logger level="INFO" doc:name="Logger" doc:id="b1ef8935-828f-48cf-9f21-067d702dc6a3" message="#[vars.sleepValue]"/>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Update 'counter' variable" doc:id="c29f9891-2e3f-4753-be91-54e6a487d926" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable variableName="counter" ><![CDATA[%dw 2.0
+output application/java
+---
+vars.counter - 1]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<scripting:execute engine="groovy" doc:name="sleep" doc:id="eec08d46-2cea-4375-a738-19e544fb1dd1" >
+					<scripting:code >sleep(vars.sleepValue)
+payload</scripting:code>
+				</scripting:execute>
+				<ee:transform doc:name="Update 'sleepValue' variable" doc:id="9461355c-6592-4eb2-ba4a-6b30e0180053" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="sleepValue" ><![CDATA[%dw 2.0
+output application/java
+---
+vars.sleepValue * 2]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<flow-ref name="create-selling-agreement-flow" doc:name="create-selling-agreement-flow" doc:id="0a92b93d-5a30-4a08-93cf-1ac28a082c06" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

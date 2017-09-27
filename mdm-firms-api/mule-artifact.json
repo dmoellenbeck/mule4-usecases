@@ -1,6 +1,7 @@
 {
   "domain": "default",
   "configs": [
+    "exponential-backoff-retry-implementation.xml",
     "global.xml",
     "implementation.xml",
     "interface.xml"

@@ -122,17 +122,7 @@ output application/json
 		</error-handler>
 	</flow>
 	<flow name="put:\sellingAgreement\v1:application\json:mdm-firms-api-config">
-		<set-variable variableName="httpStatus" value="501" doc:name="set http status 501" doc:id="8b99507a-3e13-4182-8ffd-49ae72ed3d6e" />
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  message: "Not Implemented"
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
+		<flow-ref name="put-selling-agreements-flow" doc:name="put-selling-agreements-flow" doc:id="d4f3d0a1-2084-4b95-98c0-a15b6dd53924" />
 	</flow>
 	<flow name="get:\queue\v1\(uniqueID):mdm-firms-api-config">
 		<flow-ref name="get-queue-status-flow" doc:name="get-queue-status-flow" doc:id="dd22cbde-e0b8-4ce9-b927-918a5c818616" />
@@ -141,18 +131,7 @@ output application/json
 		<flow-ref name="get-selling-agreements-flow" doc:name="get-selling-agreements-flow" doc:id="4ccaec3b-4caa-49d4-b02a-62dd802efa6a" />
 	</flow>
 	<flow name="get:\sellingAgreement\v1\(uniqueID):mdm-firms-api-config">
-		<set-variable variableName="httpStatus" value="501" doc:name="set http status 501" doc:id="8b99507a-3e13-4182-8ffd-49ae72ed3d6e" />
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  message: "Not Implemented"
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
+		<flow-ref name="get-selling-agreement-flow" doc:name="get-selling-agreement-flow" doc:id="29e0ac3b-727a-4e77-94f5-e45fa246ba36" />
 	</flow>
 	<flow name="post:\sellingAgreement\v1:application\json:mdm-firms-api-config">
 		<flow-ref name="post-selling-agreements-flow" doc:name="post-selling-agreements-flow" doc:id="6fe35d82-e2cd-47e6-bab2-93aa53c853ca" />

@@ -58,6 +58,13 @@ payload.resultSet1 map ((SA, KEY) -> {
 		</async>
 		<flow-ref name="set-accepted-status-flow" doc:name="set-accepted-status-flow" doc:id="f351ef06-bde7-4c94-81dc-aa0967f1a7ec" />
 	</flow>
+	<flow name="put-selling-agreements-flow" doc:id="2899095a-de3e-4170-ab05-adeda185774e" >
+		<flow-ref name="initializitation-flows" doc:name="initializitation-flows" doc:id="9357578b-bdad-4b97-8158-2c740408e6a5" />
+		<async doc:name="Update selling agreement (Async)" doc:id="85484a15-4bda-4593-9c4c-fa99656bdd74" >
+			<flow-ref name="update-selling-agreement-flow" doc:name="update-selling-agreement-flow" doc:id="f3ff8278-76ed-40e0-99f5-5757decf5e5b" />
+		</async>
+		<flow-ref name="set-accepted-status-flow" doc:name="set-accepted-status-flow" doc:id="4d39ecb2-4d45-4eb3-bef9-464f41a28ba1" />
+	</flow>
 	<flow name="get-queue-status-flow" doc:id="af26f51e-023f-4a1c-a414-e93833db59f7">
 		<ee:transform doc:name="set 'id' and 'host' variable" doc:id="991fd7cc-fe8c-4b26-93f9-8a25a93b6ede">
 			<ee:message>
@@ -119,9 +126,48 @@ vars.outboundHeaders ++ {Location: "https://" ++ vars.host ++ p('api.basePath') 
 			</otherwise>
 		</choice>
 	</flow>
+	<flow name="get-selling-agreement-flow" doc:id="0238b82f-3640-449e-a7de-71eee0e976e8" >
+		<ee:transform doc:name="set 'id' variable" doc:id="326b4570-13ea-4592-90f3-7ae7fcec0847" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="id" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.uriParams.uniqueID]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<os:contains key="#[vars.id]" doc:name="Get if ObjectStore contains id" doc:id="b699091e-7777-47cc-9a02-79c45c22805b" />
+		<choice doc:name="Does the id exists?" doc:id="b4111abb-4411-4071-bf46-d43175efbaf4" >
+			<when expression="#[payload]" >
+				<os:retrieve key="#[vars.id]" doc:name="Retrieve value from ObjectStore" doc:id="5d9ab4ad-599b-42b3-ab21-c936021b506b" />
+				<choice doc:name="object hasn't been generated?" doc:id="c8ab2709-3d06-42ba-96fc-4199b1e944b2" >
+					<when expression="#[isEmpty(payload)]" >
+						<flow-ref name="set-resource-not-found-flow" doc:name="set-resource-not-found-flow" doc:id="da5b08e3-9c07-4c59-9ff4-398f249967e9" />
+					</when>
+					<otherwise>
+						<ee:transform doc:name="set 'successfully generated' message" doc:id="2dfa7227-b0cb-4fcb-87b4-5b3d55b4c367" >
+							<ee:message >
+								<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Selling agreement successfully generated"
+}]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+					</otherwise>
+				</choice>
+			</when>
+			<otherwise >
+				<flow-ref name="set-resource-not-found-flow" doc:name="set-resource-not-found-flow" doc:id="b8d3378e-a0bf-4c8a-8255-36bb5bbd6570" />
+			</otherwise>
+		</choice>
+	</flow>
 	<flow name="create-selling-agreement-flow" doc:id="9ffde12a-2c97-4221-b472-a72884885e14" >
 		<db:stored-procedure config-ref="Database_Config" doc:name="Call Selling Agreement Stored Procedure (POST)" doc:id="9d1174fd-f1cf-4397-82d0-3c67d04895ec" >
 			<db:sql >CALL training.sellingagreement_post(:sellingAgreementId, :fundNumber, :dstDealerNumber, :signingDate, :dstEffectiveDate, :firstEligibleCloseDate, :endDate, :commission, :fs2FeeDm, :bdReallowanceMarketingFee, :totalDmFee, :dealerCommission, :advancedCommission, :advancedMarketingFee, :socialCodes, :comments, :custodian, :uploadedDocumentUri, :saType, :createdBy, :createdOn, :modifiedBy, :modifiedOn);</db:sql>
+			<!--
 			<db:parameter-types>
 				<db:parameter-type key="sellingAgreementId" type="BIGINT" />
 				<db:parameter-type key="fundNumber" type="BIGINT" />
@@ -147,6 +193,7 @@ vars.outboundHeaders ++ {Location: "https://" ++ vars.host ++ p('api.basePath') 
 				<db:parameter-type key="modifiedBy" type="CHAR" />
 				<db:parameter-type key="modifiedOn" type="CHAR" />
 			</db:parameter-types>
+			-->
 			<db:input-parameters ><![CDATA[#[{'sellingAgreementId': payload.sellingAgreementId, 'fundNumber': payload.fundNumber, 'dstDealerNumber': payload.dstDealerNumber, 'signingDate': payload.signingDate, 'dstEffectiveDate': payload.dstEffectiveDate, 'firstEligibleCloseDate': payload.firstEligibleCloseDate, 'endDate': payload.endDate, 'commission': payload.commission, 'fs2FeeDm': payload.fs2FeeDm, 'bdReallowanceMarketingFee': payload.bdReallowanceMarketingFee, 'totalDmFee': payload.totalDmFee, 'dealerCommission': payload.dealerCommission, 'advancedCommission': payload.advancedCommission, 'advancedMarketingFee': payload.advancedMarketingFee, 'socialCodes': payload.socialCodes, 'comments': payload.comments, 'custodian': payload.custodian,  'uploadedDocumentUri': payload.uploadedDocumentUri, 'saType': payload.saType, 'createdBy': payload.createdBy, 'createdOn': payload.createdOn, 'modifiedBy': payload.modifiedBy,  'modifiedOn':  payload.modifiedOn}]]]></db:input-parameters>
 		</db:stored-procedure>
 		<ee:transform doc:name="set processed status to 'true'" doc:id="a3125c0a-160c-453f-a9ce-bfe0133f85c1" >
@@ -161,24 +208,72 @@ output application/java
 			</ee:message>
 		</ee:transform>
 		<os:store key="#[vars.id]" doc:name="Store result into ObjectStore" doc:id="00f64ac4-d96b-473e-9771-5a27a86f357d" />
+		<error-handler>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="26f85f8e-84c5-4f6f-8b21-02778274ed8c" type="DB:QUERY_EXECUTION">
+				<flow-ref name="exponential-backoff-retry-strategy-flow" doc:name="exponential-backoff-retry-strategy-flow" doc:id="224b35a4-13f0-4a82-b008-2c380132acfd" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+	<flow name="update-selling-agreement-flow" doc:id="2f2c8b49-2f5b-4291-895e-ac2a50984fa2" >
+		<db:stored-procedure config-ref="Database_Config" doc:name="Call Selling Agreement Stored Procedure (PUT)" doc:id="8cc5d0f0-dddf-4ec9-b4dc-8a6480c101f5" >
+			<db:sql >CALL training.sellingagreement_put(:sellingAgreementId, :fundNumber, :dstDealerNumber, :signingDate, :dstEffectiveDate, :firstEligibleCloseDate, :endDate, :commission, :fs2FeeDm, :bdReallowanceMarketingFee, :totalDmFee, :dealerCommission, :advancedCommission, :advancedMarketingFee, :socialCodes, :comments, :custodian, :uploadedDocumentUri, :saType, :createdBy, :createdOn, :modifiedBy, :modifiedOn);</db:sql>
+			<db:parameter-types>
+				<db:parameter-type key="sellingAgreementId" type="BIGINT" />
+				<db:parameter-type key="fundNumber" type="BIGINT" />
+				<db:parameter-type key="dstDealerNumber" type="CHAR" />
+				<db:parameter-type key="signingDate" type="DATE" />
+				<db:parameter-type key="dstEffectiveDate" type="DATE" />
+				<db:parameter-type key="firstEligibleCloseDate" type="DATE" />
+				<db:parameter-type key="endDate" type="DATE" />
+				<db:parameter-type key="commission" type="DECIMAL" />
+				<db:parameter-type key="fs2FeeDm" type="DECIMAL" />
+				<db:parameter-type key="bdReallowanceMarketingFee" type="DECIMAL" />
+				<db:parameter-type key="totalDmFee" type="DECIMAL" />
+				<db:parameter-type key="dealerCommission" type="DECIMAL" />
+				<db:parameter-type key="advancedCommission" type="DECIMAL" />
+				<db:parameter-type key="advancedMarketingFee" type="DECIMAL" />
+				<db:parameter-type key="socialCodes" type="CHAR" />
+				<db:parameter-type key="comments" type="CHAR" />
+				<db:parameter-type key="custodian" type="CHAR" />
+				<db:parameter-type key="uploadedDocumentUri" type="CHAR" />
+				<db:parameter-type key="saType" type="CHAR" />
+				<db:parameter-type key="createdBy" type="DATE" />
+				<db:parameter-type key="createdOn" type="DATE" />
+				<db:parameter-type key="modifiedBy" type="CHAR" />
+				<db:parameter-type key="modifiedOn" type="CHAR" />
+			</db:parameter-types>
+			<db:input-parameters ><![CDATA[#[{'sellingAgreementId': payload.sellingAgreementId, 'fundNumber': payload.fundNumber, 'dstDealerNumber': payload.dstDealerNumber, 'signingDate': payload.signingDate, 'dstEffectiveDate': payload.dstEffectiveDate, 'firstEligibleCloseDate': payload.firstEligibleCloseDate, 'endDate': payload.endDate, 'commission': payload.commission, 'fs2FeeDm': payload.fs2FeeDm, 'bdReallowanceMarketingFee': payload.bdReallowanceMarketingFee, 'totalDmFee': payload.totalDmFee, 'dealerCommission': payload.dealerCommission, 'advancedCommission': payload.advancedCommission, 'advancedMarketingFee': payload.advancedMarketingFee, 'socialCodes': payload.socialCodes, 'comments': payload.comments, 'custodian': payload.custodian,  'uploadedDocumentUri': payload.uploadedDocumentUri, 'saType': payload.saType, 'createdBy': payload.createdBy, 'createdOn': payload.createdOn, 'modifiedBy': payload.modifiedBy,  'modifiedOn':  payload.modifiedOn}]]]></db:input-parameters>			
+		</db:stored-procedure>
+		<ee:transform doc:name="set processed status to 'true'" doc:id="028caf0c-9164-4dde-99cd-efe657c9bef4" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	updateCount1: payload.updateCount1,
+	processed: true
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<os:store key="#[vars.id]" doc:name="Store result into ObjectStore" doc:id="52e30e33-b63c-47da-bb5d-fb1cb71f675c" />
 	</flow>
 	<flow name="initializitation-flows" doc:id="ede6e894-63be-478e-907c-4ef29a2292b2" >
-		<ee:transform doc:name="set 'id', 'sleepValue', and 'counter' variables" doc:id="f4e4293c-4444-4382-bb55-b82966c96c08">
+		<scripting:execute engine="groovy" doc:name="set 'id' variable" doc:id="d851d183-8f64-40b1-a341-5537f3320115" >
+			<scripting:code >vars.id = UUID.randomUUID().toString()
+payload</scripting:code>
+		</scripting:execute>
+		<ee:transform doc:name="set 'sleepValue', and 'counter' variables" doc:id="f4e4293c-4444-4382-bb55-b82966c96c08">
 			<ee:message>
 			</ee:message>
 			<ee:variables>
 				<ee:set-variable variableName="sleepValue"><![CDATA[%dw 2.0
 output application/java
 ---
-p('backoff.retry.sleep.init')]]></ee:set-variable>
+p('backoff.retry.sleep.init') as Number]]></ee:set-variable>
 				<ee:set-variable variableName="counter"><![CDATA[%dw 2.0
 output application/java
 ---
 p('backoff.retry.max')]]></ee:set-variable>
-				<ee:set-variable variableName="id" ><![CDATA[%dw 2.0
-output application/java
----
-attributes.headers.correlation_id]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<os:store key="#[vars.id]" doc:name="Store 'uniqueId' in ObjectStore" doc:id="ce21f7c9-27d2-4f65-b402-fa0755262b3c">
@@ -189,7 +284,31 @@ attributes.headers.correlation_id]]></ee:set-variable>
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
-payload]]></ee:set-payload>
+{
+	sellingAgreementId: payload.sellingAgreementId,
+	fundNumber: payload.fundNumber,
+	dstDealerNumber: payload.dstDealerNumber,
+	signingDate: payload.signingDate,
+	dstEffectiveDate: payload.dstEffectiveDate,
+	firstEligibleCloseDate: payload.firstEligibleCloseDate,
+	endDate: payload.endDate,
+	commission: payload.commission,
+	fs2FeeDm: payload.fs2FeeDm,
+	bdReallowanceMarketingFee: payload.bdReallowanceMarketingFee,
+	totalDmFee: payload.totalDmFee,
+	dealerCommission: payload.dealerCommission,
+	advancedCommission: payload.advancedCommission,
+	advancedMarketingFee: payload.advancedMarketingFee,
+	socialCodes: payload.socialCodes,
+	comments: payload.comments,
+	custodian: payload.custodian,
+	uploadedDocumentUri: payload.uploadedDocumentUri,
+	saType: payload.saType,
+	createdBy: payload.createdBy,
+	createdOn: payload.createdOn,
+	modifiedBy: payload.modifiedBy,
+	modifiedOn: payload.modifiedOn
+}]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 	</flow>
