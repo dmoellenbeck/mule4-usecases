@@ -165,35 +165,9 @@ output application/json
 		</choice>
 	</flow>
 	<flow name="create-selling-agreement-flow" doc:id="9ffde12a-2c97-4221-b472-a72884885e14" >
+		<set-variable variableName="create" value="#[true]" doc:name="set 'create' variable with 'true'" doc:id="c0ef9530-4053-467a-8cba-6f7db4c90ab3" />
 		<db:stored-procedure config-ref="Database_Config" doc:name="Call Selling Agreement Stored Procedure (POST)" doc:id="9d1174fd-f1cf-4397-82d0-3c67d04895ec" >
 			<db:sql >CALL training.sellingagreement_post(:sellingAgreementId, :fundNumber, :dstDealerNumber, :signingDate, :dstEffectiveDate, :firstEligibleCloseDate, :endDate, :commission, :fs2FeeDm, :bdReallowanceMarketingFee, :totalDmFee, :dealerCommission, :advancedCommission, :advancedMarketingFee, :socialCodes, :comments, :custodian, :uploadedDocumentUri, :saType, :createdBy, :createdOn, :modifiedBy, :modifiedOn);</db:sql>
-			<!--
-			<db:parameter-types>
-				<db:parameter-type key="sellingAgreementId" type="BIGINT" />
-				<db:parameter-type key="fundNumber" type="BIGINT" />
-				<db:parameter-type key="dstDealerNumber" type="CHAR" />
-				<db:parameter-type key="signingDate" type="DATE" />
-				<db:parameter-type key="dstEffectiveDate" type="DATE" />
-				<db:parameter-type key="firstEligibleCloseDate" type="DATE" />
-				<db:parameter-type key="endDate" type="DATE" />
-				<db:parameter-type key="commission" type="DECIMAL" />
-				<db:parameter-type key="fs2FeeDm" type="DECIMAL" />
-				<db:parameter-type key="bdReallowanceMarketingFee" type="DECIMAL" />
-				<db:parameter-type key="totalDmFee" type="DECIMAL" />
-				<db:parameter-type key="dealerCommission" type="DECIMAL" />
-				<db:parameter-type key="advancedCommission" type="DECIMAL" />
-				<db:parameter-type key="advancedMarketingFee" type="DECIMAL" />
-				<db:parameter-type key="socialCodes" type="CHAR" />
-				<db:parameter-type key="comments" type="CHAR" />
-				<db:parameter-type key="custodian" type="CHAR" />
-				<db:parameter-type key="uploadedDocumentUri" type="CHAR" />
-				<db:parameter-type key="saType" type="CHAR" />
-				<db:parameter-type key="createdBy" type="DATE" />
-				<db:parameter-type key="createdOn" type="DATE" />
-				<db:parameter-type key="modifiedBy" type="CHAR" />
-				<db:parameter-type key="modifiedOn" type="CHAR" />
-			</db:parameter-types>
-			-->
 			<db:input-parameters ><![CDATA[#[{'sellingAgreementId': payload.sellingAgreementId, 'fundNumber': payload.fundNumber, 'dstDealerNumber': payload.dstDealerNumber, 'signingDate': payload.signingDate, 'dstEffectiveDate': payload.dstEffectiveDate, 'firstEligibleCloseDate': payload.firstEligibleCloseDate, 'endDate': payload.endDate, 'commission': payload.commission, 'fs2FeeDm': payload.fs2FeeDm, 'bdReallowanceMarketingFee': payload.bdReallowanceMarketingFee, 'totalDmFee': payload.totalDmFee, 'dealerCommission': payload.dealerCommission, 'advancedCommission': payload.advancedCommission, 'advancedMarketingFee': payload.advancedMarketingFee, 'socialCodes': payload.socialCodes, 'comments': payload.comments, 'custodian': payload.custodian,  'uploadedDocumentUri': payload.uploadedDocumentUri, 'saType': payload.saType, 'createdBy': payload.createdBy, 'createdOn': payload.createdOn, 'modifiedBy': payload.modifiedBy,  'modifiedOn':  payload.modifiedOn}]]]></db:input-parameters>
 		</db:stored-procedure>
 		<ee:transform doc:name="set processed status to 'true'" doc:id="a3125c0a-160c-453f-a9ce-bfe0133f85c1" >
@@ -215,33 +189,9 @@ output application/java
 		</error-handler>
 	</flow>
 	<flow name="update-selling-agreement-flow" doc:id="2f2c8b49-2f5b-4291-895e-ac2a50984fa2" >
+		<set-variable variableName="create" value="#[false]" doc:name="set 'create' variable with 'false'" doc:id="0e951616-4325-4988-a56c-871c20004220" />
 		<db:stored-procedure config-ref="Database_Config" doc:name="Call Selling Agreement Stored Procedure (PUT)" doc:id="8cc5d0f0-dddf-4ec9-b4dc-8a6480c101f5" >
 			<db:sql >CALL training.sellingagreement_put(:sellingAgreementId, :fundNumber, :dstDealerNumber, :signingDate, :dstEffectiveDate, :firstEligibleCloseDate, :endDate, :commission, :fs2FeeDm, :bdReallowanceMarketingFee, :totalDmFee, :dealerCommission, :advancedCommission, :advancedMarketingFee, :socialCodes, :comments, :custodian, :uploadedDocumentUri, :saType, :createdBy, :createdOn, :modifiedBy, :modifiedOn);</db:sql>
-			<db:parameter-types>
-				<db:parameter-type key="sellingAgreementId" type="BIGINT" />
-				<db:parameter-type key="fundNumber" type="BIGINT" />
-				<db:parameter-type key="dstDealerNumber" type="CHAR" />
-				<db:parameter-type key="signingDate" type="DATE" />
-				<db:parameter-type key="dstEffectiveDate" type="DATE" />
-				<db:parameter-type key="firstEligibleCloseDate" type="DATE" />
-				<db:parameter-type key="endDate" type="DATE" />
-				<db:parameter-type key="commission" type="DECIMAL" />
-				<db:parameter-type key="fs2FeeDm" type="DECIMAL" />
-				<db:parameter-type key="bdReallowanceMarketingFee" type="DECIMAL" />
-				<db:parameter-type key="totalDmFee" type="DECIMAL" />
-				<db:parameter-type key="dealerCommission" type="DECIMAL" />
-				<db:parameter-type key="advancedCommission" type="DECIMAL" />
-				<db:parameter-type key="advancedMarketingFee" type="DECIMAL" />
-				<db:parameter-type key="socialCodes" type="CHAR" />
-				<db:parameter-type key="comments" type="CHAR" />
-				<db:parameter-type key="custodian" type="CHAR" />
-				<db:parameter-type key="uploadedDocumentUri" type="CHAR" />
-				<db:parameter-type key="saType" type="CHAR" />
-				<db:parameter-type key="createdBy" type="DATE" />
-				<db:parameter-type key="createdOn" type="DATE" />
-				<db:parameter-type key="modifiedBy" type="CHAR" />
-				<db:parameter-type key="modifiedOn" type="CHAR" />
-			</db:parameter-types>
 			<db:input-parameters ><![CDATA[#[{'sellingAgreementId': payload.sellingAgreementId, 'fundNumber': payload.fundNumber, 'dstDealerNumber': payload.dstDealerNumber, 'signingDate': payload.signingDate, 'dstEffectiveDate': payload.dstEffectiveDate, 'firstEligibleCloseDate': payload.firstEligibleCloseDate, 'endDate': payload.endDate, 'commission': payload.commission, 'fs2FeeDm': payload.fs2FeeDm, 'bdReallowanceMarketingFee': payload.bdReallowanceMarketingFee, 'totalDmFee': payload.totalDmFee, 'dealerCommission': payload.dealerCommission, 'advancedCommission': payload.advancedCommission, 'advancedMarketingFee': payload.advancedMarketingFee, 'socialCodes': payload.socialCodes, 'comments': payload.comments, 'custodian': payload.custodian,  'uploadedDocumentUri': payload.uploadedDocumentUri, 'saType': payload.saType, 'createdBy': payload.createdBy, 'createdOn': payload.createdOn, 'modifiedBy': payload.modifiedBy,  'modifiedOn':  payload.modifiedOn}]]]></db:input-parameters>			
 		</db:stored-procedure>
 		<ee:transform doc:name="set processed status to 'true'" doc:id="028caf0c-9164-4dde-99cd-efe657c9bef4" >
@@ -256,6 +206,11 @@ output application/java
 			</ee:message>
 		</ee:transform>
 		<os:store key="#[vars.id]" doc:name="Store result into ObjectStore" doc:id="52e30e33-b63c-47da-bb5d-fb1cb71f675c" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="640204a7-f978-4da2-bc43-b43bb38b5a64" >
+				<flow-ref name="exponential-backoff-retry-strategy-flow" doc:name="exponential-backoff-retry-strategy-flow" doc:id="6d03e837-0e04-4c62-9e63-29fce4a7ca53" />
+			</on-error-continue>
+		</error-handler>
 	</flow>
 	<flow name="initializitation-flows" doc:id="ede6e894-63be-478e-907c-4ef29a2292b2" >
 		<scripting:execute engine="groovy" doc:name="set 'id' variable" doc:id="d851d183-8f64-40b1-a341-5537f3320115" >

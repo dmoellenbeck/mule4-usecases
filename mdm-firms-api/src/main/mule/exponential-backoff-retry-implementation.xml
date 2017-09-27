@@ -10,8 +10,7 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 	<flow name="exponential-backoff-retry-strategy-flow" doc:id="0390796a-27f6-4be3-8824-8928d51eb095" >
 		<choice doc:name="Choice - max attempts reached?" doc:id="7d9481b4-717a-43f3-b67f-ddb3d2dd6921" >
 			<when expression="#[vars.counter == 0]" >
-				<logger level="ERROR" doc:name="Log max attempts reached" doc:id="5a7292fc-3d63-49a2-8c37-cda0aa24ee1e" message='#["Max attempts reached"]'/>
-				<logger level="INFO" doc:name="Logger" doc:id="b1ef8935-828f-48cf-9f21-067d702dc6a3" message="#[vars.sleepValue]"/>
+				<logger level="ERROR" doc:name="Log max attempts reached" doc:id="5a7292fc-3d63-49a2-8c37-cda0aa24ee1e" message="#[output text/plain ---&quot;Max attempts reached for payload: $(write(payload, 'application/json'))&quot;]"/>
 			</when>
 			<otherwise >
 				<ee:transform doc:name="Update 'counter' variable" doc:id="c29f9891-2e3f-4753-be91-54e6a487d926" >
@@ -37,7 +36,14 @@ output application/java
 vars.sleepValue * 2]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
-				<flow-ref name="create-selling-agreement-flow" doc:name="create-selling-agreement-flow" doc:id="0a92b93d-5a30-4a08-93cf-1ac28a082c06" />
+				<choice doc:name="create selling agreement?" doc:id="018a3f6a-1856-452e-a4db-f331cc67f3b0" >
+					<when expression="#[vars.create]" >
+						<flow-ref name="create-selling-agreement-flow" doc:name="create-selling-agreement-flow" doc:id="0a92b93d-5a30-4a08-93cf-1ac28a082c06" />
+					</when>
+					<otherwise >
+						<flow-ref name="update-selling-agreement-flow" doc:name="update-selling-agreement-flow" doc:id="43648295-d402-475b-a212-0c8cfaad6e31" />
+					</otherwise>
+				</choice>
 			</otherwise>
 		</choice>
 	</flow>
