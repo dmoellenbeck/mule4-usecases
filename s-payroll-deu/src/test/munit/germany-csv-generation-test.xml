@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<munit:config name="munit" doc:name="MUnit configuration"/>
+		<import file="global.xml" />
+		<import file="implementation.xml" doc:name="Import"/>
+	<munit:test name="test-csv-export-ok" description="Test" doc:id="9d9c01bd-bea7-4e6e-a99c-311e08362bd2" >
+		<munit:behavior >
+			<set-payload value="#[getResourceAsString('sample_data/post_employees.json')]" doc:name="set s-payroll-deu JSON request" doc:id="d26ade30-134f-4e8f-9737-bdd593f6c57e" mimeType="application/json"/>
+			<munit-tools:mock-when processor="ftp:write" doc:name="ftp:write" doc:id="abcb90c3-d556-4a32-9966-c78c4d650311" >
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[getResourceAsString('sample_data/germany_employees.csv')]" mediaType="application/csv"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref name="post-employees-flow" doc:name="post-employees-flow" doc:id="f0c56830-ee06-43bd-a7d2-fe9974ff9bc5" />
+		</munit:execution>
+		<munit:validation>
+			<ee:transform doc:name="JSON to JAVA" doc:id="365db318-dd19-4021-8404-223a5e74af15" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<munit-tools:assert-that expression='#[payload.message]' is='#[equalTo("OK")]' doc:name="Assert that payload message equals 'OK'" doc:id="413fc7de-c5d6-4eb5-8caa-05aa60c84dde" />
+		</munit:validation>
+	</munit:test>
+</mule>

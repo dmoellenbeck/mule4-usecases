@@ -1,0 +1,804 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007fffc0aabfcc, pid=1291, tid=0x0000000000005703
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0_131-b11) (build 1.8.0_131-b11)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.131-b11 mixed mode bsd-amd64 compressed oops)
+# Problematic frame:
+# C  [libsystem_platform.dylib+0x5fcc]  _platform_memmove$VARIANT$Haswell+0x12c
+#
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00007fc790e6c000):  JavaThread "[Embedded]" [_thread_in_native, id=22275, stack(0x00007000030fe000,0x00007000031fe000)]
+
+siginfo: si_signo: 11 (SIGSEGV), si_code: 1 (SEGV_MAPERR), si_addr: 0x0000000111173000
+
+Registers:
+RAX=0x00007fc794944600, RBX=0x0000000111171dc3, RCX=0x0000000000000020, RDX=0x00000000000001e3
+RSP=0x00007000031f6a10, RBP=0x00007000031f6a10, RSI=0x0000000111172fd1, RDI=0x00007fc7949457e0
+R8 =0x0000000000001404, R9 =0x00007fc794944600, R10=0x00007fc794800000, R11=0x00007fc6837d280f
+R12=0x0000000050737361, R13=0x000000000001b419, R14=0x000000001402014b, R15=0x0000000000000800
+RIP=0x00007fffc0aabfcc, EFLAGS=0x0000000000010202, ERR=0x0000000000000004
+  TRAPNO=0x000000000000000e
+
+Top of Stack: (sp=0x00007000031f6a10)
+0x00007000031f6a10:   00007000031f6a80 00000001093e2006
+0x00007000031f6a20:   00000000656c6966 0000000000000008
+0x00007000031f6a30:   0000000000000808 00007fc794944600
+0x00007000031f6a40:   0000000000001403 00007fc797069ff0
+0x00007000031f6a50:   00007fc797472e10 00007fc797069ff0
+0x00007000031f6a60:   00007fc79706a270 0000000000000370
+0x00007000031f6a70:   0000000031ceb2e1 00007fc78ff52090
+0x00007000031f6a80:   00007000031f6ae0 00000001093e252d
+0x00007000031f6a90:   00007000031f6b46 00007000031f6b45
+0x00007000031f6aa0:   0000004600000000 0000004701e6c000
+0x00007000031f6ab0:   00007000031f6afe 00007000031f6f48
+0x00007000031f6ac0:   0000000000000047 00007000031f6afe
+0x00007000031f6ad0:   00007fc797069ff0 00007fc790e6c1f8
+0x00007000031f6ae0:   00007000031f6f30 00000001093e1238
+0x00007000031f6af0:   0000000000001fa0 726f000000000001
+0x00007000031f6b00:   652f656c756d2f67 6e6f69736e657478
+0x00007000031f6b10:   6f632f656c69662f 6970612f6e6f6d6d
+0x00007000031f6b20:   697470656378652f 656c69462f736e6f
+0x00007000031f6b30:   784564656b636f4c 2e6e6f6974706563
+0x00007000031f6b40:   0000007373616c63 000000000000000a
+0x00007000031f6b50:   00007000031f6d00 000000010a6ee65c
+0x00007000031f6b60:   00007fc700000001 00007fc790e6c000
+0x00007000031f6b70:   7d1040c34b4d508d 00007000031f6d98
+0x00007000031f6b80:   0000000000000000 0000000113b066a0
+0x00007000031f6b90:   0026c2ee25b34b36 00007000031f6d18
+0x00007000031f6ba0:   00007000031f6d90 00007fc790e6c000
+0x00007000031f6bb0:   00007fc790e6c000 00007fc78fd85bc0
+0x00007000031f6bc0:   00007fc7945c6600 00007fc7945c6640
+0x00007000031f6bd0:   00007fc7945ce5e8 00000000000080b0
+0x00007000031f6be0:   00007000031f7190 00007fc790e6c000
+0x00007000031f6bf0:   00007fc79197ddd0 000000012d184848
+0x00007000031f6c00:   00007fc790e6c000 000000012d184848 
+
+Instructions: (pc=0x00007fffc0aabfcc)
+0x00007fffc0aabfac:   80 00 00 00 76 4e 48 f7 c6 1f 00 00 00 74 25 c5
+0x00007fffc0aabfbc:   fc 29 0f c5 fc 29 57 20 48 83 c7 40 c5 fc 10 0e
+0x00007fffc0aabfcc:   c5 fc 10 56 20 48 83 c6 40 48 83 ea 40 77 e0 eb
+0x00007fffc0aabfdc:   23 0f 1f 00 c5 fc 29 0f c5 fc 29 57 20 48 83 c7 
+
+Register to memory mapping:
+
+RAX=0x00007fc794944600 is an unknown value
+RBX=0x0000000111171dc3 is an unknown value
+RCX=0x0000000000000020 is an unknown value
+RDX=0x00000000000001e3 is an unknown value
+RSP=0x00007000031f6a10 is pointing into the stack for thread: 0x00007fc790e6c000
+RBP=0x00007000031f6a10 is pointing into the stack for thread: 0x00007fc790e6c000
+RSI=0x0000000111172fd1 is an unknown value
+RDI=0x00007fc7949457e0 is an unknown value
+R8 =0x0000000000001404 is an unknown value
+R9 =0x00007fc794944600 is an unknown value
+R10=0x00007fc794800000 is an unknown value
+R11=0x00007fc6837d280f is an unknown value
+R12=0x0000000050737361 is an unknown value
+R13=0x000000000001b419 is an unknown value
+R14=0x000000001402014b is an unknown value
+R15=0x0000000000000800 is an unknown value
+
+
+Stack: [0x00007000030fe000,0x00007000031fe000],  sp=0x00007000031f6a10,  free space=994k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [libsystem_platform.dylib+0x5fcc]  _platform_memmove$VARIANT$Haswell+0x12c
+C  [libzip.dylib+0x3006]  newEntry+0x2c8
+C  [libzip.dylib+0x352d]  ZIP_GetEntry2+0xd4
+C  [libzip.dylib+0x2238]  Java_java_util_zip_ZipFile_getEntry+0xcf
+J 389  java.util.zip.ZipFile.getEntry(J[BZ)J (0 bytes) @ 0x0000000113c8e6ce [0x0000000113c8e600+0xce]
+J 7586 C2 java.util.jar.JarFile.getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry; (22 bytes) @ 0x0000000113ea72f4 [0x0000000113ea6f80+0x374]
+J 6378 C2 sun.misc.URLClassPath$JarLoader.getResource(Ljava/lang/String;Z)Lsun/misc/Resource; (85 bytes) @ 0x0000000114df2a34 [0x0000000114df2820+0x214]
+J 8177 C2 java.net.URLClassLoader$1.run()Ljava/lang/Object; (5 bytes) @ 0x00000001153035dc [0x00000001153028c0+0xd1c]
+v  ~StubRoutines::call_stub
+V  [libjvm.dylib+0x2ee5b6]
+V  [libjvm.dylib+0x34ed14]
+J 133  java.security.AccessController.doPrivileged(Ljava/security/PrivilegedExceptionAction;Ljava/security/AccessControlContext;)Ljava/lang/Object; (0 bytes) @ 0x0000000113c0a155 [0x0000000113c0a080+0xd5]
+J 10052 C2 org.mule.runtime.module.artifact.api.classloader.FineGrainedControlClassLoader.findLocalClass(Ljava/lang/String;)Ljava/lang/Class; (37 bytes) @ 0x00000001158dd660 [0x00000001158dd3a0+0x2c0]
+J 8175 C2 org.mule.runtime.module.artifact.api.classloader.FineGrainedControlClassLoader.loadClass(Ljava/lang/String;Z)Ljava/lang/Class; (199 bytes) @ 0x00000001152c642c [0x00000001152c5de0+0x64c]
+J 4013 C2 java.lang.ClassLoader.loadClass(Ljava/lang/String;)Ljava/lang/Class; (7 bytes) @ 0x00000001149ba260 [0x00000001149ba220+0x40]
+v  ~StubRoutines::call_stub
+V  [libjvm.dylib+0x2ee5b6]
+V  [libjvm.dylib+0x2eed5a]
+V  [libjvm.dylib+0x2eeeb2]
+V  [libjvm.dylib+0x53ca02]
+V  [libjvm.dylib+0x53c1ca]
+V  [libjvm.dylib+0x53cc1e]
+V  [libjvm.dylib+0x53d2d1]
+V  [libjvm.dylib+0x58809a]
+V  [libjvm.dylib+0x50976f]
+V  [libjvm.dylib+0x58fe51]
+V  [libjvm.dylib+0x5a7426]
+V  [libjvm.dylib+0x5a809a]
+V  [libjvm.dylib+0x2c1fa7]
+V  [libjvm.dylib+0x2c1d90]
+V  [libjvm.dylib+0x2c1d90]
+V  [libjvm.dylib+0x2c2309]
+V  [libjvm.dylib+0x2c2341]
+V  [libjvm.dylib+0x2c2a67]
+V  [libjvm.dylib+0x2ea008]
+j  org.mule.extension.ftp.internal.ftp.connection.ClassicFtpConnectionProvider.connect()Lorg/mule/extension/ftp/internal/ftp/connection/ClassicFtpFileSystem;+0
+j  org.mule.extension.ftp.internal.ftp.connection.ClassicFtpConnectionProvider.connect()Ljava/lang/Object;+1
+j  org.mule.runtime.core.internal.connection.ConnectionProviderWrapper.connect()Ljava/lang/Object;+4
+j  org.mule.runtime.core.internal.connection.ErrorTypeHandlerConnectionProviderWrapper.connect()Ljava/lang/Object;+4
+j  org.mule.runtime.core.internal.connection.ConnectionProviderWrapper.connect()Ljava/lang/Object;+4
+j  org.mule.runtime.core.internal.connection.DefaultConnectionProviderWrapper.connect()Ljava/lang/Object;+1
+j  org.mule.runtime.core.internal.connection.PoolingConnectionManagementStrategy$ObjectFactoryAdapter.makeObject()Ljava/lang/Object;+7
+j  org.apache.commons.pool.impl.GenericObjectPool.borrowObject()Ljava/lang/Object;+597
+j  org.mule.runtime.core.internal.connection.PoolingConnectionManagementStrategy.borrowConnection()Ljava/lang/Object;+4
+j  org.mule.runtime.core.internal.connection.PoolingConnectionManagementStrategy.getConnectionHandler()Lorg/mule/runtime/api/connection/ConnectionHandler;+5
+j  org.mule.runtime.core.internal.connection.DefaultConnectionManager.getConnection(Ljava/lang/Object;)Lorg/mule/runtime/api/connection/ConnectionHandler;+88
+j  org.mule.runtime.core.internal.connection.DefaultConnectionManager.lambda$testConnectivity$1(Lorg/mule/runtime/extension/api/runtime/config/ConfigurationInstance;)Lorg/mule/runtime/api/connection/ConnectionValidationResult;+39
+j  org.mule.runtime.core.internal.connection.DefaultConnectionManager$$Lambda$1258.call()Ljava/lang/Object;+8
+j  org.mule.runtime.core.internal.connection.DefaultConnectionManager.doTestConnectivity(Ljava/util/concurrent/Callable;)Lorg/mule/runtime/api/connection/ConnectionValidationResult;+1
+j  org.mule.runtime.core.internal.connection.DefaultConnectionManager.testConnectivity(Lorg/mule/runtime/extension/api/runtime/config/ConfigurationInstance;)Lorg/mule/runtime/api/connection/ConnectionValidationResult;+30
+j  org.mule.runtime.core.internal.connection.CompositeConnectionManager.testConnectivity(Lorg/mule/runtime/extension/api/runtime/config/ConfigurationInstance;)Lorg/mule/runtime/api/connection/ConnectionValidationResult;+25
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationInstance$1.doWork(Lorg/mule/runtime/core/api/retry/RetryContext;)V+67
+j  org.mule.runtime.core.api.retry.policy.AbstractPolicyTemplate.execute(Lorg/mule/runtime/core/api/retry/RetryCallback;Ljava/util/concurrent/Executor;)Lorg/mule/runtime/core/api/retry/RetryContext;+37
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationInstance.testConnectivity()V+59
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationInstance.start()V+121
+j  org.mule.runtime.core.api.lifecycle.LifecycleUtils.startIfNeeded(Ljava/lang/Object;)V+16
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationProvider.startConfig(Lorg/mule/runtime/extension/api/runtime/config/ConfigurationInstance;)V+1
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationProvider.lambda$null$3(Ljava/lang/String;Ljava/lang/Object;)V+33
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationProvider$$Lambda$1256.onTransition(Ljava/lang/String;Ljava/lang/Object;)V+6
+j  org.mule.runtime.core.api.lifecycle.AbstractLifecycleManager.invokePhase(Ljava/lang/String;Ljava/lang/Object;Lorg/mule/runtime/core/api/lifecycle/LifecycleCallback;)V+13
+j  org.mule.runtime.core.internal.lifecycle.DefaultLifecycleManager.fireStartPhase(Lorg/mule/runtime/core/api/lifecycle/LifecycleCallback;)V+57
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationProvider.lambda$start$4()Ljava/lang/Object;+10
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationProvider$$Lambda$1254.call()Ljava/lang/Object;+4
+J 11103 C1 org.mule.runtime.core.api.util.ExceptionUtils.tryExpecting(Ljava/lang/Class;Ljava/util/concurrent/Callable;Lorg/mule/runtime/core/api/util/ExceptionHandler;)Ljava/lang/Object; (38 bytes) @ 0x0000000115d0dcb4 [0x0000000115d0dbc0+0xf4]
+J 8835 C1 org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader(Ljava/lang/ClassLoader;Ljava/util/concurrent/Callable;Ljava/lang/Class;Lorg/mule/runtime/core/api/util/ExceptionHandler;)Ljava/lang/Object; (48 bytes) @ 0x000000011540259c [0x00000001154018c0+0xcdc]
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationProvider.start()V+17
+j  sun.reflect.GeneratedMethodAccessor26.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+36
+J 4667 C2 java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object; (62 bytes) @ 0x00000001143be028 [0x00000001143bdf80+0xa8]
+J 11375 C1 org.mule.runtime.core.internal.lifecycle.phases.DefaultLifecyclePhase.applyLifecycle(Ljava/lang/Object;)V (142 bytes) @ 0x0000000113db908c [0x0000000113db7fc0+0x10cc]
+j  org.mule.runtime.core.internal.lifecycle.RegistryLifecycleCallback.doApplyLifecycle(Lorg/mule/runtime/core/api/lifecycle/LifecyclePhase;Ljava/util/Set;Lorg/mule/runtime/core/api/lifecycle/LifecycleObject;Ljava/util/Collection;)V+127
+j  org.mule.runtime.core.internal.lifecycle.RegistryLifecycleCallback.onTransition(Ljava/lang/String;Ljava/lang/Object;)V+165
+j  org.mule.runtime.core.api.lifecycle.AbstractLifecycleManager.invokePhase(Ljava/lang/String;Ljava/lang/Object;Lorg/mule/runtime/core/api/lifecycle/LifecycleCallback;)V+13
+j  org.mule.runtime.core.internal.lifecycle.RegistryLifecycleManager.fireLifecycle(Ljava/lang/String;)V+39
+j  org.mule.runtime.core.internal.registry.AbstractRegistryBroker.fireLifecycle(Ljava/lang/String;)V+37
+j  org.mule.runtime.core.internal.registry.MuleRegistryHelper.fireLifecycle(Ljava/lang/String;)V+43
+j  org.mule.runtime.core.internal.lifecycle.MuleContextLifecycleManager$MuleContextLifecycleCallback.onTransition(Ljava/lang/String;Lorg/mule/runtime/core/api/MuleContext;)V+7
+j  org.mule.runtime.core.internal.lifecycle.MuleContextLifecycleManager$MuleContextLifecycleCallback.onTransition(Ljava/lang/String;Ljava/lang/Object;)V+6
+j  org.mule.runtime.core.api.lifecycle.AbstractLifecycleManager.invokePhase(Ljava/lang/String;Ljava/lang/Object;Lorg/mule/runtime/core/api/lifecycle/LifecycleCallback;)V+13
+j  org.mule.runtime.core.internal.lifecycle.MuleContextLifecycleManager.fireLifecycle(Ljava/lang/String;)V+15
+j  org.mule.runtime.core.DefaultMuleContext.start()V+90
+j  org.mule.runtime.module.deployment.impl.internal.application.DefaultMuleApplication.start()V+52
+j  org.mule.runtime.module.deployment.impl.internal.artifact.DeployableArtifactWrapper$$Lambda$281.execute()V+4
+j  org.mule.runtime.module.deployment.impl.internal.artifact.DeployableArtifactWrapper$$Lambda$159.run()V+4
+j  org.mule.runtime.core.api.util.ClassUtils.lambda$withContextClassLoader$10(Ljava/lang/Runnable;)Ljava/lang/Object;+1
+j  org.mule.runtime.core.api.util.ClassUtils$$Lambda$68.call()Ljava/lang/Object;+4
+J 11103 C1 org.mule.runtime.core.api.util.ExceptionUtils.tryExpecting(Ljava/lang/Class;Ljava/util/concurrent/Callable;Lorg/mule/runtime/core/api/util/ExceptionHandler;)Ljava/lang/Object; (38 bytes) @ 0x0000000115d0dcb4 [0x0000000115d0dbc0+0xf4]
+J 8835 C1 org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader(Ljava/lang/ClassLoader;Ljava/util/concurrent/Callable;Ljava/lang/Class;Lorg/mule/runtime/core/api/util/ExceptionHandler;)Ljava/lang/Object; (48 bytes) @ 0x000000011540259c [0x00000001154018c0+0xcdc]
+J 8834 C1 org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader(Ljava/lang/ClassLoader;Ljava/util/concurrent/Callable;)Ljava/lang/Object; (13 bytes) @ 0x00000001153e5f74 [0x00000001153e5da0+0x1d4]
+j  org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader(Ljava/lang/ClassLoader;Ljava/lang/Runnable;)V+7
+j  org.mule.runtime.module.deployment.impl.internal.artifact.DeployableArtifactWrapper.executeWithinArtifactClassLoader(Lorg/mule/runtime/module/deployment/impl/internal/artifact/DeployableArtifactWrapper$ArtifactAction;)V+38
+j  org.mule.runtime.module.deployment.impl.internal.artifact.DeployableArtifactWrapper.start()V+15
+j  org.mule.runtime.module.deployment.internal.DefaultArtifactDeployer.deploy(Lorg/mule/runtime/deployment/model/api/DeployableArtifact;)V+13
+j  org.mule.runtime.module.deployment.internal.DefaultArchiveDeployer.deployArtifact(Lorg/mule/runtime/deployment/model/api/DeployableArtifact;)V+25
+j  org.mule.runtime.module.deployment.internal.DefaultArchiveDeployer.deployExplodedApp(Ljava/lang/String;)Lorg/mule/runtime/deployment/model/api/DeployableArtifact;+177
+j  org.mule.runtime.module.deployment.internal.DefaultArchiveDeployer.deployExplodedArtifact(Ljava/lang/String;)Lorg/mule/runtime/deployment/model/api/DeployableArtifact;+12
+j  org.mule.runtime.module.deployment.internal.MuleDeploymentService.lambda$deploy$2(Ljava/net/URI;)V+82
+j  org.mule.runtime.module.deployment.internal.MuleDeploymentService$$Lambda$295.execute()V+8
+j  org.mule.runtime.module.deployment.internal.MuleDeploymentService.executeSynchronized(Lorg/mule/runtime/module/deployment/internal/MuleDeploymentService$SynchronizedDeploymentAction;)V+97
+j  org.mule.runtime.module.deployment.internal.MuleDeploymentService.deploy(Ljava/net/URI;)V+8
+j  org.mule.runtime.module.embedded.impl.EmbeddedController.deployApplication([B)V+46
+...<more frames>...
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+J 389  java.util.zip.ZipFile.getEntry(J[BZ)J (0 bytes) @ 0x0000000113c8e658 [0x0000000113c8e600+0x58]
+J 7586 C2 java.util.jar.JarFile.getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry; (22 bytes) @ 0x0000000113ea72f4 [0x0000000113ea6f80+0x374]
+J 6378 C2 sun.misc.URLClassPath$JarLoader.getResource(Ljava/lang/String;Z)Lsun/misc/Resource; (85 bytes) @ 0x0000000114df2a34 [0x0000000114df2820+0x214]
+J 8177 C2 java.net.URLClassLoader$1.run()Ljava/lang/Object; (5 bytes) @ 0x00000001153035dc [0x00000001153028c0+0xd1c]
+v  ~StubRoutines::call_stub
+J 133  java.security.AccessController.doPrivileged(Ljava/security/PrivilegedExceptionAction;Ljava/security/AccessControlContext;)Ljava/lang/Object; (0 bytes) @ 0x0000000113c0a0e3 [0x0000000113c0a080+0x63]
+J 10052 C2 org.mule.runtime.module.artifact.api.classloader.FineGrainedControlClassLoader.findLocalClass(Ljava/lang/String;)Ljava/lang/Class; (37 bytes) @ 0x00000001158dd660 [0x00000001158dd3a0+0x2c0]
+J 8175 C2 org.mule.runtime.module.artifact.api.classloader.FineGrainedControlClassLoader.loadClass(Ljava/lang/String;Z)Ljava/lang/Class; (199 bytes) @ 0x00000001152c642c [0x00000001152c5de0+0x64c]
+J 4013 C2 java.lang.ClassLoader.loadClass(Ljava/lang/String;)Ljava/lang/Class; (7 bytes) @ 0x00000001149ba260 [0x00000001149ba220+0x40]
+v  ~StubRoutines::call_stub
+j  org.mule.extension.ftp.internal.ftp.connection.ClassicFtpConnectionProvider.connect()Lorg/mule/extension/ftp/internal/ftp/connection/ClassicFtpFileSystem;+0
+j  org.mule.extension.ftp.internal.ftp.connection.ClassicFtpConnectionProvider.connect()Ljava/lang/Object;+1
+j  org.mule.runtime.core.internal.connection.ConnectionProviderWrapper.connect()Ljava/lang/Object;+4
+j  org.mule.runtime.core.internal.connection.ErrorTypeHandlerConnectionProviderWrapper.connect()Ljava/lang/Object;+4
+j  org.mule.runtime.core.internal.connection.ConnectionProviderWrapper.connect()Ljava/lang/Object;+4
+j  org.mule.runtime.core.internal.connection.DefaultConnectionProviderWrapper.connect()Ljava/lang/Object;+1
+j  org.mule.runtime.core.internal.connection.PoolingConnectionManagementStrategy$ObjectFactoryAdapter.makeObject()Ljava/lang/Object;+7
+j  org.apache.commons.pool.impl.GenericObjectPool.borrowObject()Ljava/lang/Object;+597
+j  org.mule.runtime.core.internal.connection.PoolingConnectionManagementStrategy.borrowConnection()Ljava/lang/Object;+4
+j  org.mule.runtime.core.internal.connection.PoolingConnectionManagementStrategy.getConnectionHandler()Lorg/mule/runtime/api/connection/ConnectionHandler;+5
+j  org.mule.runtime.core.internal.connection.DefaultConnectionManager.getConnection(Ljava/lang/Object;)Lorg/mule/runtime/api/connection/ConnectionHandler;+88
+j  org.mule.runtime.core.internal.connection.DefaultConnectionManager.lambda$testConnectivity$1(Lorg/mule/runtime/extension/api/runtime/config/ConfigurationInstance;)Lorg/mule/runtime/api/connection/ConnectionValidationResult;+39
+j  org.mule.runtime.core.internal.connection.DefaultConnectionManager$$Lambda$1258.call()Ljava/lang/Object;+8
+j  org.mule.runtime.core.internal.connection.DefaultConnectionManager.doTestConnectivity(Ljava/util/concurrent/Callable;)Lorg/mule/runtime/api/connection/ConnectionValidationResult;+1
+j  org.mule.runtime.core.internal.connection.DefaultConnectionManager.testConnectivity(Lorg/mule/runtime/extension/api/runtime/config/ConfigurationInstance;)Lorg/mule/runtime/api/connection/ConnectionValidationResult;+30
+j  org.mule.runtime.core.internal.connection.CompositeConnectionManager.testConnectivity(Lorg/mule/runtime/extension/api/runtime/config/ConfigurationInstance;)Lorg/mule/runtime/api/connection/ConnectionValidationResult;+25
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationInstance$1.doWork(Lorg/mule/runtime/core/api/retry/RetryContext;)V+67
+j  org.mule.runtime.core.api.retry.policy.AbstractPolicyTemplate.execute(Lorg/mule/runtime/core/api/retry/RetryCallback;Ljava/util/concurrent/Executor;)Lorg/mule/runtime/core/api/retry/RetryContext;+37
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationInstance.testConnectivity()V+59
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationInstance.start()V+121
+j  org.mule.runtime.core.api.lifecycle.LifecycleUtils.startIfNeeded(Ljava/lang/Object;)V+16
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationProvider.startConfig(Lorg/mule/runtime/extension/api/runtime/config/ConfigurationInstance;)V+1
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationProvider.lambda$null$3(Ljava/lang/String;Ljava/lang/Object;)V+33
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationProvider$$Lambda$1256.onTransition(Ljava/lang/String;Ljava/lang/Object;)V+6
+j  org.mule.runtime.core.api.lifecycle.AbstractLifecycleManager.invokePhase(Ljava/lang/String;Ljava/lang/Object;Lorg/mule/runtime/core/api/lifecycle/LifecycleCallback;)V+13
+j  org.mule.runtime.core.internal.lifecycle.DefaultLifecycleManager.fireStartPhase(Lorg/mule/runtime/core/api/lifecycle/LifecycleCallback;)V+57
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationProvider.lambda$start$4()Ljava/lang/Object;+10
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationProvider$$Lambda$1254.call()Ljava/lang/Object;+4
+J 11103 C1 org.mule.runtime.core.api.util.ExceptionUtils.tryExpecting(Ljava/lang/Class;Ljava/util/concurrent/Callable;Lorg/mule/runtime/core/api/util/ExceptionHandler;)Ljava/lang/Object; (38 bytes) @ 0x0000000115d0dcb4 [0x0000000115d0dbc0+0xf4]
+J 8835 C1 org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader(Ljava/lang/ClassLoader;Ljava/util/concurrent/Callable;Ljava/lang/Class;Lorg/mule/runtime/core/api/util/ExceptionHandler;)Ljava/lang/Object; (48 bytes) @ 0x000000011540259c [0x00000001154018c0+0xcdc]
+j  org.mule.runtime.module.extension.internal.runtime.config.LifecycleAwareConfigurationProvider.start()V+17
+j  sun.reflect.GeneratedMethodAccessor26.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+36
+J 4667 C2 java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object; (62 bytes) @ 0x00000001143be028 [0x00000001143bdf80+0xa8]
+J 11375 C1 org.mule.runtime.core.internal.lifecycle.phases.DefaultLifecyclePhase.applyLifecycle(Ljava/lang/Object;)V (142 bytes) @ 0x0000000113db908c [0x0000000113db7fc0+0x10cc]
+j  org.mule.runtime.core.internal.lifecycle.RegistryLifecycleCallback.doApplyLifecycle(Lorg/mule/runtime/core/api/lifecycle/LifecyclePhase;Ljava/util/Set;Lorg/mule/runtime/core/api/lifecycle/LifecycleObject;Ljava/util/Collection;)V+127
+j  org.mule.runtime.core.internal.lifecycle.RegistryLifecycleCallback.onTransition(Ljava/lang/String;Ljava/lang/Object;)V+165
+j  org.mule.runtime.core.api.lifecycle.AbstractLifecycleManager.invokePhase(Ljava/lang/String;Ljava/lang/Object;Lorg/mule/runtime/core/api/lifecycle/LifecycleCallback;)V+13
+j  org.mule.runtime.core.internal.lifecycle.RegistryLifecycleManager.fireLifecycle(Ljava/lang/String;)V+39
+j  org.mule.runtime.core.internal.registry.AbstractRegistryBroker.fireLifecycle(Ljava/lang/String;)V+37
+j  org.mule.runtime.core.internal.registry.MuleRegistryHelper.fireLifecycle(Ljava/lang/String;)V+43
+j  org.mule.runtime.core.internal.lifecycle.MuleContextLifecycleManager$MuleContextLifecycleCallback.onTransition(Ljava/lang/String;Lorg/mule/runtime/core/api/MuleContext;)V+7
+j  org.mule.runtime.core.internal.lifecycle.MuleContextLifecycleManager$MuleContextLifecycleCallback.onTransition(Ljava/lang/String;Ljava/lang/Object;)V+6
+j  org.mule.runtime.core.api.lifecycle.AbstractLifecycleManager.invokePhase(Ljava/lang/String;Ljava/lang/Object;Lorg/mule/runtime/core/api/lifecycle/LifecycleCallback;)V+13
+j  org.mule.runtime.core.internal.lifecycle.MuleContextLifecycleManager.fireLifecycle(Ljava/lang/String;)V+15
+j  org.mule.runtime.core.DefaultMuleContext.start()V+90
+j  org.mule.runtime.module.deployment.impl.internal.application.DefaultMuleApplication.start()V+52
+j  org.mule.runtime.module.deployment.impl.internal.artifact.DeployableArtifactWrapper$$Lambda$281.execute()V+4
+j  org.mule.runtime.module.deployment.impl.internal.artifact.DeployableArtifactWrapper$$Lambda$159.run()V+4
+j  org.mule.runtime.core.api.util.ClassUtils.lambda$withContextClassLoader$10(Ljava/lang/Runnable;)Ljava/lang/Object;+1
+j  org.mule.runtime.core.api.util.ClassUtils$$Lambda$68.call()Ljava/lang/Object;+4
+J 11103 C1 org.mule.runtime.core.api.util.ExceptionUtils.tryExpecting(Ljava/lang/Class;Ljava/util/concurrent/Callable;Lorg/mule/runtime/core/api/util/ExceptionHandler;)Ljava/lang/Object; (38 bytes) @ 0x0000000115d0dcb4 [0x0000000115d0dbc0+0xf4]
+J 8835 C1 org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader(Ljava/lang/ClassLoader;Ljava/util/concurrent/Callable;Ljava/lang/Class;Lorg/mule/runtime/core/api/util/ExceptionHandler;)Ljava/lang/Object; (48 bytes) @ 0x000000011540259c [0x00000001154018c0+0xcdc]
+J 8834 C1 org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader(Ljava/lang/ClassLoader;Ljava/util/concurrent/Callable;)Ljava/lang/Object; (13 bytes) @ 0x00000001153e5f74 [0x00000001153e5da0+0x1d4]
+j  org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader(Ljava/lang/ClassLoader;Ljava/lang/Runnable;)V+7
+j  org.mule.runtime.module.deployment.impl.internal.artifact.DeployableArtifactWrapper.executeWithinArtifactClassLoader(Lorg/mule/runtime/module/deployment/impl/internal/artifact/DeployableArtifactWrapper$ArtifactAction;)V+38
+j  org.mule.runtime.module.deployment.impl.internal.artifact.DeployableArtifactWrapper.start()V+15
+j  org.mule.runtime.module.deployment.internal.DefaultArtifactDeployer.deploy(Lorg/mule/runtime/deployment/model/api/DeployableArtifact;)V+13
+j  org.mule.runtime.module.deployment.internal.DefaultArchiveDeployer.deployArtifact(Lorg/mule/runtime/deployment/model/api/DeployableArtifact;)V+25
+j  org.mule.runtime.module.deployment.internal.DefaultArchiveDeployer.deployExplodedApp(Ljava/lang/String;)Lorg/mule/runtime/deployment/model/api/DeployableArtifact;+177
+j  org.mule.runtime.module.deployment.internal.DefaultArchiveDeployer.deployExplodedArtifact(Ljava/lang/String;)Lorg/mule/runtime/deployment/model/api/DeployableArtifact;+12
+j  org.mule.runtime.module.deployment.internal.MuleDeploymentService.lambda$deploy$2(Ljava/net/URI;)V+82
+j  org.mule.runtime.module.deployment.internal.MuleDeploymentService$$Lambda$295.execute()V+8
+j  org.mule.runtime.module.deployment.internal.MuleDeploymentService.executeSynchronized(Lorg/mule/runtime/module/deployment/internal/MuleDeploymentService$SynchronizedDeploymentAction;)V+97
+j  org.mule.runtime.module.deployment.internal.MuleDeploymentService.deploy(Ljava/net/URI;)V+8
+j  org.mule.runtime.module.embedded.impl.EmbeddedController.deployApplication([B)V+46
+v  ~StubRoutines::call_stub
+J 2063  sun.reflect.NativeMethodAccessorImpl.invoke0(Ljava/lang/reflect/Method;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object; (0 bytes) @ 0x00000001141c27b7 [0x00000001141c2740+0x77]
+J 2062 C1 sun.reflect.NativeMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object; (104 bytes) @ 0x00000001141c3dd4 [0x00000001141c2c00+0x11d4]
+J 4667 C2 java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object; (62 bytes) @ 0x00000001143be028 [0x00000001143bdf80+0xa8]
+j  org.mule.runtime.module.embedded.internal.DefaultEmbeddedContainerBuilder$1.lambda$executeUsingReflection$3(Ljava/lang/ClassLoader;Lorg/mule/runtime/module/embedded/internal/DefaultEmbeddedContainerBuilder$UncheckedSupplier;Ljava/util/List;Ljava/lang/Object;)V+75
+j  org.mule.runtime.module.embedded.internal.DefaultEmbeddedContainerBuilder$1$$Lambda$49.run()V+16
+j  java.util.concurrent.Executors$RunnableAdapter.call()Ljava/lang/Object;+4
+j  java.util.concurrent.FutureTask.run()V+42
+j  java.util.concurrent.ThreadPoolExecutor.runWorker(Ljava/util/concurrent/ThreadPoolExecutor$Worker;)V+95
+j  java.util.concurrent.ThreadPoolExecutor$Worker.run()V+5
+j  java.lang.Thread.run()V+11
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x00007fc7981d5000 JavaThread "[s-payroll-deu].ObjectStoreManager-Monitor.01" [_thread_blocked, id=53507, stack(0x00007000070bb000,0x00007000071bb000)]
+  0x00007fc795577800 JavaThread "Log4j2-TF-1-AsyncLoggerConfig-5" daemon [_thread_blocked, id=52995, stack(0x0000700006fb8000,0x00007000070b8000)]
+  0x00007fc791138000 JavaThread "logger.context.reaper" [_thread_blocked, id=52483, stack(0x0000700006eb5000,0x0000700006fb5000)]
+  0x00007fc790c62000 JavaThread "Log4j2-TF-1-AsyncLoggerConfig-4" daemon [_thread_blocked, id=51971, stack(0x0000700006db2000,0x0000700006eb2000)]
+  0x00007fc79342d000 JavaThread "Thread-1" [_thread_in_native, id=51459, stack(0x0000700006caf000,0x0000700006daf000)]
+  0x00007fc7932b0000 JavaThread "Mule.app.deployer.monitor.1.thread.1" [_thread_blocked, id=50947, stack(0x0000700006bac000,0x0000700006cac000)]
+  0x00007fc796151800 JavaThread "[default].processing.time.monitor.01" [_thread_blocked, id=5639, stack(0x0000700006aa9000,0x0000700006ba9000)]
+  0x00007fc794b5b800 JavaThread "[default].ObjectStoreManager-Monitor.01" [_thread_blocked, id=6663, stack(0x00007000069a6000,0x0000700006aa6000)]
+  0x00007fc7961a1000 JavaThread "Log4j2-TF-1-AsyncLoggerConfig-3" daemon [_thread_blocked, id=50435, stack(0x00007000068a3000,0x00007000069a3000)]
+  0x00007fc795ccc000 JavaThread "http.listener.08 SelectorRunner" [_thread_in_native, id=49923, stack(0x00007000067a0000,0x00007000068a0000)]
+  0x00007fc795ccb800 JavaThread "http.listener.07 SelectorRunner" [_thread_in_native, id=49411, stack(0x000070000669d000,0x000070000679d000)]
+  0x00007fc795cca800 JavaThread "http.listener.06 SelectorRunner" [_thread_in_native, id=48899, stack(0x000070000659a000,0x000070000669a000)]
+  0x00007fc795cca000 JavaThread "http.listener.05 SelectorRunner" [_thread_in_native, id=48387, stack(0x0000700006497000,0x0000700006597000)]
+  0x00007fc795cc9000 JavaThread "http.listener.04 SelectorRunner" [_thread_in_native, id=47875, stack(0x0000700006394000,0x0000700006494000)]
+  0x00007fc793429000 JavaThread "http.listener.03 SelectorRunner" [_thread_in_native, id=47363, stack(0x0000700006291000,0x0000700006391000)]
+  0x00007fc793428800 JavaThread "http.listener.02 SelectorRunner" [_thread_in_native, id=46851, stack(0x000070000618e000,0x000070000628e000)]
+  0x00007fc795cc8800 JavaThread "http.listener.01 SelectorRunner" [_thread_in_native, id=46339, stack(0x000070000608b000,0x000070000618b000)]
+  0x00007fc7949d4000 JavaThread "Scheduler Maintenace.01" [_thread_blocked, id=45827, stack(0x0000700005f88000,0x0000700006088000)]
+  0x00007fc795b83800 JavaThread "[MuleRuntime].timer" [_thread_blocked, id=45315, stack(0x0000700005e85000,0x0000700005f85000)]
+  0x00007fc7949d3000 JavaThread "[MuleRuntime].cpuIntensive.16" [_thread_blocked, id=44803, stack(0x0000700005d82000,0x0000700005e82000)]
+  0x00007fc795b83000 JavaThread "[MuleRuntime].cpuIntensive.15" [_thread_blocked, id=44291, stack(0x0000700005c7f000,0x0000700005d7f000)]
+  0x00007fc795b82000 JavaThread "[MuleRuntime].cpuIntensive.14" [_thread_blocked, id=43779, stack(0x0000700005b7c000,0x0000700005c7c000)]
+  0x00007fc7949d8000 JavaThread "[MuleRuntime].cpuIntensive.13" [_thread_blocked, id=43267, stack(0x0000700005a79000,0x0000700005b79000)]
+  0x00007fc795b81800 JavaThread "[MuleRuntime].cpuIntensive.12" [_thread_blocked, id=42755, stack(0x0000700005976000,0x0000700005a76000)]
+  0x00007fc795b80800 JavaThread "[MuleRuntime].cpuIntensive.11" [_thread_blocked, id=42243, stack(0x0000700005873000,0x0000700005973000)]
+  0x00007fc794b36000 JavaThread "[MuleRuntime].cpuIntensive.10" [_thread_blocked, id=41731, stack(0x0000700005770000,0x0000700005870000)]
+  0x00007fc792916000 JavaThread "[MuleRuntime].cpuIntensive.09" [_thread_blocked, id=41219, stack(0x000070000566d000,0x000070000576d000)]
+  0x00007fc793426800 JavaThread "[MuleRuntime].cpuIntensive.08" [_thread_blocked, id=40707, stack(0x000070000556a000,0x000070000566a000)]
+  0x00007fc795b80000 JavaThread "[MuleRuntime].cpuIntensive.07" [_thread_blocked, id=40195, stack(0x0000700005467000,0x0000700005567000)]
+  0x00007fc795b7f000 JavaThread "[MuleRuntime].cpuIntensive.06" [_thread_blocked, id=39683, stack(0x0000700005364000,0x0000700005464000)]
+  0x00007fc795b7e800 JavaThread "[MuleRuntime].cpuIntensive.05" [_thread_blocked, id=39171, stack(0x0000700005261000,0x0000700005361000)]
+  0x00007fc795b7d800 JavaThread "[MuleRuntime].cpuIntensive.04" [_thread_blocked, id=38659, stack(0x000070000515e000,0x000070000525e000)]
+  0x00007fc7910b8800 JavaThread "[MuleRuntime].cpuIntensive.03" [_thread_blocked, id=38147, stack(0x000070000505b000,0x000070000515b000)]
+  0x00007fc7910b8000 JavaThread "[MuleRuntime].cpuIntensive.02" [_thread_blocked, id=37635, stack(0x0000700004f58000,0x0000700005058000)]
+  0x00007fc795b7d000 JavaThread "[MuleRuntime].cpuIntensive.01" [_thread_blocked, id=37123, stack(0x0000700004e55000,0x0000700004f55000)]
+  0x00007fc793425800 JavaThread "[MuleRuntime].io.08" [_thread_in_native, id=36611, stack(0x0000700004d52000,0x0000700004e52000)]
+  0x00007fc790220800 JavaThread "[MuleRuntime].io.07" [_thread_blocked, id=36099, stack(0x0000700004c4f000,0x0000700004d4f000)]
+  0x00007fc790220000 JavaThread "[MuleRuntime].io.06" [_thread_blocked, id=35587, stack(0x0000700004b4c000,0x0000700004c4c000)]
+  0x00007fc795cda800 JavaThread "[MuleRuntime].io.05" [_thread_blocked, id=35075, stack(0x0000700004a49000,0x0000700004b49000)]
+  0x00007fc793425000 JavaThread "[MuleRuntime].io.04" [_thread_blocked, id=34563, stack(0x0000700004946000,0x0000700004a46000)]
+  0x00007fc793424000 JavaThread "[MuleRuntime].io.03" [_thread_blocked, id=34051, stack(0x0000700004843000,0x0000700004943000)]
+  0x00007fc793423800 JavaThread "[MuleRuntime].io.02" [_thread_blocked, id=33539, stack(0x0000700004740000,0x0000700004840000)]
+  0x00007fc7949d7800 JavaThread "[MuleRuntime].io.01" [_thread_blocked, id=33027, stack(0x000070000463d000,0x000070000473d000)]
+  0x00007fc7949d6800 JavaThread "[MuleRuntime].cpuLight.16" [_thread_blocked, id=32515, stack(0x000070000453a000,0x000070000463a000)]
+  0x00007fc795cd9800 JavaThread "[MuleRuntime].cpuLight.15" [_thread_blocked, id=32003, stack(0x0000700004437000,0x0000700004537000)]
+  0x00007fc79021f000 JavaThread "[MuleRuntime].cpuLight.14" [_thread_blocked, id=31491, stack(0x0000700004334000,0x0000700004434000)]
+  0x00007fc793422800 JavaThread "[MuleRuntime].cpuLight.13" [_thread_blocked, id=30979, stack(0x0000700004231000,0x0000700004331000)]
+  0x00007fc7910b6800 JavaThread "[MuleRuntime].cpuLight.12" [_thread_blocked, id=30467, stack(0x000070000412e000,0x000070000422e000)]
+  0x00007fc79021e800 JavaThread "[MuleRuntime].cpuLight.11" [_thread_blocked, id=29955, stack(0x000070000402b000,0x000070000412b000)]
+  0x00007fc795cd9000 JavaThread "[MuleRuntime].cpuLight.10" [_thread_blocked, id=29443, stack(0x0000700003f28000,0x0000700004028000)]
+  0x00007fc795cd0000 JavaThread "[MuleRuntime].cpuLight.09" [_thread_blocked, id=28931, stack(0x0000700003e25000,0x0000700003f25000)]
+  0x00007fc7949d6000 JavaThread "[MuleRuntime].cpuLight.08" [_thread_blocked, id=28419, stack(0x0000700003d22000,0x0000700003e22000)]
+  0x00007fc794b2a000 JavaThread "[MuleRuntime].cpuLight.07" [_thread_blocked, id=27907, stack(0x0000700003c1f000,0x0000700003d1f000)]
+  0x00007fc794b29000 JavaThread "[MuleRuntime].cpuLight.06" [_thread_blocked, id=27395, stack(0x0000700003b1c000,0x0000700003c1c000)]
+  0x00007fc7928dc800 JavaThread "[MuleRuntime].cpuLight.05" [_thread_blocked, id=26883, stack(0x0000700003a19000,0x0000700003b19000)]
+  0x00007fc79608e800 JavaThread "[MuleRuntime].cpuLight.04" [_thread_blocked, id=26371, stack(0x0000700003916000,0x0000700003a16000)]
+  0x00007fc79021d800 JavaThread "[MuleRuntime].cpuLight.03" [_thread_blocked, id=25859, stack(0x0000700003813000,0x0000700003913000)]
+  0x00007fc79021d000 JavaThread "[MuleRuntime].cpuLight.02" [_thread_blocked, id=25347, stack(0x0000700003710000,0x0000700003810000)]
+  0x00007fc79021c000 JavaThread "[MuleRuntime].cpuLight.01" [_thread_blocked, id=24835, stack(0x000070000360d000,0x000070000370d000)]
+  0x00007fc794a2f800 JavaThread "[MuleRuntime]._QuartzSchedulerThread" [_thread_blocked, id=24323, stack(0x000070000350a000,0x000070000360a000)]
+  0x00007fc793422000 JavaThread "[MuleRuntime]._qz-1" [_thread_blocked, id=23811, stack(0x0000700003407000,0x0000700003507000)]
+  0x00007fc790f52800 JavaThread "Log4j2-TF-1-AsyncLoggerConfig-2" daemon [_thread_blocked, id=23299, stack(0x0000700003304000,0x0000700003404000)]
+  0x00007fc79015e000 JavaThread "Log4j2-TF-1-AsyncLoggerConfig-1" daemon [_thread_blocked, id=22787, stack(0x0000700003201000,0x0000700003301000)]
+=>0x00007fc790e6c000 JavaThread "[Embedded]" [_thread_in_native, id=22275, stack(0x00007000030fe000,0x00007000031fe000)]
+  0x00007fc793828000 JavaThread "Service Thread" daemon [_thread_blocked, id=21251, stack(0x0000700002ef8000,0x0000700002ff8000)]
+  0x00007fc79080f000 JavaThread "C1 CompilerThread3" daemon [_thread_blocked, id=20739, stack(0x0000700002df5000,0x0000700002ef5000)]
+  0x00007fc79080e000 JavaThread "C2 CompilerThread2" daemon [_thread_blocked, id=20227, stack(0x0000700002cf2000,0x0000700002df2000)]
+  0x00007fc79080d800 JavaThread "C2 CompilerThread1" daemon [_thread_in_native, id=19715, stack(0x0000700002bef000,0x0000700002cef000)]
+  0x00007fc790800800 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=19203, stack(0x0000700002aec000,0x0000700002bec000)]
+  0x00007fc790009000 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=18691, stack(0x00007000029e9000,0x0000700002ae9000)]
+  0x00007fc794005000 JavaThread "Finalizer" daemon [_thread_blocked, id=14595, stack(0x00007000028e6000,0x00007000029e6000)]
+  0x00007fc794002000 JavaThread "Reference Handler" daemon [_thread_blocked, id=14083, stack(0x00007000027e3000,0x00007000028e3000)]
+  0x00007fc792801800 JavaThread "main" [_thread_blocked, id=7939, stack(0x0000700001dc5000,0x0000700001ec5000)]
+
+Other Threads:
+  0x00007fc79380d800 VMThread [stack: 0x00007000026e0000,0x00007000027e0000] [id=13571]
+  0x00007fc793829000 WatcherThread [stack: 0x0000700002ffb000,0x00007000030fb000] [id=21763]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap:
+ PSYoungGen      total 884224K, used 76500K [0x000000076ab00000, 0x00000007acc80000, 0x00000007c0000000)
+  eden space 856576K, 5% used [0x000000076ab00000,0x000000076dab94b0,0x000000079ef80000)
+  from space 27648K, 99% used [0x000000079ef80000,0x00000007a0a7be78,0x00000007a0a80000)
+  to   space 32768K, 0% used [0x00000007aac80000,0x00000007aac80000,0x00000007acc80000)
+ ParOldGen       total 222208K, used 35500K [0x00000006c0000000, 0x00000006cd900000, 0x000000076ab00000)
+  object space 222208K, 15% used [0x00000006c0000000,0x00000006c22ab030,0x00000006cd900000)
+ Metaspace       used 70816K, capacity 76251K, committed 76440K, reserved 1116160K
+  class space    used 9445K, capacity 10592K, committed 10672K, reserved 1048576K
+
+Card table byte_map: [0x000000010b798000,0x000000010bf99000] byte_map_base: 0x0000000108198000
+
+Marking Bits: (ParMarkBitMap*) 0x000000010acf1ea0
+ Begin Bits: [0x0000000122ac1000, 0x0000000126ac1000)
+ End Bits:   [0x0000000126ac1000, 0x000000012aac1000)
+
+Polling page: 0x00000001093d6000
+
+CodeCache: size=245760Kb used=37693Kb max_used=38396Kb free=208066Kb
+ bounds [0x0000000113ac1000, 0x0000000116081000, 0x0000000122ac1000]
+ total_blobs=10711 nmethods=10157 adapters=465
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 13.433 Thread 0x00007fc79080f000 nmethod 12174 0x0000000113e5c590 code [0x0000000113e5c720, 0x0000000113e5cac8]
+Event: 13.433 Thread 0x00007fc79080f000 12186       1       com.lmax.disruptor.dsl.Disruptor::getRingBuffer (5 bytes)
+Event: 13.433 Thread 0x00007fc79080f000 nmethod 12186 0x00000001152b6810 code [0x00000001152b6960, 0x00000001152b6a70]
+Event: 13.454 Thread 0x00007fc79080f000 12188       3       org.apache.logging.log4j.spi.AbstractLogger::logIfEnabled (21 bytes)
+Event: 13.454 Thread 0x00007fc79080f000 nmethod 12188 0x00000001148c8990 code [0x00000001148c8b80, 0x00000001148c9718]
+Event: 13.458 Thread 0x00007fc790800800 nmethod 12183 0x0000000114e93f10 code [0x0000000114e94160, 0x0000000114e95b18]
+Event: 13.458 Thread 0x00007fc790800800 12184       4       sun.util.calendar.CalendarDate::getDayOfWeek (18 bytes)
+Event: 13.459 Thread 0x00007fc790800800 nmethod 12184 0x0000000115f1c890 code [0x0000000115f1c9e0, 0x0000000115f1ca58]
+Event: 13.459 Thread 0x00007fc790800800 12189       4       org.mule.runtime.api.util.Reference::equals (27 bytes)
+Event: 13.459 Thread 0x00007fc790800800 nmethod 12189 0x0000000113f43f10 code [0x0000000113f44060, 0x0000000113f44138]
+
+GC Heap History (10 events):
+Event: 7.746 GC heap before
+{Heap before GC invocations=10 (full 2):
+ PSYoungGen      total 537088K, used 517120K [0x000000076ab00000, 0x0000000794480000, 0x00000007c0000000)
+  eden space 517120K, 100% used [0x000000076ab00000,0x000000078a400000,0x000000078a400000)
+  from space 19968K, 0% used [0x000000078a400000,0x000000078a400000,0x000000078b780000)
+  to   space 18432K, 0% used [0x0000000793280000,0x0000000793280000,0x0000000794480000)
+ ParOldGen       total 163328K, used 18241K [0x00000006c0000000, 0x00000006c9f80000, 0x000000076ab00000)
+  object space 163328K, 11% used [0x00000006c0000000,0x00000006c11d0508,0x00000006c9f80000)
+ Metaspace       used 51824K, capacity 55678K, committed 55984K, reserved 1097728K
+  class space    used 7057K, capacity 7780K, committed 7856K, reserved 1048576K
+Event: 7.767 GC heap after
+Heap after GC invocations=10 (full 2):
+ PSYoungGen      total 656896K, used 18412K [0x000000076ab00000, 0x000000079c700000, 0x00000007c0000000)
+  eden space 638464K, 0% used [0x000000076ab00000,0x000000076ab00000,0x0000000791a80000)
+  from space 18432K, 99% used [0x0000000793280000,0x000000079447b3d8,0x0000000794480000)
+  to   space 24576K, 0% used [0x0000000791a80000,0x0000000791a80000,0x0000000793280000)
+ ParOldGen       total 163328K, used 25977K [0x00000006c0000000, 0x00000006c9f80000, 0x000000076ab00000)
+  object space 163328K, 15% used [0x00000006c0000000,0x00000006c195e610,0x00000006c9f80000)
+ Metaspace       used 51824K, capacity 55678K, committed 55984K, reserved 1097728K
+  class space    used 7057K, capacity 7780K, committed 7856K, reserved 1048576K
+}
+Event: 8.144 GC heap before
+{Heap before GC invocations=11 (full 2):
+ PSYoungGen      total 656896K, used 158991K [0x000000076ab00000, 0x000000079c700000, 0x00000007c0000000)
+  eden space 638464K, 22% used [0x000000076ab00000,0x0000000773448ab0,0x0000000791a80000)
+  from space 18432K, 99% used [0x0000000793280000,0x000000079447b3d8,0x0000000794480000)
+  to   space 24576K, 0% used [0x0000000791a80000,0x0000000791a80000,0x0000000793280000)
+ ParOldGen       total 163328K, used 25977K [0x00000006c0000000, 0x00000006c9f80000, 0x000000076ab00000)
+  object space 163328K, 15% used [0x00000006c0000000,0x00000006c195e610,0x00000006c9f80000)
+ Metaspace       used 55096K, capacity 59095K, committed 59160K, reserved 1099776K
+  class space    used 7439K, capacity 8240K, committed 8240K, reserved 1048576K
+Event: 8.163 GC heap after
+Heap after GC invocations=11 (full 2):
+ PSYoungGen      total 663040K, used 17311K [0x000000076ab00000, 0x00000007a2a80000, 0x00000007c0000000)
+  eden space 638464K, 0% used [0x000000076ab00000,0x000000076ab00000,0x0000000791a80000)
+  from space 24576K, 70% used [0x0000000791a80000,0x0000000792b67f18,0x0000000793280000)
+  to   space 25600K, 0% used [0x00000007a1180000,0x00000007a1180000,0x00000007a2a80000)
+ ParOldGen       total 163328K, used 25985K [0x00000006c0000000, 0x00000006c9f80000, 0x000000076ab00000)
+  object space 163328K, 15% used [0x00000006c0000000,0x00000006c1960610,0x00000006c9f80000)
+ Metaspace       used 55096K, capacity 59095K, committed 59160K, reserved 1099776K
+  class space    used 7439K, capacity 8240K, committed 8240K, reserved 1048576K
+}
+Event: 8.163 GC heap before
+{Heap before GC invocations=12 (full 3):
+ PSYoungGen      total 663040K, used 17311K [0x000000076ab00000, 0x00000007a2a80000, 0x00000007c0000000)
+  eden space 638464K, 0% used [0x000000076ab00000,0x000000076ab00000,0x0000000791a80000)
+  from space 24576K, 70% used [0x0000000791a80000,0x0000000792b67f18,0x0000000793280000)
+  to   space 25600K, 0% used [0x00000007a1180000,0x00000007a1180000,0x00000007a2a80000)
+ ParOldGen       total 163328K, used 25985K [0x00000006c0000000, 0x00000006c9f80000, 0x000000076ab00000)
+  object space 163328K, 15% used [0x00000006c0000000,0x00000006c1960610,0x00000006c9f80000)
+ Metaspace       used 55096K, capacity 59095K, committed 59160K, reserved 1099776K
+  class space    used 7439K, capacity 8240K, committed 8240K, reserved 1048576K
+Event: 8.286 GC heap after
+Heap after GC invocations=12 (full 3):
+ PSYoungGen      total 663040K, used 0K [0x000000076ab00000, 0x00000007a2a80000, 0x00000007c0000000)
+  eden space 638464K, 0% used [0x000000076ab00000,0x000000076ab00000,0x0000000791a80000)
+  from space 24576K, 0% used [0x0000000791a80000,0x0000000791a80000,0x0000000793280000)
+  to   space 25600K, 0% used [0x00000007a1180000,0x00000007a1180000,0x00000007a2a80000)
+ ParOldGen       total 222208K, used 32203K [0x00000006c0000000, 0x00000006cd900000, 0x000000076ab00000)
+  object space 222208K, 14% used [0x00000006c0000000,0x00000006c1f72dd8,0x00000006cd900000)
+ Metaspace       used 55096K, capacity 59095K, committed 59160K, reserved 1099776K
+  class space    used 7439K, capacity 8240K, committed 8240K, reserved 1048576K
+}
+Event: 10.754 GC heap before
+{Heap before GC invocations=13 (full 3):
+ PSYoungGen      total 663040K, used 638464K [0x000000076ab00000, 0x00000007a2a80000, 0x00000007c0000000)
+  eden space 638464K, 100% used [0x000000076ab00000,0x0000000791a80000,0x0000000791a80000)
+  from space 24576K, 0% used [0x0000000791a80000,0x0000000791a80000,0x0000000793280000)
+  to   space 25600K, 0% used [0x00000007a1180000,0x00000007a1180000,0x00000007a2a80000)
+ ParOldGen       total 222208K, used 32203K [0x00000006c0000000, 0x00000006cd900000, 0x000000076ab00000)
+  object space 222208K, 14% used [0x00000006c0000000,0x00000006c1f72dd8,0x00000006cd900000)
+ Metaspace       used 61476K, capacity 66401K, committed 66584K, reserved 1105920K
+  class space    used 8182K, capacity 9206K, committed 9264K, reserved 1048576K
+Event: 10.775 GC heap after
+Heap after GC invocations=13 (full 3):
+ PSYoungGen      total 834048K, used 20311K [0x000000076ab00000, 0x00000007a2580000, 0x00000007c0000000)
+  eden space 813568K, 0% used [0x000000076ab00000,0x000000076ab00000,0x000000079c580000)
+  from space 20480K, 99% used [0x00000007a1180000,0x00000007a2555c40,0x00000007a2580000)
+  to   space 27648K, 0% used [0x000000079ef80000,0x000000079ef80000,0x00000007a0a80000)
+ ParOldGen       total 222208K, used 32211K [0x00000006c0000000, 0x00000006cd900000, 0x000000076ab00000)
+  object space 222208K, 14% used [0x00000006c0000000,0x00000006c1f74dd8,0x00000006cd900000)
+ Metaspace       used 61476K, capacity 66401K, committed 66584K, reserved 1105920K
+  class space    used 8182K, capacity 9206K, committed 9264K, reserved 1048576K
+}
+Event: 13.335 GC heap before
+{Heap before GC invocations=14 (full 3):
+ PSYoungGen      total 834048K, used 833879K [0x000000076ab00000, 0x00000007a2580000, 0x00000007c0000000)
+  eden space 813568K, 100% used [0x000000076ab00000,0x000000079c580000,0x000000079c580000)
+  from space 20480K, 99% used [0x00000007a1180000,0x00000007a2555c40,0x00000007a2580000)
+  to   space 27648K, 0% used [0x000000079ef80000,0x000000079ef80000,0x00000007a0a80000)
+ ParOldGen       total 222208K, used 32211K [0x00000006c0000000, 0x00000006cd900000, 0x000000076ab00000)
+  object space 222208K, 14% used [0x00000006c0000000,0x00000006c1f74dd8,0x00000006cd900000)
+ Metaspace       used 69913K, capacity 75359K, committed 75416K, reserved 1114112K
+  class space    used 9291K, capacity 10386K, committed 10416K, reserved 1048576K
+Event: 13.356 GC heap after
+Heap after GC invocations=14 (full 3):
+ PSYoungGen      total 884224K, used 27631K [0x000000076ab00000, 0x00000007acc80000, 0x00000007c0000000)
+  eden space 856576K, 0% used [0x000000076ab00000,0x000000076ab00000,0x000000079ef80000)
+  from space 27648K, 99% used [0x000000079ef80000,0x00000007a0a7be78,0x00000007a0a80000)
+  to   space 32768K, 0% used [0x00000007aac80000,0x00000007aac80000,0x00000007acc80000)
+ ParOldGen       total 222208K, used 35500K [0x00000006c0000000, 0x00000006cd900000, 0x000000076ab00000)
+  object space 222208K, 15% used [0x00000006c0000000,0x00000006c22ab030,0x00000006cd900000)
+ Metaspace       used 69913K, capacity 75359K, committed 75416K, reserved 1114112K
+  class space    used 9291K, capacity 10386K, committed 10416K, reserved 1048576K
+}
+
+Deoptimization events (10 events):
+Event: 12.830 Thread 0x00007fc790e6c000 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0x0000000115f843ec method=org.raml.yagi.framework.util.NodeSelector.findValueWithName(Lorg/raml/yagi/framework/nodes/Node;Ljava/lang/String;)Lorg/raml/yagi/framework/nodes/Node; @ 3
+Event: 12.834 Thread 0x00007fc790e6c000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x0000000113d02b04 method=java.util.regex.Matcher.appendReplacement(Ljava/lang/StringBuffer;Ljava/lang/String;)Ljava/util/regex/Matcher; @ 47
+Event: 12.837 Thread 0x00007fc790e6c000 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0x0000000115fa6fb8 method=org.raml.v2.internal.impl.commons.rule.SchemaDeclarationRule.matches(Lorg/raml/yagi/framework/nodes/Node;)Z @ 11
+Event: 12.849 Thread 0x00007fc790e6c000 Uncommon trap: reason=null_check action=make_not_entrant pc=0x00000001154658e4 method=java.lang.reflect.WeakCache.get(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; @ 28
+Event: 12.861 Thread 0x00007fc790e6c000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x0000000115e2623c method=org.raml.yagi.framework.phase.TransformationPhase.apply(Lorg/raml/yagi/framework/nodes/Node;)Lorg/raml/yagi/framework/nodes/Node; @ 61
+Event: 13.356 Thread 0x00007fc790e6c000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x0000000115f96e20 method=org.raml.yagi.framework.util.NodeSelector.selectFrom(Ljava/util/List;Lorg/raml/yagi/framework/nodes/Node;)Lorg/raml/yagi/framework/nodes/Node; @ 37
+Event: 13.362 Thread 0x00007fc790e6c000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x0000000115f309e4 method=org.raml.yagi.framework.grammar.rule.KeyValueRule.applyDefault(Lorg/raml/yagi/framework/nodes/Node;)V @ 22
+Event: 13.401 Thread 0x00007fc790e6c000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00000001147d28a4 method=java.util.regex.Pattern.RemoveQEQuoting()V @ 41
+Event: 13.448 Thread 0x00007fc795cc8800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00000001154c4610 method=java.util.concurrent.locks.AbstractQueuedSynchronizer.doReleaseShared()V @ 6
+Event: 13.451 Thread 0x00007fc790e6c000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x0000000113e33a48 method=org.mule.runtime.core.api.util.func.CheckedSupplier.get()Ljava/lang/Object; @ 1
+
+Internal exceptions (10 events):
+Event: 13.234 Thread 0x00007fc790e6c000 Exception <a 'java/io/FileNotFoundException'> (0x0000000797f92df0) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u131/8869/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 13.234 Thread 0x00007fc790e6c000 Exception <a 'java/io/FileNotFoundException'> (0x0000000797f93e70) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u131/8869/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 13.244 Thread 0x00007fc790e6c000 Exception <a 'java/io/FileNotFoundException'> (0x000000079848e7a8) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u131/8869/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 13.244 Thread 0x00007fc790e6c000 Exception <a 'java/io/FileNotFoundException'> (0x000000079848f878) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u131/8869/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 13.250 Thread 0x00007fc790e6c000 Exception <a 'java/io/FileNotFoundException'> (0x00000007986b1aa0) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u131/8869/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 13.250 Thread 0x00007fc790e6c000 Exception <a 'java/io/FileNotFoundException'> (0x00000007986b2b40) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u131/8869/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 13.451 Thread 0x00007fc790e6c000 Exception <a 'java/lang/ClassNotFoundException': org/mule/service/http/impl/service/server/grizzly/GrizzlyServerManager$ManagedGrizzlyHttpServerBeanInfo> (0x000000076cbf5200) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u131/8869/hotspo
+Event: 13.452 Thread 0x00007fc790e6c000 Exception <a 'java/lang/ClassNotFoundException': org/mule/service/http/impl/service/server/grizzly/GrizzlyHttpServerBeanInfo> (0x000000076cc0c738) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u131/8869/hotspot/src/share/vm/classfile/sys
+Event: 13.452 Thread 0x00007fc790e6c000 Exception <a 'java/lang/ClassNotFoundException': org/mule/service/http/impl/service/server/grizzly/GrizzlyHttpServerCustomizer> (0x000000076cc23f30) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u131/8869/hotspot/src/share/vm/classfile/s
+Event: 13.453 Thread 0x00007fc790e6c000 Exception <a 'java/lang/ClassNotFoundException': org/mule/service/http/impl/service/server/grizzly/GrizzlyServerManager$ManagedGrizzlyHttpServerCustomizer> (0x000000076cc4b450) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u131/8869/hots
+
+Events (10 events):
+Event: 13.457 loading class reactor/core/scheduler/Scheduler
+Event: 13.457 loading class reactor/core/scheduler/Scheduler done
+Event: 13.457 loading class reactor/core/scheduler/Scheduler
+Event: 13.457 loading class reactor/core/scheduler/Scheduler done
+Event: 13.457 loading class reactor/core/scheduler/TimedScheduler
+Event: 13.457 loading class reactor/core/scheduler/TimedScheduler done
+Event: 13.457 loading class reactor/core/scheduler/TimedScheduler
+Event: 13.457 loading class reactor/core/scheduler/TimedScheduler done
+Event: 13.458 loading class reactor/core/Disposable
+Event: 13.458 loading class reactor/core/Disposable done
+
+
+Dynamic libraries:
+0x0000000035d13000 	/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa
+0x0000000035d13000 	/System/Library/Frameworks/Security.framework/Versions/A/Security
+0x0000000035d13000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices
+0x0000000035d13000 	/usr/lib/libz.1.dylib
+0x0000000035d13000 	/usr/lib/libSystem.B.dylib
+0x0000000035d13000 	/usr/lib/libobjc.A.dylib
+0x0000000035d13000 	/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+0x0000000035d13000 	/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation
+0x0000000035d13000 	/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit
+0x0000000035d13000 	/System/Library/Frameworks/CoreData.framework/Versions/A/CoreData
+0x0000000035d13000 	/System/Library/PrivateFrameworks/RemoteViewServices.framework/Versions/A/RemoteViewServices
+0x0000000035d13000 	/System/Library/PrivateFrameworks/UIFoundation.framework/Versions/A/UIFoundation
+0x0000000035d13000 	/System/Library/PrivateFrameworks/DFRFoundation.framework/Versions/A/DFRFoundation
+0x0000000035d13000 	/usr/lib/libenergytrace.dylib
+0x0000000035d13000 	/System/Library/PrivateFrameworks/SkyLight.framework/Versions/A/SkyLight
+0x0000000035d13000 	/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics
+0x0000000035d13000 	/usr/lib/libScreenReader.dylib
+0x0000000035d13000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Accelerate
+0x0000000035d13000 	/System/Library/Frameworks/IOSurface.framework/Versions/A/IOSurface
+0x0000000035d13000 	/System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox
+0x0000000035d13000 	/System/Library/Frameworks/AudioUnit.framework/Versions/A/AudioUnit
+0x0000000035d13000 	/System/Library/PrivateFrameworks/DataDetectorsCore.framework/Versions/A/DataDetectorsCore
+0x0000000035d13000 	/System/Library/PrivateFrameworks/DesktopServicesPriv.framework/Versions/A/DesktopServicesPriv
+0x0000000035d13000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/HIToolbox
+0x0000000035d13000 	/usr/lib/libicucore.A.dylib
+0x0000000035d13000 	/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore
+0x0000000035d13000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/SpeechRecognition.framework/Versions/A/SpeechRecognition
+0x0000000035d13000 	/usr/lib/libauto.dylib
+0x0000000035d13000 	/usr/lib/libxml2.2.dylib
+0x0000000035d13000 	/System/Library/PrivateFrameworks/CoreUI.framework/Versions/A/CoreUI
+0x0000000035d13000 	/System/Library/Frameworks/CoreAudio.framework/Versions/A/CoreAudio
+0x0000000035d13000 	/System/Library/Frameworks/DiskArbitration.framework/Versions/A/DiskArbitration
+0x0000000035d13000 	/usr/lib/liblangid.dylib
+0x0000000035d13000 	/System/Library/PrivateFrameworks/MultitouchSupport.framework/Versions/A/MultitouchSupport
+0x0000000035d13000 	/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit
+0x0000000035d13000 	/usr/lib/libDiagnosticMessagesClient.dylib
+0x0000000035d13000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices
+0x0000000035d13000 	/System/Library/PrivateFrameworks/PerformanceAnalysis.framework/Versions/A/PerformanceAnalysis
+0x0000000035d13000 	/System/Library/PrivateFrameworks/GenerationalStorage.framework/Versions/A/GenerationalStorage
+0x0000000035d13000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL
+0x0000000035d13000 	/System/Library/Frameworks/CoreImage.framework/Versions/A/CoreImage
+0x0000000035d13000 	/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText
+0x0000000035d13000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO
+0x0000000035d13000 	/System/Library/PrivateFrameworks/Backup.framework/Versions/A/Backup
+0x0000000035d13000 	/usr/lib/libarchive.2.dylib
+0x0000000035d13000 	/System/Library/Frameworks/CFNetwork.framework/Versions/A/CFNetwork
+0x0000000035d13000 	/System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration
+0x0000000035d13000 	/usr/lib/libCRFSuite.dylib
+0x0000000035d13000 	/usr/lib/libc++.1.dylib
+0x0000000035d13000 	/usr/lib/libc++abi.dylib
+0x0000000035d13000 	/usr/lib/system/libcache.dylib
+0x0000000035d13000 	/usr/lib/system/libcommonCrypto.dylib
+0x0000000035d13000 	/usr/lib/system/libcompiler_rt.dylib
+0x0000000035d13000 	/usr/lib/system/libcopyfile.dylib
+0x0000000035d13000 	/usr/lib/system/libcorecrypto.dylib
+0x0000000035d13000 	/usr/lib/system/libdispatch.dylib
+0x0000000035d13000 	/usr/lib/system/libdyld.dylib
+0x0000000035d13000 	/usr/lib/system/libkeymgr.dylib
+0x0000000035d13000 	/usr/lib/system/liblaunch.dylib
+0x0000000035d13000 	/usr/lib/system/libmacho.dylib
+0x0000000035d13000 	/usr/lib/system/libquarantine.dylib
+0x0000000035d13000 	/usr/lib/system/libremovefile.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_asl.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_blocks.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_c.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_configuration.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_coreservices.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_coretls.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_dnssd.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_info.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_kernel.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_m.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_malloc.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_network.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_networkextension.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_notify.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_platform.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_pthread.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_sandbox.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_secinit.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_symptoms.dylib
+0x0000000035d13000 	/usr/lib/system/libsystem_trace.dylib
+0x0000000035d13000 	/usr/lib/system/libunwind.dylib
+0x0000000035d13000 	/usr/lib/system/libxpc.dylib
+0x0000000035d13000 	/usr/lib/libbsm.0.dylib
+0x0000000035d13000 	/usr/lib/system/libkxld.dylib
+0x0000000035d13000 	/usr/lib/libcoretls.dylib
+0x0000000035d13000 	/usr/lib/libcoretls_cfhelpers.dylib
+0x0000000035d13000 	/usr/lib/libOpenScriptingUtil.dylib
+0x0000000035d13000 	/usr/lib/libpam.2.dylib
+0x0000000035d13000 	/usr/lib/libsqlite3.dylib
+0x0000000035d13000 	/usr/lib/libxar.1.dylib
+0x0000000035d13000 	/usr/lib/libbz2.1.0.dylib
+0x0000000035d13000 	/usr/lib/liblzma.5.dylib
+0x0000000035d13000 	/usr/lib/libnetwork.dylib
+0x0000000035d13000 	/usr/lib/libpcap.A.dylib
+0x0000000035d13000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/FSEvents.framework/Versions/A/FSEvents
+0x0000000035d13000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/CarbonCore
+0x0000000035d13000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Metadata
+0x0000000035d13000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/OSServices.framework/Versions/A/OSServices
+0x0000000035d13000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SearchKit.framework/Versions/A/SearchKit
+0x0000000035d13000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
+0x0000000035d13000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
+0x0000000035d13000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
+0x0000000035d13000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SharedFileList.framework/Versions/A/SharedFileList
+0x0000000035d13000 	/System/Library/Frameworks/NetFS.framework/Versions/A/NetFS
+0x0000000035d13000 	/System/Library/PrivateFrameworks/NetAuth.framework/Versions/A/NetAuth
+0x0000000035d13000 	/System/Library/PrivateFrameworks/login.framework/Versions/A/Frameworks/loginsupport.framework/Versions/A/loginsupport
+0x0000000035d13000 	/System/Library/PrivateFrameworks/TCC.framework/Versions/A/TCC
+0x0000000035d13000 	/usr/lib/libmecabra.dylib
+0x0000000035d13000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/ATS
+0x0000000035d13000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ColorSync.framework/Versions/A/ColorSync
+0x0000000035d13000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/HIServices.framework/Versions/A/HIServices
+0x0000000035d13000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/LangAnalysis.framework/Versions/A/LangAnalysis
+0x0000000035d13000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/PrintCore.framework/Versions/A/PrintCore
+0x0000000035d13000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/QD.framework/Versions/A/QD
+0x0000000035d13000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/SpeechSynthesis.framework/Versions/A/SpeechSynthesis
+0x0000000035d13000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vImage.framework/Versions/A/vImage
+0x0000000035d13000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/vecLib
+0x0000000035d13000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvDSP.dylib
+0x0000000035d13000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBNNS.dylib
+0x0000000035d13000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libQuadrature.dylib
+0x0000000035d13000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvMisc.dylib
+0x0000000035d13000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib
+0x0000000035d13000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+0x0000000035d13000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLinearAlgebra.dylib
+0x0000000035d13000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libSparseBLAS.dylib
+0x0000000035d13000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Resources/libFontParser.dylib
+0x0000000035d13000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Resources/libFontRegistry.dylib
+0x0000000035d13000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJPEG.dylib
+0x0000000035d13000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libTIFF.dylib
+0x0000000035d13000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libPng.dylib
+0x0000000035d13000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libGIF.dylib
+0x0000000035d13000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJP2.dylib
+0x0000000035d13000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libRadiance.dylib
+0x0000000035d13000 	/usr/lib/libcompression.dylib
+0x0000000035d13000 	/System/Library/PrivateFrameworks/AppleJPEG.framework/Versions/A/AppleJPEG
+0x0000000035d13000 	/usr/lib/libcups.2.dylib
+0x0000000035d13000 	/System/Library/Frameworks/Kerberos.framework/Versions/A/Kerberos
+0x0000000035d13000 	/System/Library/Frameworks/GSS.framework/Versions/A/GSS
+0x0000000035d13000 	/usr/lib/libresolv.9.dylib
+0x0000000035d13000 	/usr/lib/libiconv.2.dylib
+0x0000000035d13000 	/System/Library/PrivateFrameworks/Heimdal.framework/Versions/A/Heimdal
+0x0000000035d13000 	/usr/lib/libheimdal-asn1.dylib
+0x0000000035d13000 	/System/Library/Frameworks/OpenDirectory.framework/Versions/A/OpenDirectory
+0x0000000035d13000 	/System/Library/PrivateFrameworks/CommonAuth.framework/Versions/A/CommonAuth
+0x0000000035d13000 	/System/Library/Frameworks/OpenDirectory.framework/Versions/A/Frameworks/CFOpenDirectory.framework/Versions/A/CFOpenDirectory
+0x0000000035d13000 	/System/Library/Frameworks/SecurityFoundation.framework/Versions/A/SecurityFoundation
+0x0000000035d13000 	/System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling
+0x0000000035d13000 	/usr/lib/libmarisa.dylib
+0x0000000035d13000 	/usr/lib/libChineseTokenizer.dylib
+0x0000000035d13000 	/usr/lib/libcmph.dylib
+0x0000000035d13000 	/System/Library/PrivateFrameworks/CoreEmoji.framework/Versions/A/CoreEmoji
+0x0000000035d13000 	/System/Library/Frameworks/ServiceManagement.framework/Versions/A/ServiceManagement
+0x0000000035d13000 	/usr/lib/libxslt.1.dylib
+0x0000000035d13000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Ink.framework/Versions/A/Ink
+0x0000000035d13000 	/System/Library/PrivateFrameworks/TextureIO.framework/Versions/A/TextureIO
+0x0000000035d13000 	/System/Library/Frameworks/Metal.framework/Versions/A/Metal
+0x0000000035d13000 	/usr/lib/libate.dylib
+0x0000000035d13000 	/System/Library/PrivateFrameworks/GPUCompiler.framework/libmetal_timestamp.dylib
+0x0000000035d13000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCoreFSCache.dylib
+0x0000000035d13000 	/System/Library/PrivateFrameworks/IOAccelerator.framework/Versions/A/IOAccelerator
+0x0000000035d13000 	/System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo
+0x0000000035d13000 	/usr/lib/libFosl_dynamic.dylib
+0x0000000035d13000 	/System/Library/PrivateFrameworks/MetalPerformanceShaders.framework/Versions/A/MetalPerformanceShaders
+0x0000000035d13000 	/System/Library/PrivateFrameworks/FaceCore.framework/Versions/A/FaceCore
+0x0000000035d13000 	/System/Library/Frameworks/OpenCL.framework/Versions/A/OpenCL
+0x0000000035d13000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
+0x0000000035d13000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGFXShared.dylib
+0x0000000035d13000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
+0x0000000035d13000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLImage.dylib
+0x0000000035d13000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCVMSPluginSupport.dylib
+0x0000000035d13000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCoreVMClient.dylib
+0x0000000035d13000 	/System/Library/PrivateFrameworks/CrashReporterSupport.framework/Versions/A/CrashReporterSupport
+0x0000000035d13000 	/System/Library/PrivateFrameworks/Sharing.framework/Versions/A/Sharing
+0x0000000035d13000 	/System/Library/PrivateFrameworks/IconServices.framework/Versions/A/IconServices
+0x0000000035d13000 	/System/Library/PrivateFrameworks/ProtocolBuffer.framework/Versions/A/ProtocolBuffer
+0x0000000035d13000 	/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Apple80211
+0x0000000035d13000 	/System/Library/Frameworks/CoreWLAN.framework/Versions/A/CoreWLAN
+0x0000000035d13000 	/System/Library/PrivateFrameworks/CoreUtils.framework/Versions/A/CoreUtils
+0x0000000035d13000 	/System/Library/Frameworks/IOBluetooth.framework/Versions/A/IOBluetooth
+0x0000000035d13000 	/System/Library/PrivateFrameworks/CoreWiFi.framework/Versions/A/CoreWiFi
+0x0000000035d13000 	/System/Library/Frameworks/CoreBluetooth.framework/Versions/A/CoreBluetooth
+0x0000000035d13000 	/System/Library/Frameworks/CoreDisplay.framework/Versions/A/CoreDisplay
+0x0000000035d13000 	/System/Library/PrivateFrameworks/IOPresentment.framework/Versions/A/IOPresentment
+0x0000000035d13000 	/System/Library/PrivateFrameworks/DSExternalDisplay.framework/Versions/A/DSExternalDisplay
+0x0000000035d13000 	/System/Library/PrivateFrameworks/DebugSymbols.framework/Versions/A/DebugSymbols
+0x0000000035d13000 	/System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/CoreSymbolication
+0x0000000035d13000 	/System/Library/PrivateFrameworks/Symbolication.framework/Versions/A/Symbolication
+0x0000000035d13000 	/System/Library/PrivateFrameworks/AppleFSCompression.framework/Versions/A/AppleFSCompression
+0x0000000035d13000 	/System/Library/PrivateFrameworks/SpeechRecognitionCore.framework/Versions/A/SpeechRecognitionCore
+0x0000000035d13000 	/System/Library/PrivateFrameworks/ChunkingLibrary.framework/Versions/A/ChunkingLibrary
+0x000000010a400000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/server/libjvm.dylib
+0x0000000035d13000 	/usr/lib/libstdc++.6.dylib
+0x00000001093c8000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/libverify.dylib
+0x000000010b3a3000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/libjava.dylib
+0x00000001093df000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/libzip.dylib
+0x000000010f48e000 	/System/Library/Frameworks/JavaVM.framework/Frameworks/JavaRuntimeSupport.framework/JavaRuntimeSupport
+0x00000001093e9000 	/System/Library/Frameworks/JavaVM.framework/Versions/A/Frameworks/JavaNativeFoundation.framework/Versions/A/JavaNativeFoundation
+0x000000010f4a8000 	/System/Library/Frameworks/JavaVM.framework/Versions/A/JavaVM
+0x0000000035d13000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon
+0x000000010f4b5000 	/System/Library/PrivateFrameworks/JavaLaunching.framework/Versions/A/JavaLaunching
+0x0000000035d13000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/CommonPanels.framework/Versions/A/CommonPanels
+0x0000000035d13000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Help.framework/Versions/A/Help
+0x0000000035d13000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/ImageCapture.framework/Versions/A/ImageCapture
+0x0000000035d13000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/OpenScripting.framework/Versions/A/OpenScripting
+0x0000000035d13000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Print.framework/Versions/A/Print
+0x0000000035d13000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/SecurityHI.framework/Versions/A/SecurityHI
+0x0000000110e65000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/libnet.dylib
+0x0000000110ec4000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/libnio.dylib
+0x0000000110f0d000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/libmanagement.dylib
+0x000000012b4e4000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/libsunec.dylib
+
+VM Arguments:
+jvm_args: -Djava.library.path= -Dorg.glassfish.grizzly.DEFAULT_MEMORY_MANAGER=org.glassfish.grizzly.memory.HeapMemoryManager -Dmunit.server.port=40842 -Dfile.encoding=UTF-8 
+java_command: org.mule.munit.remote.RemoteRunner -run_configuration /Users/andresalleva/AnypointStudio/studio-workspace/mule4-usecases/s-payroll-deu/target/munitworkingdir-1284450491116/run-configuration.json
+java_class_path (initial): /Users/andresalleva/Documents/AnypointStudio/7/AnypointStudio.app/Contents/Eclipse/plugins/org.mule.tooling.ui.contribution.munit_2.0.0.201709262009/lib/munit-remote-jar-with-dependencies.jar:/Users/andresalleva/AnypointStudio/studio-workspace/mule4-usecases/s-payroll-deu/target/test-classes
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+
+Signal Handlers:
+SIGSEGV: [libjvm.dylib+0x5b1eb1], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_ONSTACK|SA_RESTART|SA_SIGINFO
+SIGBUS: [libjvm.dylib+0x5b1eb1], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGFPE: [libjvm.dylib+0x488988], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGPIPE: [libjvm.dylib+0x488988], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGXFSZ: [libjvm.dylib+0x488988], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGILL: [libjvm.dylib+0x488988], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGUSR1: SIG_DFL, sa_mask[0]=00000000000000000000000000000000, sa_flags=none
+SIGUSR2: [libjvm.dylib+0x4884a6], sa_mask[0]=00100000000000000000000000000000, sa_flags=SA_RESTART|SA_SIGINFO
+SIGHUP: [libjvm.dylib+0x486a7d], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGINT: [libjvm.dylib+0x486a7d], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGTERM: [libjvm.dylib+0x486a7d], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGQUIT: [libjvm.dylib+0x486a7d], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+
+
+---------------  S Y S T E M  ---------------
+
+OS:Bsduname:Darwin 16.7.0 Darwin Kernel Version 16.7.0: Thu Jun 15 17:36:27 PDT 2017; root:xnu-3789.70.16~2/RELEASE_X86_64 x86_64
+rlimit: STACK 8192k, CORE 0k, NPROC 709, NOFILE 10240, AS infinity
+load average:3.37 2.58 2.06
+
+CPU:total 8 (initial active 8) (4 cores per cpu, 2 threads per core) family 6 model 70 stepping 1, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2
+
+Memory: 4k page, physical 16777216k(18976k free)
+
+/proc/meminfo:
+
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.131-b11) for bsd-amd64 JRE (1.8.0_131-b11), built on Mar 15 2017 01:32:22 by "java_re" with gcc 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.11.00)
+
+time: Wed Sep 27 17:34:05 2017
+elapsed time: 13 seconds (0d 0h 0m 13s)
+
