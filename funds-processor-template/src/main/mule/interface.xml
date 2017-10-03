@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+	<file:config name="File_Config" doc:name="File Config" doc:id="ed94258e-b7b0-46db-92d8-8c7f4d8658fe" />
+	<flow name="main-flow" doc:id="c239253f-9679-4861-b83e-c344903abcf2" >
+		<scheduler doc:name="Scheduler" doc:id="84ce4de5-c9d7-4b6f-9968-df0c7712503c" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="${polling.frequency}"/>
+			</scheduling-strategy>
+		</scheduler>
+		<flow-ref name="read-files-flow" doc:name="read-files-flow" doc:id="b9b61558-257f-488e-82ce-9a1ac4590e79" />
+		
+	</flow>
+	<flow name="process-file-flow" doc:id="82e62a74-ebae-42e7-89f8-b407b150f7ef" >
+		<batch:job jobName="interfaceBatch_Job" doc:id="92e776b1-a63e-4b70-955d-55a5f800ed2d" >
+			<batch:process-records >
+				<batch:step name="Step_1" doc:id="6fc499a7-ba18-47b7-9450-7042ff88b742" >
+					<flow-ref name="format-line-flow" doc:name="format-line-flow" doc:id="2cd46355-54ad-41d9-b6e4-3c6beeea9be1" />
+				</batch:step>
+				<batch:step name="Step_2" doc:id="ac76882a-81d1-4b6d-9f42-4679a3b8180a" >
+					<batch:aggregator doc:name="Batch Aggregator" doc:id="22b96fc9-7f16-49dc-8133-a03e8db9790b" size="1000">
+						<flow-ref name="elk-bulk-post-flow" doc:name="elk-bulk-post-flow" doc:id="b71418d3-cd54-428a-bd8f-2badd077ab21" />
+					</batch:aggregator>
+				</batch:step>
+			</batch:process-records>
+			<batch:on-complete >
+				<file:move config-ref="File_Config" sourcePath="#[vars.fileName]" targetPath="#[p('archive.path')]" doc:name="Move 'historical prices' file" doc:id="12446a63-cb4c-4676-9477-a70ae3dab5bb" />
+			</batch:on-complete>
+		</batch:job>
+	</flow>
+</mule>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
+	<flow name="read-files-flow" doc:id="1e2bf9a9-2e76-45bc-9908-656cbf6f4e6d" >
+		<file:list config-ref="File_Config" directoryPath="#[p('directory.path')]" doc:name="List 'historical prices' files" doc:id="7633061a-484d-4ad7-aeac-900aa76ab4c1" >
+			<file:matcher filenamePattern="#[p('file.name.pattern')]" />
+		</file:list>
+		<choice doc:name="size &gt; 0" doc:id="2229190d-de78-4318-9d5c-6a48bf6f8a2b" >
+			<when expression="#[sizeOf(payload) &gt; 0]" >
+				<set-variable variableName="fileName" value="#[payload[0].typedAttributes.path]" doc:name="Set 'fileName' variable" doc:id="38b8e404-c990-4e28-ae49-c9f6f679bd8d" />
+				<file:read config-ref="File_Config" path="#[vars.fileName]" doc:name="Read 'historical prices' file" doc:id="c2dabb27-af53-4deb-aeea-6aa27b6864c8" outputMimeType="application/csv"/>
+				<ee:transform doc:name="CSV to JAVA" doc:id="448fd9c2-5a97-4a04-a18d-68675017aa56" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload as Array {iterator: true}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<flow-ref name="process-file-flow" doc:name="process-file-flow" doc:id="5d6d5155-4c37-42ad-92a4-57932dfaed6f" />
+			</when>
+			<otherwise >
+				<logger level="DEBUG" doc:name="do nothing" doc:id="d55c5fdb-b427-4dc3-a85f-fa272d56c0d2" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="format-line-flow" doc:id="95c8a990-1be4-4695-8ee9-019ff405d1a8" >
+		<ee:transform doc:name="Object to JSON" doc:id="ad3f940b-d9fe-4657-9825-76566d7c9958">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/json indent=false
+---
+{
+	symbol: payload.Symbol,
+	date: payload.Date as Date {format: "M/d/yyyy"} as String {format: "yyyy-MM-dd"},
+	open: payload.Open,
+	close: payload.High,
+	low: payload.Low,
+	close: payload.Close,
+	adjClose: payload.'Adj Close',
+	volume: payload.Volume
+}
+]]></ee:set-payload>
+						</ee:message>
+		</ee:transform>
+		<object-to-string-transformer doc:name="Object to String" mimeType="text/plain" returnClass="java.lang.String" />
+		<scripting:execute engine="groovy" doc:name="Append index" doc:id="1f9d655b-7002-4de0-b3f5-a48aedf58cfa" >
+			<scripting:code >'{ &quot;index&quot; : {  } }' + &quot;\n&quot; + payload + &quot;\n&quot;</scripting:code>
+		</scripting:execute>
+	</flow>
+	<flow name="elk-bulk-post-flow" doc:id="771e0f91-e06e-46f7-88d4-7ab8b3fad9f9" >
+		<ee:transform doc:name="Set 'bulkPayload' variable" doc:id="8edeeadb-2bc8-49ff-ab52-c4c7798e83a0" >
+			<ee:message />
+			<ee:variables >
+				<ee:set-variable variableName="bulkPayload" ><![CDATA[%dw 2.0
+output application/java
+---
+""]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="c0a663e1-2047-4253-9c86-b6cfd7a8a609" >
+			<ee:transform doc:name="Append payload to 'bulkPayload' variable" doc:id="4b5cd416-1563-485c-b724-9c1870b5b4cf" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="bulkPayload" ><![CDATA[%dw 2.0
+output application/java
+---
+vars.bulkPayload ++ payload]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</foreach>
+		<ee:transform doc:name="Set payload with 'bulkPayload' variable" doc:id="7b6634f3-3c6b-4133-8205-9456eb73078a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+vars.bulkPayload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="577d1802-09f4-4421-9356-3cedd0db5b7e" message="#[payload]"/>
+	</flow>
+</mule>
