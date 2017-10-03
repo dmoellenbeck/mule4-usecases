@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="elk-errors-handling-flow" doc:id="be2f21ee-8610-4ada-b8ae-3d28c3eec03f" >
+		<choice doc:name="errors?" doc:id="6b6a2741-d02f-476b-a8c8-c09f90b5c1d9" >
+			<when expression="#[payload.errors]" >
+				<foreach doc:name="For Each" doc:id="f65efd65-5401-47e7-9a6f-4a7995e409ff" collection="#[payload.items]">
+					<choice doc:name="status != 201?" doc:id="1f2e9c84-2684-4eff-abcb-09ff6d7dd30b" >
+						<when expression="#[payload.status != 201]" >
+							<logger level="ERROR" doc:name="log error" doc:id="fe274e08-8ca0-498d-9ed9-ecf00f6b0a80" message="#['ELK ERROR: '+payload]"/>
+						</when>
+						<otherwise >
+							<logger level="DEBUG" doc:name="do nothing" doc:id="7bb10310-0e8f-428f-ab59-169b3d42daf2" />
+						</otherwise>
+					</choice>
+				</foreach>
+			</when>
+			<otherwise >
+				<logger level="DEBUG" doc:name="do nothing" doc:id="63a43e14-7b1a-4319-beec-e8bcfd22eb0e" message="do nothing"/>
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

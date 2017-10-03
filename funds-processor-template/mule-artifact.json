@@ -1,6 +1,7 @@
 {
   "domain": "default",
   "configs": [
+    "errors.xml",
     "global.xml",
     "implementation.xml",
     "interface.xml"
