@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:batch="http://www.mulesoft.org/schema/mule/batch"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<configuration-properties file="funds-processor-local.properties" doc:name="Configuration properties" doc:id="345d738e-f2e8-488e-a059-bf776cff45c2" />
+	<http:request-config name="HTTP_Elk_Request_configuration" doc:name="HTTP Request configuration" doc:id="15464347-6e66-464f-a353-ee9ac54f1a02" basePath="${elk.basePath}" >
+		<http:request-connection host="${elk.host}" port="${elk.port}" />
+	</http:request-config>
+	<http:request-config name="HTTP_Funds_Request_configuration" doc:name="HTTP Request configuration" doc:id="6e7f3bf2-5aa5-47ce-914a-59305bcebfc7" basePath="${funds.api.basePath}" >
+		<http:request-connection protocol="HTTPS" host="${funds.api.host}" port="${funds.api.port}" />
+	</http:request-config>
 </mule>

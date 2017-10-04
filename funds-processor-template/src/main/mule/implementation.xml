@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:file="http://www.mulesoft.org/schema/mule/file"
-	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
-	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="15464347-6e66-464f-a353-ee9ac54f1a02" basePath="${elk.basePath}" >
-		<http:request-connection host="${elk.host}" port="${elk.port}" />
-	</http:request-config>
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
 	<flow name="read-files-flow" doc:id="1e2bf9a9-2e76-45bc-9908-656cbf6f4e6d" >
 		<file:list config-ref="File_Config" directoryPath="#[p('directory.path')]" doc:name="List 'historical prices' files" doc:id="7633061a-484d-4ad7-aeac-900aa76ab4c1" >
 			<file:matcher filenamePattern="#[p('file.name.pattern')]" />
@@ -98,8 +96,8 @@ output application/java
 vars.bulkPayload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<logger level="INFO" doc:name="Log ELK call" doc:id="37a3f944-704a-4769-bc44-84d822b48121" message='#["ELK Bulk post with: $(vars.numberOfRecords) records."]'/>
-		<http:request config-ref="HTTP_Request_configuration" method="POST" path="${elk.path}" doc:name="POST elk" doc:id="91d0620b-1492-4c81-8373-aab59eef80d8" >
+		<logger level="DEBUG" doc:name="Log ELK call" doc:id="37a3f944-704a-4769-bc44-84d822b48121" message='#["ELK Bulk post with: $(vars.numberOfRecords) records."]'/>
+		<http:request config-ref="HTTP_Elk_Request_configuration" method="POST" path="${elk.path}" doc:name="POST elk" doc:id="91d0620b-1492-4c81-8373-aab59eef80d8" >
 			<http:headers ><![CDATA[#[output applicaton/java
 ---
 {
@@ -114,6 +112,18 @@ vars.bulkPayload]]></ee:set-payload>
 	</flow>
 	<flow name="elk-aggregation-flow" doc:id="6fea8e70-cea4-4418-904d-76d5cbc6ac4e" >
 		<flow-ref name="elk-invocation-flow" doc:name="elk-invocation-flow" doc:id="06b5d4c1-3522-41e1-9bb8-e6aa21452b31" />
+		<set-variable variableName="from" value="#[vars.from + p('elk.query.size')]" doc:name="Update 'from' variable" doc:id="f607d2da-9aae-4228-ba75-58f20dfa5bd0" />
+		<set-variable variableName="newPage" value="#[isEmpty(payload.hits.hits) == false]" doc:name="Set 'newPage' variable" doc:id="42985500-0065-4968-9cb1-93969fe979b8" />
+		<choice doc:name="Check if newPage pending" doc:id="e16538fd-33ab-4592-8c07-46702b18766e" >
+			<when expression="#[vars.newPage]" >
+				<set-payload value="#[payload.hits.hits]" doc:name="Set Payload with elk query result" doc:id="90f519ac-7075-48cf-a51b-0fbbe49f2c7d" mimeType="application/json"/>
+				<flow-ref name="record-process-flow" doc:name="record-process-flow" doc:id="d72d849b-b76c-4a2f-97fb-45a26d3e9a72" />
+				<flow-ref name="elk-aggregation-flow" doc:name="elk-aggregation-flow" doc:id="c978d27b-ff68-4dca-ae83-891ef57ed28e" />
+			</when>
+			<otherwise >
+				<logger level="DEBUG" doc:name="do nothing" doc:id="76534c99-a3fc-4fe6-bcf7-409940b73d9a"/>
+			</otherwise>
+		</choice>
 	</flow>
 	<flow name="elk-invocation-flow" doc:id="51611d25-d055-42cb-a99e-b75f1d11cd98" >
 		<ee:transform doc:name="Set 'basePath', 'allPath' and 'batchSearchPath' variables" doc:id="ad359449-242b-4df5-90fc-73c0edb1bca9" >
@@ -144,7 +154,7 @@ output application/java
 vars.allPath ++ "/" ++ vars.batchSearchPath ++ "%22" ++ vars.batchUUID ++ "%22"]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<http:request config-ref="HTTP_Request_configuration" method="GET" path="#[vars.path]" doc:name="GET elk" doc:id="d3b31464-5928-4720-954e-2636e0a13a6c" outputMimeType="application/json">
+		<http:request config-ref="HTTP_Elk_Request_configuration" method="GET" path="#[vars.path]" doc:name="GET elk" doc:id="d3b31464-5928-4720-954e-2636e0a13a6c" outputMimeType="application/json">
 			<http:query-params ><![CDATA[#[output applicaton/java
 ---
 {
@@ -152,6 +162,44 @@ vars.allPath ++ "/" ++ vars.batchSearchPath ++ "%22" ++ vars.batchUUID ++ "%22"]
 	"size" : "$(p('elk.query.size'))"
 }]]]></http:query-params>
 		</http:request>
-		<logger level="INFO" doc:name="Logger" message="#[payload]" />
+		<ee:transform doc:name="JSON to Object" doc:id="d807f83e-d33f-45e5-b488-90373305efdc" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="DEBUG" doc:name="Log ELK call" doc:id="c899ffc6-9380-4dc1-93dc-35b64c1012c6" message='#["ELK get with: $(sizeOf(payload.hits.hits)) records."]'/>
+	</flow>
+	<flow name="record-process-flow" doc:id="40043be2-0133-4913-80ef-dd1c8e9b9c38" >
+		<batch:job jobName="record-process-batch" doc:id="e744addd-3043-486a-99a2-29c690484eac" blockSize="${block.size}">
+			<batch:process-records >
+				<batch:step name="map_fund_data" doc:id="24b7068b-a902-4d1c-8387-b7671d983658" >
+					<ee:transform doc:name="Map fund data" doc:id="1b0efd6e-3dda-4b38-aa57-0250b9b94eda" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload.'_source']]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+				</batch:step>
+				<batch:step name="post_funds_api" doc:id="a4a8a269-6a16-40dd-8868-d2e6faffe083" >
+					<batch:aggregator doc:name="Batch Aggregator" doc:id="33b6b0da-5c5d-48c0-8289-d55fd9b04e00" size="${aggregator.size}">
+						<ee:transform doc:name="Object to JSON" doc:id="a4788755-1642-4687-ac1f-346d4ccb14f4" >
+							<ee:message >
+								<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+						<http:request config-ref="HTTP_Funds_Request_configuration" method="POST" path="${funds.api.path}" doc:name="POST funds-api" doc:id="c2626771-773b-41ec-a50e-0ebaff9f26ca" />
+						<logger level="DEBUG" doc:name="Log response" doc:id="cc647f84-8f21-4e50-b68e-e9e43b7ce582" message="#[payload]"/>
+					</batch:aggregator>
+				</batch:step>
+			</batch:process-records>
+		</batch:job>
 	</flow>
 </mule>
