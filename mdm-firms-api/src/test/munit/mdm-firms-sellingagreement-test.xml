@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
-	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
 		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-	<munit:config name="munit" doc:name="MUnit configuration"/>
-		
-		<import file="global.xml" />
-		<import file="implementation.xml" />
-	<munit:test name="get-selling-agreement-test" description="Test" doc:id="7e1e634b-adc4-44cb-8652-5c2763d3f476" >
-		<munit:behavior >
-			<munit-tools:mock-when processor="db:stored-procedure" doc:name="Mock db:stored-procedure" doc:id="bee86d0f-6c53-41ae-84e8-89dc52e31bea" >
-				<munit-tools:then-return >
-					<munit-tools:payload value="#[{'resultSet1': [{'comments': 'Kung Fury is the kungiest fury', 'dst_dealer_number': '123', 'total_dm_fee': 0.000000, 'dealer_commission': 0.750000, 'created_on': '2017-06-16', 'advanced_marketing_fee': 0.000000, 'sa_type': '1', 'signing_date': '2017-06-16', 'end_date': '0001-01-18', 'bd_reallowance_marketing_fee': 0.500000, 'custodian': 'Me', 'modified_by': 'DataScript', 'fund_number': 3804, 'advanced_commission': 2.250000, 'dst_effective_date': '2017-06-16', 'uploaded_document_uri': 'https://google.com', 'first_eligible_close_date': '0001-01-18', 'commission': 0.500000, 'modified_on': '2017-06-16', 'created_by': 'DataScript', 'fs2_fee_dm': 0.500000, 'social_codes': 'h8terade', 'selling_agreement_id': 1}], 'updateCount1': 0}]" />
+	<munit:config name="munit" doc:name="MUnit configuration" />
+
+	<import file="global.xml" />
+	<import file="implementation.xml" />
+	<munit:test name="get-selling-agreements-test" description="Test" doc:id="7e1e634b-adc4-44cb-8652-5c2763d3f476">
+		<munit:behavior>
+			<munit-tools:mock-when processor="db:stored-procedure" doc:name="Mock db:stored-procedure" doc:id="bee86d0f-6c53-41ae-84e8-89dc52e31bea">
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value="#[{'resultSet1': [{'comments': 'Kung Fury is the kungiest fury', 'dst_dealer_number': '123', 'total_dm_fee': 0.000000, 'dealer_commission': 0.750000, 'created_on': '2017-06-16', 'advanced_marketing_fee': 0.000000, 'sa_type': '1', 'signing_date': '2017-06-16', 'end_date': '0001-01-18', 'bd_reallowance_marketing_fee': 0.500000, 'custodian': 'Me', 'modified_by': 'DataScript', 'fund_number': 3804, 'advanced_commission': 2.250000, 'dst_effective_date': '2017-06-16', 'uploaded_document_uri': 'https://google.com', 'first_eligible_close_date': '0001-01-18', 'commission': 0.500000, 'modified_on': '2017-06-16', 'created_by': 'DataScript', 'fs2_fee_dm': 0.500000, 'social_codes': 'h8terade', 'selling_agreement_id': 1}], 'updateCount1': 0}]" />
 				</munit-tools:then-return>
 			</munit-tools:mock-when>
 		</munit:behavior>
-		<munit:execution >
+		<munit:execution>
 			<flow-ref name="get-selling-agreements-flow" doc:name="get-selling-agreements-flow" doc:id="2fff11bd-95b6-42c5-b648-61865051a146" />
 		</munit:execution>
-		<munit:validation >
+		<munit:validation>
 			<ee:transform doc:name="map JSON response to JAVA" doc:id="28a75718-437d-4013-b81c-27b7a61eb195">
 				<ee:message>
 					<ee:set-payload><![CDATA[%dw 2.0
@@ -38,67 +38,66 @@ payload]]></ee:set-payload>
 			<munit-tools:assert-that expression="#[payload[0].dstDealerNumber == '123']" is="#[equalTo(true)]" doc:name="dealerNumber equalTo '123'" doc:id="ec3d4bc6-5ab1-407e-8ac9-b6b5dff55e4d" />
 		</munit:validation>
 	</munit:test>
-	<munit:test name="initializitation-flows-test" description="MUnit Test" doc:id="e9eb9c0a-dc5f-479a-878d-c0345675bc87" >
-		<munit:behavior >
-			<set-payload value="#[getResourceAsString('sample_data/postSellingagreements-request.json')]" doc:name="Set request message" doc:id="b1f90b8f-6395-4812-8c85-8dcd37e2e595" mimeType="application/json"/>
+	<munit:test name="initializitation-flows-test" description="MUnit Test" doc:id="e9eb9c0a-dc5f-479a-878d-c0345675bc87">
+		<munit:behavior>
+			<set-payload value="#[getResourceAsString('sample_data/postSellingagreements-request.json')]" doc:name="Set request message" doc:id="b1f90b8f-6395-4812-8c85-8dcd37e2e595"
+				mimeType="application/json" />
 		</munit:behavior>
-		<munit:execution >
+		<munit:execution>
 			<flow-ref name="initializitation-flows" doc:name="initializitation-flows" doc:id="3dc7595c-4e67-4a8c-8ff7-199e17b8337a" />
 		</munit:execution>
-		<munit:validation >
+		<munit:validation>
 			<munit-tools:assert-that expression="#[vars.id]" is="#[notNullValue()]" doc:name="vars.id is not null" doc:id="2f5234eb-a2ce-418b-9207-7df0d42fa59e" />
 			<munit-tools:assert-that expression="#[vars.counter]" is="#[notNullValue()]" doc:name="vars.counter is not null" doc:id="45f7eec0-8711-4565-8c8d-c7a61234e5d0" />
 			<munit-tools:assert-that expression="#[vars.sleepValue]" is="#[notNullValue()]" doc:name="vars.sleepValue is not null" doc:id="73ada70d-9d27-4ed3-82a3-a7fcaf01bcee" />
 			<munit-tools:assert-that expression='#[payload.fundNumber == "3804"]' is="#[equalTo(true)]" doc:name="fundNumber equalTo '3804'" doc:id="e75c9cf6-b45e-4dfc-b750-f711a71d477c" />
 		</munit:validation>
 	</munit:test>
-	<munit:test name="post-selling-agreements-test" description="MUnit Test" doc:id="6e12bbcd-fa4b-4e56-a2fd-2cb1dee7f5fa" >
-		<munit:behavior >
-			<munit:set-event doc:name="Set request message" doc:id="3ca7e80d-489d-4954-83af-6e2214f95d94" >
+	<munit:test name="post-selling-agreements-test" description="MUnit Test" doc:id="6e12bbcd-fa4b-4e56-a2fd-2cb1dee7f5fa">
+		<munit:behavior>
+			<munit:set-event doc:name="Set request message" doc:id="3ca7e80d-489d-4954-83af-6e2214f95d94">
 				<munit:payload value="#[getResourceAsString('sample_data/postSellingagreements-request.json')]" mediaType="application/json" />
 				<munit:attributes value='#[{headers: {host: "localhost:8082"}}]' />
-				<munit:variables >
+				<munit:variables>
 					<munit:variable key="outboundHeaders" value="#[mel:[]]" />
 				</munit:variables>
 			</munit:set-event>
 		</munit:behavior>
-		<munit:execution >
+		<munit:execution>
 			<flow-ref name="post-selling-agreements-flow" doc:name="post-selling-agreements-flow" doc:id="d4810c9d-cd5d-47fd-bdd0-586c8b7869e9" />
 		</munit:execution>
 		<munit:validation>
-			<ee:transform doc:name="map JSON response to JAVA" doc:id="4cda1c26-d479-47af-b4f0-135965dd85e6" >
-				<ee:message >
-					<ee:set-payload ><![CDATA[%dw 2.0
+			<ee:transform doc:name="map JSON response to JAVA" doc:id="4cda1c26-d479-47af-b4f0-135965dd85e6">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 payload]]></ee:set-payload>
 				</ee:message>
 			</ee:transform>
 			<munit-tools:assert-that expression="#[vars.httpStatus]" is="#[equalTo(202)]" doc:name="httpStatus equalTo 202" doc:id="5445ecdf-fe91-4a0f-b6b0-1b282cc94af5" />
-			<munit-tools:assert-that expression="#[vars.outboundHeaders.Location]" is="#[notNullValue()]" doc:name="vars.outboundHeaders.Location is not null" doc:id="9d8cc577-63c7-48e5-a13c-f76b2db2b280" />
+			<munit-tools:assert-that expression="#[vars.outboundHeaders.Location]" is="#[notNullValue()]" doc:name="vars.outboundHeaders.Location is not null"
+				doc:id="9d8cc577-63c7-48e5-a13c-f76b2db2b280" />
 			<munit-tools:assert-that expression="#[payload.message]" is='#[equalTo("Accepted")]' doc:name="message equalTo 'Accepted'" doc:id="e00b9366-41aa-4dd8-bdf1-4ce56f9a31ed" />
 		</munit:validation>
 	</munit:test>
-	
-	
-	
 	<munit:test name="put-selling-agreements-test" description="MUnit Test">
-		<munit:behavior >
+		<munit:behavior>
 			<munit:set-event doc:name="Set request message">
 				<munit:payload value="#[getResourceAsString('sample_data/postSellingagreements-request.json')]" mediaType="application/json" />
 				<munit:attributes value='#[{headers: {host: "localhost:8082"}}]' />
-				<munit:variables >
+				<munit:variables>
 					<munit:variable key="outboundHeaders" value="#[mel:[]]" />
 				</munit:variables>
 			</munit:set-event>
 		</munit:behavior>
-		<munit:execution >
+		<munit:execution>
 			<flow-ref name="put-selling-agreements-flow" doc:name="put-selling-agreements-flow" />
 		</munit:execution>
 		<munit:validation>
 			<ee:transform doc:name="map JSON response to JAVA">
-				<ee:message >
-					<ee:set-payload ><![CDATA[%dw 2.0
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 payload]]></ee:set-payload>
@@ -107,6 +106,111 @@ payload]]></ee:set-payload>
 			<munit-tools:assert-that expression="#[vars.httpStatus]" is="#[equalTo(202)]" doc:name="httpStatus equalTo 202" />
 			<munit-tools:assert-that expression="#[vars.outboundHeaders.Location]" is="#[notNullValue()]" doc:name="vars.outboundHeaders.Location is not null" />
 			<munit-tools:assert-that expression="#[payload.message]" is='#[equalTo("Accepted")]' doc:name="message equalTo 'Accepted'" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-selling-agreement-with-invalid-id-test" description="MUnit Test" doc:id="f6dff361-11be-4cd4-8d57-98b598f2e5b4">
+		<munit:behavior>
+			<munit:set-event doc:name="Set 'UUID' value" doc:id="c05c3aa3-806c-43d7-abf9-1ae5386a81fa">
+				<munit:attributes value='#[{uriParams: {uniqueID: "6b57613e-823c-486d-94fc-7a7d09bf7732"}}]' />
+			</munit:set-event>
+			<munit-tools:mock-when processor="os:contains" doc:name="Get if ObjectStore contains id" doc:id="11436553-280e-467b-9c7f-649ed7c1c2ad">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute attributeName="doc:name" whereValue='#["Get if ObjectStore contains id"]' />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload value="#[false]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref name="get-selling-agreement-flow" doc:name="get-selling-agreement-flow" doc:id="1bcc71d9-ed85-47e8-bee3-270582e1c944" />
+		</munit:execution>
+		<munit:validation>
+			<ee:transform doc:name="map JSON response to JAVA" doc:id="b457fc1f-ffeb-4ae9-b11c-8d9efbad710e">
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<munit-tools:assert-that expression="#[vars.httpStatus]" is="#[equalTo(404)]" doc:name="httpStatus equalTo 404" />
+			<munit-tools:assert-that expression="#[payload.message]" is='#[equalTo("Not Found")]' doc:name="message equalTo 'Not Found'" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-selling-agreement-with-valid-id-test" description="MUnit Test">
+		<munit:behavior >
+			<munit:set-event doc:name="Set 'UUID' value">
+				<munit:attributes value='#[{uriParams: {uniqueID: "6b57613e-823c-486d-94fc-7a7d09bf7732"}}]' />
+			</munit:set-event>
+			<munit-tools:mock-when processor="os:contains" doc:name="Get if ObjectStore contains id">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue='#["Get if ObjectStore contains id"]' />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[true]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when processor="os:retrieve" doc:name="Retrieve value from ObjectStore">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue='#["Retrieve value from ObjectStore"]' />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[{updateCount1: 1, processed: true}]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref name="get-selling-agreement-flow" doc:name="get-selling-agreement-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<ee:transform doc:name="map JSON response to JAVA">
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<munit-tools:assert-that expression="#[payload.message]" is='#[equalTo("Selling agreement successfully generated")]' doc:name="message equalTo 'Selling agreement successfully generated'" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-selling-agreement-notfound-test" description="MUnit Test">
+		<munit:behavior >
+			<munit:set-event doc:name="Set 'UUID' value">
+				<munit:attributes value='#[{uriParams: {uniqueID: "6b57613e-823c-486d-94fc-7a7d09bf7732"}}]' />
+			</munit:set-event>
+			<munit-tools:mock-when processor="os:contains" doc:name="Get if ObjectStore contains id">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue='#["Get if ObjectStore contains id"]' />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[true]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when processor="os:retrieve" doc:name="Retrieve value from ObjectStore">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue='#["Retrieve value from ObjectStore"]' />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['']" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref name="get-selling-agreement-flow" doc:name="get-selling-agreement-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<ee:transform doc:name="map JSON response to JAVA">
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<munit-tools:assert-that expression="#[vars.httpStatus]" is="#[equalTo(404)]" doc:name="httpStatus equalTo 404" />
+			<munit-tools:assert-that expression="#[payload.message]" is='#[equalTo("Not Found")]' doc:name="message equalTo 'Not Found'" />
 		</munit:validation>
 	</munit:test>
 </mule>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<munit:config name="munit" />
+
+		<import file="global.xml" />
+		<import file="implementation.xml" />
+	<munit:test name="get-queue-status-with-invalid-id-test" description="Test" doc:id="fd0474c1-e633-440c-8f18-67cb5fc867fe" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set 'UUID' value" doc:id="a188b085-9f82-4092-aa45-b87e0d28d844" >
+				<munit:attributes value='#[{uriParams: {uniqueID: "6b57613e-823c-486d-94fc-7a7d09bf7732"}}]' />
+			</munit:set-event>
+			<munit-tools:mock-when processor="os:contains" doc:name="Get if ObjectStore contains id" doc:id="cdb603fe-b545-4050-9732-ce505358fb79" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue='#["Get if ObjectStore contains id"]' />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[false]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref name="get-queue-status-flow" doc:name="get-queue-status-flow" doc:id="877776f0-d951-48ec-bed3-ad8d7386c551" />
+		</munit:execution>
+		<munit:validation >
+			<ee:transform doc:name="map JSON response to JAVA" doc:id="65b9cd26-f719-405a-be99-dbc13aa1b9e0" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<munit-tools:assert-that expression="#[vars.httpStatus]" is="#[equalTo(404)]" doc:name="httpStatus equalTo 404" doc:id="c79ce0fe-70a5-4f1e-aff8-1615515c56a5" />
+			<munit-tools:assert-that expression="#[payload.message]" is='#[equalTo("Not Found")]' doc:name="message equalTo 'Not Found'" doc:id="d046aba6-7508-4284-9dda-29128a73ba6e" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-queue-status-inprogress-test" description="MUnit Test" doc:id="9b1ac55d-8e9b-460d-a821-a2781cac9639" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set 'UUID' value" doc:id="9aa282bd-592f-424c-bbe9-a49881915158" >
+				<munit:attributes value='#[{uriParams: {uniqueID: "6b57613e-823c-486d-94fc-7a7d09bf7732"}}]' />
+			</munit:set-event>
+			<munit-tools:mock-when processor="os:contains" doc:name="Get if ObjectStore contains id" doc:id="592e4fb8-0933-4d19-87bb-0c6d4c1e525d" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue='#["Get if ObjectStore contains id"]' />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[true]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when processor="os:retrieve" doc:name="Retrieve value from ObjectStore" doc:id="b4f43727-2730-4f65-a48b-8f5d96443da4" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue='#["Retrieve value from ObjectStore"]' />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[""]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref name="get-queue-status-flow" doc:name="get-queue-status-flow" doc:id="8eb21700-2f66-4bbe-bcdb-d925ee6fa606" />
+		</munit:execution>
+		<munit:validation >
+			<ee:transform doc:name="map JSON response to JAVA" doc:id="fd9a4c5c-f45d-425a-9073-844a97a7b94a" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<munit-tools:assert-that expression="#[payload.message]" is='#[equalTo("In progress")]' doc:name="message equalTo 'In progress'" doc:id="d404a860-6ce6-43c6-a146-291f2dc488e3" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-queue-status-seeother-test" description="MUnit Test">
+		<munit:behavior >
+			<munit:set-event doc:name="Set 'UUID' value">
+				<munit:attributes value='#[{uriParams: {uniqueID: "6b57613e-823c-486d-94fc-7a7d09bf7732"}, headers: {host: "localhost:8082"}}]' />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[mel:[]]" />
+				</munit:variables>
+			</munit:set-event>
+			<munit-tools:mock-when processor="os:contains" doc:name="Get if ObjectStore contains id">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue='#["Get if ObjectStore contains id"]' />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[true]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when processor="os:retrieve" doc:name="Retrieve value from ObjectStore">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue='#["Retrieve value from ObjectStore"]' />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[{updateCount1: 1, processed: true}]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref name="get-queue-status-flow" doc:name="get-queue-status-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<ee:transform doc:name="map JSON response to JAVA">
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<logger level="INFO" doc:name="Logger" doc:id="5a6b89b7-210e-4161-ac4c-af4d4cd7d3a1" message="#[vars.outboundHeaders.Location]"/>
+			<munit-tools:assert-that expression="#[vars.httpStatus]" is="#[equalTo(303)]" doc:name="httpStatus equalTo 303" doc:id="1e93052a-2ec1-4422-9cf6-11c9d6eaa1fe" />
+			<munit-tools:assert-that expression="#[payload.message]" is='#[equalTo("See Other")]' doc:name="message equalTo 'See Other'"/>
+			<munit-tools:assert-that expression="#[vars.outboundHeaders.Location]" is='#[equalTo("https://localhost:8082/api/firms/sellingAgreement/v1/6b57613e-823c-486d-94fc-7a7d09bf7732")]' doc:name="vars.outboundHeaders.Location is OK" doc:id="b6e0c2e3-8a3b-4f2e-9efb-9a7a085ab3ef" />
+		</munit:validation>
+	</munit:test>
+</mule>
