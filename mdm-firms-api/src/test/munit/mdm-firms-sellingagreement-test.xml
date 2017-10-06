@@ -182,7 +182,7 @@ payload]]></ee:set-payload>
 			</munit:set-event>
 			<munit-tools:mock-when processor="os:contains" doc:name="Get if ObjectStore contains id">
 				<munit-tools:with-attributes >
-					<munit-tools:with-attribute attributeName="doc:name" whereValue='#["Get if ObjectStore contains id"]' />
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="#['Get if ObjectStore contains id']" />
 				</munit-tools:with-attributes>
 				<munit-tools:then-return >
 					<munit-tools:payload value="#[true]" />
@@ -190,7 +190,7 @@ payload]]></ee:set-payload>
 			</munit-tools:mock-when>
 			<munit-tools:mock-when processor="os:retrieve" doc:name="Retrieve value from ObjectStore">
 				<munit-tools:with-attributes >
-					<munit-tools:with-attribute attributeName="doc:name" whereValue='#["Retrieve value from ObjectStore"]' />
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="#['Retrieve value from ObjectStore']" />
 				</munit-tools:with-attributes>
 				<munit-tools:then-return >
 					<munit-tools:payload value="#['']" />
@@ -210,7 +210,7 @@ payload]]></ee:set-payload>
 				</ee:message>
 			</ee:transform>
 			<munit-tools:assert-that expression="#[vars.httpStatus]" is="#[equalTo(404)]" doc:name="httpStatus equalTo 404" />
-			<munit-tools:assert-that expression="#[payload.message]" is='#[equalTo("Not Found")]' doc:name="message equalTo 'Not Found'" />
+			<munit-tools:assert-that expression="#[payload.message]" is="#[equalTo('Not Found')]" doc:name="message equalTo 'Not Found'" />
 		</munit:validation>
 	</munit:test>
 </mule>
