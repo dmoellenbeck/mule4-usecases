@@ -1,0 +1,21 @@
+{
+  "domain": "default",
+  "configs": [
+    "global.xml",
+    "implementation.xml",
+    "interface.xml"
+  ],
+  "redeploymentEnabled": true,
+  "name": "ux-myid-api",
+  "minMuleVersion": "4.0.0-rc",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedResources": []
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}

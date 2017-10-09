@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema",
+  "properties": {
+    "Allow Login": {
+      "type": "number",
+      "required": true
+    },
+    "Billing Center": {
+      "type": "array",
+      "required": true,
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "Business Title": {
+      "type": "string",
+      "required": false
+    },
+    "Business Unit": {
+      "type": "string",
+      "required": false
+    },
+    "City": {
+      "type": "string",
+      "required": false
+    },
+    "Company Code": {
+      "type": "string",
+      "required": false
+    },
+    "Company Name": {
+      "type": "string",
+      "required": false
+    },
+    "Country": {
+      "type": "string",
+      "required": false
+    },
+    "Email": {
+      "type": "string",
+      "required": true
+    },
+    "First Name": {
+      "type": "string",
+      "required": true
+    },
+    "Home Department": {
+      "type": "string",
+      "required": false
+    },
+    "Home Department Desc": {
+      "type": "string",
+      "required": false
+    },
+    "Is Active": {
+      "type": "number",
+      "required": true
+    },
+    "Last Name": {
+      "type": "string",
+      "required": true
+    },
+    "Manager ID": {
+      "type": "string",
+      "required": false
+    },
+    "Manager Name": {
+      "type": "string",
+      "required": false
+    },
+    "Mobile Number": {
+      "type": "string",
+      "required": false
+    },
+    "Network ID": {
+      "type": "string",
+      "required": true
+    },
+    "Routing Code": {
+      "type": "array",
+      "required": true,
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "TMS Roles": {
+      "type": "array",
+      "required": true,
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0
+    },
+    "Start Date": {
+      "type": "string",
+      "required": false
+    },
+    "State": {
+      "type": "string",
+      "required": false
+    },
+    "Street": {
+      "type": "string",
+      "required": false
+    },
+    "Telephone Number": {
+      "type": "string",
+      "required": false
+    },
+    "Termination Date": {
+      "type": "string",
+      "required": false
+    },
+    "TimeZone": {
+      "type": "string",
+      "required": false
+    },
+    "Title": {
+      "type": "string",
+      "required": false
+    },
+    "User Name": {
+      "type": "string",
+      "required": true
+    },
+    "User Status": {
+      "type": "string",
+      "required": false
+    },
+    "User Type": {
+      "type": "string",
+      "required": true
+    },
+    "Zip Code": {
+      "type": "string",
+      "required": false
+    }
+  }
+}

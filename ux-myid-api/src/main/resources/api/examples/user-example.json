@@ -1,0 +1,42 @@
+{
+    "Allow Login": 1,
+    "Billing Center": [
+    	"NYC",
+    	"CAL"
+    ],
+    "Business Title": "Developer",
+    "Business Unit": "ABC",
+    "City": "Chesterbrook",
+    "Company Code": "ABC",
+    "Company Name": "AmerisourceBergen",
+    "Country": "USA",
+    "Email": "Suresh.Mukthapuram@amerisourcebergenDev.com",
+    "First Name": "Suresh",
+    "Home Department": "10110101",
+    "Home Department Desc": "IAM",
+    "Is Active": 1,
+    "Last Name": "Mukthapuram",
+    "Manager ID": "62115",
+    "Manager Name": "Kratz, Rick (A062115)",
+    "Mobile Number": "111-111-1919",
+    "Network ID": "A011209",
+    "Routing Code": [
+        "NYC",
+        "CAL"
+    ],
+    "TMS Roles": [
+        "role1",
+        "role2"
+    ],
+    "Start Date": "2017-05-18 00:00:00.0",
+    "State": "PA",
+    "Street": "1400",
+    "Telephone Number": "111-111-0999",
+    "Termination Date": "2017-05-31 00:00:00.0",
+    "TimeZone": "EST",
+    "Title": "Developer",
+    "User Name": "A011209",
+    "User Status": "Active",
+    "User Type": "Vendor",
+    "Zip Code": "19406"
+}
