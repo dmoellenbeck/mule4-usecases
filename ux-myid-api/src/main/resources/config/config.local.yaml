@@ -1,3 +1,19 @@
 http:
   host: "0.0.0.0"
   port: "8081"
+
+# WMQ Config  
+wmq:
+  hostname: "127.0.0.1"
+  port: "1414"
+  channel: "PASSWORD.SVRCONN"
+  maxredelivery: "10"
+  queue:
+    manager: "QM1"
+    inbound: "in1"
+    outbound: "in1"
+  validate:
+    connections: "true"
+  reconnection:
+    freq: "30000"
+    attempts: "60"

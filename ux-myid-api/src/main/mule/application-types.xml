@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
   <types:catalog>
-    <types:type name="user_request" format="json">
-      <types:example format="json" location="api/examples/user-example.json"></types:example>
+    <types:type name="user-request" format="json">
+      <types:example format="json" location="examples/user-example.json"></types:example>
     </types:type>
   </types:catalog>
   <types:enrichment select="#7cdafc8e-2691-4b64-90ad-fa0cf6be0f1d">
     <types:processor-declaration>
       <types:input-event>
         <types:message>
-          <types:payload type="user_request"/>
+          <types:payload type="user-request"/>
         </types:message>
       </types:input-event>
     </types:processor-declaration>
