@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:ftp="http://www.mulesoft.org/schema/mule/ftp" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ftp http://www.mulesoft.org/schema/mule/ftp/current/mule-ftp.xsd">
 	<flow name="send-user-to-queue" doc:id="cdfb8381-b6b5-4184-87e6-909b376b7910" >
 		<logger level="INFO" doc:name="Logger" doc:id="43959b94-ad4c-46db-9d33-fed63466da78" message='#["ExecutionId: $(vars.executionId) - Transforming JSON to XML"]'/>
 		<ee:transform doc:name="Transform User to XML" doc:id="7cdafc8e-2691-4b64-90ad-fa0cf6be0f1d">
@@ -62,10 +64,12 @@ payload."Network ID"]]></ee:set-variable>
 		<logger level="INFO" doc:name="Logger" doc:id="6fbc6d33-754e-4bb7-8c85-5737d8d0acfc" message='#["ExecutionId: $(vars.executionId) - Sending User to queue"]'/>
 		<logger level="INFO" doc:name="Logger" doc:id="65beb8b4-0b2b-4b7c-b345-007805c8f9d6" message='#["ExecutionId: $(vars.executionId) - User sent to queue - Email: $(vars.userEmail)"]'/>
 		<jms:publish config-ref="JMS_Config" destination="in1" doc:name="Publish" doc:id="90efcedd-1eb1-4f47-9afe-2b444af4ce92" >
+			<reconnect-forever />
 		</jms:publish>
 	</flow>
 	<flow name="queue-to-file" doc:id="d69b8ac5-d91a-431e-9d67-4cbc1bf242dc" >
 		<jms:listener config-ref="JMS_Config" destination="in1" doc:name="Listener" doc:id="af488999-5170-4a64-9d26-20b2f394edbc" >
+			<reconnect-forever />
 			<jms:consumer-type >
 				<jms:queue-consumer />
 			</jms:consumer-type>
@@ -73,5 +77,67 @@ payload."Network ID"]]></ee:set-variable>
 		<set-variable variableName="executionId" value="#[java!org::mule::runtime::core::api::util::UUID::getUUID()]" doc:name="Set executionId" doc:id="c63f0413-cafb-453c-a35a-7c2991c1883e" />
 		<set-variable variableName="messageClass" value="#[mel:message.payload.class]" doc:name="Set messageClass" doc:id="d07506be-0984-482b-a9ae-ee8529af16ad" />
 		<logger level="INFO" doc:name="Logger" doc:id="a3bfe83f-cf62-4e56-b6a6-646a2c62d14b" message='#["ExecutionId: $(vars.executionId) - User received from WMQ - Message payload class: $(vars.messageClass)"]'/>
+		<file:write config-ref="NetworkDir" path="#[p('networkdir.path') ++ 'user-' ++ (now() as Number) ++ &quot;-&quot; ++ java!org::mule::runtime::core::api::util::UUID::getUUID() ++ '.xml']" doc:name="Save User to file" doc:id="3c9b2fef-77cc-4176-9b2b-315fd63d2293" encoding="UTF-8">
+			<reconnect-forever frequency="${file.reconnection.frequency}"/>
+		</file:write>
+		<logger level="INFO" doc:name="Logger" doc:id="9823e5f7-2c02-46f6-8113-ce7db23669c4" message='#["ExecutionId: $(vars.executionId) - User sent to file"]'/>
+	</flow>
+	<flow name="file-to-aggregator" doc:id="534d16e4-3046-4efc-9bfe-199b4c610dfe" >
+		<scheduler doc:name="Scheduler" doc:id="d109fde1-323c-49e2-92d9-591825947a04" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="${networkdir.pollingFreq}" startDelay="${networkdir.fileAge}"/>
+			</scheduling-strategy>
+		</scheduler>
+		<file:list config-ref="NetworkDir" directoryPath="${networkdir.path}" doc:name="List user files" doc:id="e38777ca-52b6-4b88-903e-8d65272531cd" >
+			<reconnect-forever frequency="${file.reconnection.frequency}"/>
+			<file:matcher filenamePattern="${file.name.pattern}" />
+		</file:list>
+		<choice doc:name="size &gt; 0" doc:id="f046af74-9cff-494a-bb84-639d41f081e9" >
+			<when expression="#[sizeOf(payload) &gt; 0]" >
+				<set-variable variableName="executionId" value="#[java!org::mule::runtime::core::api::util::UUID::getUUID()]" doc:name="Set executionId" doc:id="d0c19104-560a-45ac-9dd4-396726142d3d" />
+				<logger level="INFO" doc:name="Logger" doc:id="711b6d1b-84f5-4fa0-add8-e3b7c8681ec3" message='#["ExecutionId: $(vars.executionId) - Files aggregated - Number: $(sizeOf(payload))"]' />
+				<ee:transform doc:name="Create XML payload" doc:id="4076b156-5531-4a90-9963-c341cdb3bafa" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="filePathList" ><![CDATA[%dw 2.0
+output application/java
+---
+payload map $.typedAttributes.path]]></ee:set-variable>
+						<ee:set-variable variableName="users" ><![CDATA[%dw 2.0
+output application/xml encoding="UTF-8"
+ns xsi http://www.w3.org/2001/XMLSchema-instance
+---
+{
+	MercuryGate: {
+		Header: {
+			DocTypeID: "user"
+		},
+		Users: {
+			((payload orderBy $.typedAttributes.fileName)[-1 to 0] map ((element) -> 
+				element.payload.MercuryGate.Users
+			) distinctBy $.User.@id)
+		}
+	}
+}]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<ftp:write config-ref="TMS-SFTP" path="#[p('tms.sftp.path') ++ 'User-' ++ (now() as Number) ++ '.xml']" doc:name="Write SFTP" doc:id="958ff714-6714-451f-9c6e-c7e1d8a2ac37" encoding="UTF-8">
+					<ftp:content ><![CDATA[#[vars.users]]]></ftp:content>
+				</ftp:write>
+				<flow-ref name="delete-files-flow" doc:name="delete-files-flow" doc:id="d7dc23cd-984b-45e1-8ad7-d4f38b48aae9" />
+			</when>
+			<otherwise >
+				<logger level="DEBUG" doc:name="do nothing" doc:id="da57960f-591e-4e41-8022-0ec36fecebdd" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="delete-files-flow" doc:id="f7315f1c-0bd4-4843-8b7d-187930343484" >
+		<foreach doc:name="For Each" doc:id="94736931-687c-4a5e-960a-4c84f932ebcc">
+					<file:delete config-ref="NetworkDir" path="#[attributes.path]" doc:name="Delete file" doc:id="77ae392f-414f-4b34-890d-a9e63a901f9a">
+						<reconnect-forever frequency="${file.reconnection.frequency}" />
+					</file:delete>
+				</foreach>
+		<logger level="INFO" doc:name="Logger" doc:id="28974f6e-a4a6-4d40-a658-8ac99df045fa" message="#[ output text/plain ---&quot;ExecutionId: $(vars.executionId) - Files deleted: $(write(vars.filePathList, 'text/json'))&quot; ]"/>
 	</flow>
 </mule>

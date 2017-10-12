@@ -1,25 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:ftp="http://www.mulesoft.org/schema/mule/ftp"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
+http://www.mulesoft.org/schema/mule/ftp http://www.mulesoft.org/schema/mule/ftp/current/mule-ftp.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
 	<http:listener-config name="http-lc-0.0.0.0" doc:name="HTTP Listener config" doc:id="7dcbb28a-fc6d-4232-89a0-6ec31eacd3f4" >
 		<http:listener-connection host="${http.host}" port="${http.port}" />
 	</http:listener-config>
 	<configuration-properties file="config/config.local.yaml" doc:name="Configuration properties" doc:id="38f8a04a-b92e-4b6a-a425-05de1c38738a" />
-	<jms:config name="JMS_Config" doc:name="JMS Config" doc:id="791d16d6-d720-4cb3-93d0-02d915d0eef4">
+	<ftp:config name="TMS-SFTP" doc:name="FTP Config" doc:id="778898c9-ba43-42ae-8128-02325a00b505" >
+		<ftp:sftp-connection host="${tms.sftp.host}" port="${tms.sftp.port}" username="${tms.sftp.user}" password="${tms.sftp.pass}" >
+			<reconnection >
+				<reconnect frequency="${tms.sftp.reconnection.freq}" count="${tms.sftp.reconnection.attempts}" />
+			</reconnection>
+		</ftp:sftp-connection>
+	</ftp:config>
+	<jms:config name="JMS_Config" doc:name="JMS Config" doc:id="25bdcb04-303c-4e7f-93f1-74d1992f8081" >
 		<jms:active-mq-connection >
+			<reconnection >
+				<reconnect frequency="${jms.reconnection.freq}" count="${jms.reconnection.attempts}" />
+			</reconnection>
 			<jms:caching-strategy >
 				<jms:default-caching />
 			</jms:caching-strategy>
-			<jms:factory-configuration brokerUrl="tcp://localhost:61616" />
+			<jms:factory-configuration brokerUrl="${jms.brokerurl}" maxRedelivery="${jms.maxredelivery}" />
 		</jms:active-mq-connection>
 		<jms:consumer-config >
 			<jms:consumer-type >
 				<jms:queue-consumer />
 			</jms:consumer-type>
 		</jms:consumer-config>
-	</jms:config>	
+	</jms:config>
+	<file:config name="NetworkDir" doc:name="File Config" doc:id="e5a321da-8add-4ee3-bac7-8174611df47e" />	
 </mule>

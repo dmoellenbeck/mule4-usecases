@@ -2,18 +2,35 @@ http:
   host: "0.0.0.0"
   port: "8081"
 
-# WMQ Config  
-wmq:
-  hostname: "127.0.0.1"
-  port: "1414"
-  channel: "PASSWORD.SVRCONN"
+# Network Dir Configuration
+networkdir:
+  path: "/Users/andresalleva/temp/mule-shared/"
+  pollingFreq: "60000"
+  fileAge: "1000"
+
+# JMS Config
+jms:
+  brokerurl: "tcp://localhost:61616"
   maxredelivery: "10"
-  queue:
-    manager: "QM1"
-    inbound: "in1"
-    outbound: "in1"
-  validate:
-    connections: "true"
   reconnection:
-    freq: "30000"
-    attempts: "60"
+    freq: "1000"
+    attempts: "50"
+
+# MercuryGate TMS SFTP Configuration
+tms:
+  sftp:
+    host: "localhost"
+    port: "22"
+    path: "/Users/andresalleva/amerisource/"
+    user: ""
+    pass: ""
+    poolsize: "0"
+    reconnection:
+      freq: "60000"
+      attempts: "60"
+
+file:
+  name:
+    pattern: "*.xml"
+  reconnection:
+    frequency: "2000"
