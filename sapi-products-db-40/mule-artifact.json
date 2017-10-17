@@ -1,0 +1,20 @@
+{
+  "domain": "default",
+  "configs": [
+    "api-product.xml",
+    "global.xml"
+  ],
+  "redeploymentEnabled": true,
+  "name": "sapi-products-db-40",
+  "minMuleVersion": "4.0.0-rc",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedResources": []
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}
