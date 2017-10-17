@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd ">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
     <apikit:config name="api-config" raml="api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="api-main">
         <http:listener config-ref="http-lc-0.0.0.0" path="/api/*" doc:name="Listener">
@@ -90,6 +91,40 @@ output application/json
                     </ee:variables>
                 </ee:transform>
             </on-error-propagate>
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="cf1d6006-f277-4555-a13a-470e6a194937" >
+				<ee:transform doc:name="Set 'Error Message' and 'Description'" doc:id="3498c23c-df11-4158-82b9-70be718a6d67" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="errorDescription" ><![CDATA[%dw 2.0
+output application/java
+---
+"Unable to fullfil request due to internal error."]]></ee:set-variable>
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+500]]></ee:set-variable>
+						<ee:set-variable variableName="errorMessage" ><![CDATA[%dw 2.0
+output application/java
+---
+"INTERNAL_SERVER_ERROR"]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<logger level="ERROR" doc:name="Logger" doc:id="fa47b735-5cc9-4e51-83a7-e13d8c71ccea" message='#["ExecutionId: $(vars.executionId) - Error Message : $(vars.errorMessage) - Error Description: $(vars.errorDescription) - Cause Message: $(error.cause.message)"]'/>
+				<ee:transform doc:name="Create Error Message" doc:id="1eabc8cd-66e3-412f-8543-b772fd835e39" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json encoding="UTF-8", skipNullOn="everywhere"
+---
+{
+	status: "error",
+	message: vars.errorMessage,
+	description: vars.errorDescription,
+	executionId: vars.executionId
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-propagate>
         </error-handler>
     </flow>
     <flow name="api-console">
@@ -122,14 +157,14 @@ output application/json
         <logger level="INFO" doc:name="Logger" doc:id="aa82f24a-072b-46ae-a1e0-e089eca362cd" message='#["Create user"]'/>
 		<set-variable variableName="executionId" value="#[java!org::mule::runtime::core::api::util::UUID::getUUID()]" doc:name="Set executionId" doc:id="be4ef17b-ce2a-49e5-8094-80d60137ce71" />
 		<flow-ref name="send-user-to-queue" doc:name="send-user-to-queue" doc:id="70e5dc1c-26c9-4ad8-a5c0-69a96acd8a2e" />
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:name="Success Response">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
-output application/json
+output application/json encoding="UTF-8", skipNullOn="everywhere"
 ---
 {
-  status: "success",
-  networkId: "A011209"
+	status: "success",
+	networkId: vars.networkId
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>

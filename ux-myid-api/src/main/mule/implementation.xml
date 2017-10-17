@@ -64,12 +64,10 @@ payload."Network ID"]]></ee:set-variable>
 		<logger level="INFO" doc:name="Logger" doc:id="6fbc6d33-754e-4bb7-8c85-5737d8d0acfc" message='#["ExecutionId: $(vars.executionId) - Sending User to queue"]'/>
 		<logger level="INFO" doc:name="Logger" doc:id="65beb8b4-0b2b-4b7c-b345-007805c8f9d6" message='#["ExecutionId: $(vars.executionId) - User sent to queue - Email: $(vars.userEmail)"]'/>
 		<jms:publish config-ref="JMS_Config" destination="in1" doc:name="Publish" doc:id="90efcedd-1eb1-4f47-9afe-2b444af4ce92" >
-			<reconnect-forever />
 		</jms:publish>
 	</flow>
 	<flow name="queue-to-file" doc:id="d69b8ac5-d91a-431e-9d67-4cbc1bf242dc" >
 		<jms:listener config-ref="JMS_Config" destination="in1" doc:name="Listener" doc:id="af488999-5170-4a64-9d26-20b2f394edbc" >
-			<reconnect-forever />
 			<jms:consumer-type >
 				<jms:queue-consumer />
 			</jms:consumer-type>
