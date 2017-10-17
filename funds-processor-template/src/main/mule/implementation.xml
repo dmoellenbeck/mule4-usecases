@@ -41,7 +41,7 @@ java!org::mule::runtime::core::api::util::UUID::getUUID()]]></ee:set-variable>
 		<ee:transform doc:name="Object to JSON" doc:id="ad3f940b-d9fe-4657-9825-76566d7c9958">
 						<ee:message>
 							<ee:set-payload><![CDATA[%dw 2.0
-output application/json indent=false
+output application/json
 ---
 {
 	symbol: payload.Symbol,
@@ -57,10 +57,14 @@ output application/json indent=false
 ]]></ee:set-payload>
 						</ee:message>
 		</ee:transform>
-		<object-to-string-transformer doc:name="Object to String" mimeType="text/plain" returnClass="java.lang.String" />
-		<scripting:execute engine="groovy" doc:name="Append index" doc:id="1f9d655b-7002-4de0-b3f5-a48aedf58cfa" >
-			<scripting:code >'{ &quot;index&quot; : {  } }' + &quot;\n&quot; + payload + &quot;\n&quot;</scripting:code>
-		</scripting:execute>
+		<ee:transform doc:name="Append index" doc:id="157a2a95-9d38-4efc-af14-cf4f868e93a4" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output text/plain
+---
+"{ \"index\" : {  } }" ++ "\n" ++ write(payload, "text/json", {indent: false}) ++ "\n"]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</flow>
 	<flow name="elk-bulk-post-flow" doc:id="771e0f91-e06e-46f7-88d4-7ab8b3fad9f9" >
 		<ee:transform doc:name="Set 'bulkPayload' and 'numberOfRecords' variable" doc:id="8edeeadb-2bc8-49ff-ab52-c4c7798e83a0" >
