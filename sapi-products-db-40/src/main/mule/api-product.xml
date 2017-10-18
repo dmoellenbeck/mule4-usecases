@@ -79,7 +79,7 @@ output application/json
                     </ee:variables>
                 </ee:transform>
             </on-error-propagate>
-            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED" doc:name="On Error Propagate">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
@@ -89,6 +89,19 @@ output application/json
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="ANY" doc:name="On Error Propagate" enableNotifications="true" logException="true">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Internal Server Error"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[500]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </on-error-propagate>
@@ -124,44 +137,109 @@ output application/json
         <logger level="INFO" message="put:\product\(id):application\json:api-product-config" />
     </flow>
     <flow name="delete:\product\(id):application\json:api-product-config">
-        <logger level="INFO" message="delete:\product\(id):application\json:api-product-config" />
+        <ee:transform doc:name="Get Uri Params" doc:id="18bf2497-2270-48b0-b449-bc576abc3aac" >
+			<ee:message />
+			<ee:variables >
+				<ee:set-variable variableName="id" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.uriParams.id]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<try doc:name="Try" doc:id="c1745052-3ee4-4ac8-aec6-7ce074af9954" transactionalAction="ALWAYS_BEGIN">
+			<db:delete config-ref="MySQL_Configuration" doc:name="Delete Product" doc:id="07333e4b-ffd7-4f38-8535-c9b66a0436fb" >
+				<db:sql >delete from product where id=:id</db:sql>
+				<db:input-parameters ><![CDATA[#[{'id' : vars.id}]]]></db:input-parameters>
+			</db:delete>
+		</try>
+		<ee:transform doc:name="Set Status" doc:id="9976485b-94e5-42d6-9a89-c8acd9bf310c" >
+			<ee:message />
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+204]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
     </flow>
     <flow name="get:\product\(id):api-product-config">
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+		<ee:transform doc:name="Get Uri Params" doc:id="89d0a01b-dae9-4eaa-8167-32a37001c08d" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="id" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.uriParams.id]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<db:select config-ref="MySQL_Configuration" doc:name="Get by Id" doc:id="0eed6454-d19c-4be9-94a5-a5c19414a575">
+			<db:sql>SELECT p.id, p.name, p.description, p.product_number, p.manufactured, p.colors, p.categories, p.stock, p.safety_stock_level, p.standard_cost, p.list_price, p.size, p.size_unit_measure_code, p.weight, p.weight_unit_measure_code, p.days_to_manufacture, p.images,  p.modified_date, p.created_date 
+FROM product p 
+where p.id = :id</db:sql>
+			<db:input-parameters><![CDATA[#[{'id' : vars.id}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="transform to ArrayList" doc:id="defcf225-408d-49ad-b861-7ac8e2bfc6bf">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload as Array]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<choice doc:name="If result exists" doc:id="8df417bb-e872-4f71-b1f6-b587b0240ce8" >
+			<when expression="#[sizeOf(payload) &gt; 0]" >
+				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:name="Products to JSON">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
+var product = payload[0]
 ---
 {
-  id: 1,
-  name: "ELMO",
-  description: "Playskool sesame street play all day Elmo",
-  productNumber: "UUID34234923934293",
-  manufactured: true,
-  safetyStockLevel: 540,
-  standardCost: 78.00,
-  listPrice: 99.90,
-  size: "200x300",
-  sizeUnitMeasureCode: "in",
-  weightUnitMeasureCode: "gr",
-  weight: 400,
-  daysToManufacture: 10,
-  categories: [
-    "playskool",
-    "sesame street"
-  ],
-  stock: 2800,
-  colors: [
-    "blue",
-    "red",
-    "green"
-  ],
-  images: [
-    "/wcsstore/HTSStorefrontAssetStore/Attachment/HomePage/Product eSpots/Play-All-Day-Elmo.png"
-  ]
+	id: product.id,
+	name: product.name,
+	description: product.description,
+	manufactured: product.manufactured,
+	productNumber: product.product_number,
+	colors: (product.colors default "") splitBy "," ,
+	categories:(product.categories default "") splitBy "," ,
+	safetyStockLevel: product.safety_socket_level,
+	standardCost: (product.standard_cost default "0.0") as String {format: "##.##"} as Number,
+	listPrice: (product.list_price default "0.0") as String {format: "##.##"} as Number,
+	stock: product.stock,
+	safetyStockLevel: product.safety_stock_level,
+	daysToManufacture: product.days_to_manufacture,
+	size: product.size,
+	sizeUnitMeasureCode: product.size_unit_measure_code,
+	weight: product.weight,
+	weightUnitMeasureCode: product.weight_unit_measure_code,
+	daysToManufacture: product.days_to_manufacture,	
+	images: (product.images splitBy "," default null),
+	modifiedDate: (product.modified_date default "") as Date {format: "yyyy-MM-dd"},
+	createdDate: (product.created_date default "") as Date {format: "yyyy-MM-dd"}
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+			</when>
+			<otherwise>
+				<ee:transform doc:name="Set Resource not Found" doc:id="6924eb05-a6e0-4966-b048-b846cd08d604">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Resource not found"
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
+output application/java
+---
+404]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</otherwise>
+		</choice>
     </flow>
     <flow name="get:\product:api-product-config">
         <ee:transform doc:name="Get Query Params" doc:id="b99dcbea-c676-4f9f-a60a-29eaa092d051">
@@ -231,39 +309,57 @@ payload map {
 		</ee:transform>
     </flow>
     <flow name="post:\product:application\json:api-product-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+		<ee:transform doc:name="Json to Map" doc:id="36171883-b5bd-4138-8705-d86f24ff35e1" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="originalPayload" ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+				<ee:set-variable variableName="newPayload" ><![CDATA[%dw 2.0
+output application/java
+fun getManufacturedCode(value) =
+	if (value == true) 1
+	else 0
+---
+{
+	categories: payload.categories joinBy ",",
+	colors: payload.colors joinBy ",",
+	daysToManufacture: payload.daysToManufacture,
+	description: payload.description,
+	images: payload.images joinBy ",",
+	listPrice: payload.listPrice,
+	manufactured: getManufacturedCode(payload.manufactured),
+	name: payload.name,
+	productNumber: payload.productNumber,
+	safetyStockLevel: payload.safetyStockLevel,
+	size: payload.size,
+	sizeUnitMeasureCode: payload.sizeUnitMeasureCode,
+	standardCost: payload.standardCost,
+	stock: payload.stock, 
+	weight: payload.weight,
+	weightUnitMeasureCode: payload.weightUnitMeasureCode
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<try transactionalAction="ALWAYS_BEGIN" doc:name="Try">
+		<db:insert config-ref="MySQL_Configuration" doc:name="Insert Product" doc:id="5c78b2e3-5c4b-4764-aa61-08410c4e9071" autoGenerateKeys="true">
+			<db:sql >insert into product(name, description, product_number, manufactured, colors, categories, stock, safety_stock_level, standard_cost, list_price, size, size_unit_measure_code, weight, weight_unit_measure_code, days_to_manufacture, images, modified_date, created_date) 
+values(:name, :description, :product_number, :manufactured, :colors,  :categories, :stock, :safety_stock_level, :standard_cost, :list_price, :size, :size_unit_measure_code, :weight, :weight_unit_measure_code, :days_to_manufacture, :images, CURDATE(), CURDATE());</db:sql>
+			<db:input-parameters ><![CDATA[#[{'name': vars.newPayload.name, 'description': vars.newPayload.description, 'product_number': vars.newPayload.productNumber, 'manufactured': vars.newPayload.manufactured, 'colors': vars.newPayload.colors, 'categories': vars.newPayload.categories, 'stock': vars.newPayload.stock, 'safety_stock_level': vars.newPayload.safetyStockLevel, 'standard_cost': vars.newPayload.standardCost, 'list_price': vars.newPayload.listPrice, 'size': vars.newPayload.size, 'size_unit_measure_code': vars.newPayload.sizeUnitMeasureCode, 'weight': vars.newPayload.weight, 'weight_unit_measure_code': vars.newPayload.weightUnitMeasureCode, 'days_to_manufacture': vars.newPayload.daysToManufacture, 'images': vars.newPayload.images}]]]></db:input-parameters>
+				<db:auto-generated-keys-column-names >
+					<db:auto-generated-keys-column-name value="id" />
+				</db:auto-generated-keys-column-names>
+		</db:insert>
+		</try>
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:name="Database to Json">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{
-  id: 1,
-  name: "ELMO",
-  description: "Playskool sesame street play all day Elmo",
-  productNumber: "UUID34234923934293",
-  manufactured: true,
-  safetyStockLevel: 540,
-  standardCost: 78.00,
-  listPrice: 99.90,
-  size: "200x300",
-  sizeUnitMeasureCode: "in",
-  weightUnitMeasureCode: "gr",
-  weight: 400,
-  daysToManufacture: 10,
-  categories: [
-    "playskool",
-    "sesame street"
-  ],
-  stock: 2800,
-  colors: [
-    "blue",
-    "red",
-    "green"
-  ],
-  images: [
-    "/wcsstore/HTSStorefrontAssetStore/Attachment/HomePage/Product eSpots/Play-All-Day-Elmo.png"
-  ]
-}]]></ee:set-payload>
+vars.originalPayload ++
+id: payload.generatedKeys.GENERATED_KEY]]></ee:set-payload>
             </ee:message>
         </ee:transform>
     </flow>
