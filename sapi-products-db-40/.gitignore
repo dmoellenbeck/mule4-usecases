@@ -43,3 +43,11 @@ local.properties
 # Studio-specific #
 # --------------- #
 target/
+
+#Manually added
+catalog/
+.mule/**
+.mule/**/*
+.DS_Store
+src/main/api/.repository/
+velocity.log

@@ -92,7 +92,7 @@ output application/json
                     </ee:variables>
                 </ee:transform>
             </on-error-propagate>
-            <on-error-propagate type="ANY" doc:name="On Error Propagate" enableNotifications="true" logException="true">
+            <on-error-propagate doc:name="On Error Propagate" enableNotifications="true" logException="true">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
@@ -134,7 +134,55 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\product\(id):application\json:api-product-config">
-        <logger level="INFO" message="put:\product\(id):application\json:api-product-config" />
+        <ee:transform doc:name="JSon to Product" doc:id="4b3831bb-d857-405b-8346-6e0e9ff70c56" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="updatePayload" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	categories: payload.categories joinBy ",",
+	colors: payload.colors joinBy ",",
+	daysToManufacture: payload.daysToManufacture,
+	description: payload.description,
+	images: payload.images joinBy ",",
+	listPrice: payload.listPrice,
+	manufactured: payload.manufactured,
+	name: payload.name,
+	productNumber: payload.productNumber,
+	safetyStockLevel: payload.safetyStockLevel,
+	size: payload.size,
+	sizeUnitMeasureCode: payload.sizeUnitMeasureCode,
+	standardCost: payload.standardCost,
+	stock: payload.stock, 
+	weight: payload.weight,
+	weightUnitMeasureCode: payload.weightUnitMeasureCode
+}]]></ee:set-variable>
+				<ee:set-variable variableName="id" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.uriParams.id]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<try doc:name="Try" doc:id="237c2741-5537-4675-a905-5997a0c784c0" transactionalAction="ALWAYS_BEGIN">
+			<db:update config-ref="MySQL_Configuration" doc:name="Update Product" doc:id="70747e98-f414-4d19-8bfc-8b63d088dcb5" >
+				<db:sql >update product 
+set name = :name, description = :description, product_number = :product_number, manufactured = :manufactured, colors = :colors, categories= :categories, stock = :stock, safety_stock_level = :safety_stock_level, standard_cost = :standard_cost, list_price = :list_price, size = :size, size_unit_measure_code = :size_unit_measure_code, weight = :weight, weight_unit_measure_code = :weight_unit_measure_code, days_to_manufacture = :days_to_manufacture, images = :images,  modified_date = CURDATE() 
+where id = :id</db:sql>
+				<db:input-parameters ><![CDATA[#[{'name': vars.updatePayload.name, 'description': vars.updatePayload.description, 'product_number': vars.updatePayload.productNumber, 'manufactured': vars.updatePayload.manufactured, 'colors': vars.updatePayload.colors, 'categories': vars.updatePayload.categories, 'stock': vars.updatePayload.stock, 'safety_stock_level': vars.updatePayload.safetyStockLevel, 'standard_cost': vars.updatePayload.standardCost, 'list_price': vars.updatePayload.listPrice, 'size': vars.updatePayload.size, 'size_unit_measure_code': vars.updatePayload.sizeUnitMeasureCode, 'weight': vars.updatePayload.weight, 'weight_unit_measure_code': vars.updatePayload.weightUnitMeasureCode, 'days_to_manufacture': vars.updatePayload.daysToManufacture, 'images': vars.updatePayload.images, 'id': vars.id}]]]></db:input-parameters>
+			</db:update>
+		</try>
+		<ee:transform doc:name="Set Status" doc:id="07f54c4e-7e24-40f7-9e67-1dece3cbe945" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+204]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
     </flow>
     <flow name="delete:\product\(id):application\json:api-product-config">
         <ee:transform doc:name="Get Uri Params" doc:id="18bf2497-2270-48b0-b449-bc576abc3aac" >

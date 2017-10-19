@@ -6,6 +6,5 @@ mysql:
   password: "Mule1379"
   port: "3306"
   user: "product"
-  #database: "products"
-  database: "products_test"
+  database: "products"
   host: "services.mythicalcorp.com"
